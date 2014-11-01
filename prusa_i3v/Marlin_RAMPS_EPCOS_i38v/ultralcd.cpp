@@ -289,7 +289,11 @@ static void lcd_move_x()
 {
     if (encoderPosition != 0)
     {
-        current_position[X_AXIS] += float((int)encoderPosition) * move_menu_scale;
+        // Original Line.
+        // current_position[X_AXIS] += float((int)encoderPosition) * move_menu_scale;
+        // On Prusa i3v turning the knob to the right moves the X to the left so we invert it 
+        // here.
+        current_position[X_AXIS] -= float((int)encoderPosition) * move_menu_scale;
         if (current_position[X_AXIS] < X_MIN_POS)
             current_position[X_AXIS] = X_MIN_POS;
         if (current_position[X_AXIS] > X_MAX_POS)
