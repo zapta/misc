@@ -1,35 +1,46 @@
 // A handpiece for SMT vacuum pick and place tool.
 // All dimensions in mm
-// Print with high infill percentage (e.g. 50%) for better air tightness. 
+// Print with high infill percentage (e.g. 50%) for better 
+// air tightness. 
 // Material support not needed.
 
 // Circles resolutions. Reduce for fast debugging.
-$fn=76;
+$fn=72;
 
-// Set to 0 or 1
-release_hole_enabled = 1;
+// 1 = with release hole, 0 = without release hole.
+release_hole_enabled = 0;
+
+// 1 for debugging. 0 for production.
+cross_section_enabled = 0;
 
 tip_bottom_diameter = 4.5;   
 tip_length = 9;
 tip_taper_percents = 6;
 tip_wall_thickness = 0.8;
 
-conn_bottom_diameter = 5.4;
-conn_top_diameter = 5.3;
+conn_diameter = 5.3;
 conn_length = 10;
+// Defines the ID of the connector.
 conn_wall_thickness = 1;
+// For better retention of the hose.
 conn_bump_size = 0.5;
 conn_bump_offset = 1;
+// Provides clearance for the outer surface of the hose.
+conn_clearance_diameter = 12;
 
 // Reduce tube length to let's say 5 for quick test prints.
 tube_length = 110;
-tube_diameter = 25;
+tube_diameter = 20;
 tube_thickness = 2;
 end_thickness = 3;
+// Smoothing the outer 'corners'.
 edge_radius = 2;
 
-release_hole_diameter = 5;
-release_hole_offset = 10;
+// Higher diameters improve release but also improe the release
+// resistance and thus cause shaking. Setting here a small 
+// hole, drill a larger one if needed.
+release_hole_diameter = 3;
+release_hole_offset = 9;
 release_chamber_length = 20;
 inner_thickness = 2;
 inner_tube_id = 4;
@@ -98,24 +109,24 @@ module tip() {
 module connector() {
    translate([0, 0, end_thickness + conn_length]) rotate([0, 180, 0]) difference() {
     union() {
-      //cylinder(d = 2*tube_diameter, h=end_thickness + conn_length - 0.03);
       difference() {
         // Overall body.
         rounded_cylinder(tube_diameter, conn_length + end_thickness, edge_radius);
-        // Make outer shell.
-        translate([0, 0, end_thickness]) cylinder(d=14, h=conn_length+eps);
+        // Make the outer wall.
+        translate([0, 0, end_thickness]) 
+            cylinder(d=conn_clearance_diameter, h=conn_length+eps);
       }
       // Connector hose
       translate([0, 0, end_thickness - eps]) 
-          cylinder(d1=conn_bottom_diameter, d2=conn_top_diameter, h=conn_length + eps); 
+          cylinder(d=conn_diameter, h=conn_length + eps); 
       // Support ring
       translate([0, 0, end_thickness-eps2]) 
-          support_ring(conn_bottom_diameter - eps, 2);
+          support_ring(conn_diameter - eps, 2);
       // Bump
       translate([0, 0, end_thickness + conn_length - conn_bump_size - conn_bump_offset]) 
-        donut(conn_top_diameter/2, conn_bump_size);
+        donut(conn_diameter/2, conn_bump_size);
     }
-    // Substract connector hole.
+    // Substract connector through hole.
     translate([0, 0, -eps]) cylinder(d=conn_hole_diameter, h=end_thickness + conn_length + eps2); 
   }
 }
@@ -157,32 +168,22 @@ module tube() {
 
 // The entire part.
 module main_part() {
-  union() {
-    connector();
-    translate([0, 0, end_thickness + conn_length - eps]) tube();
-    translate([0, 0, end_thickness + conn_length +tube_length - eps2]) tip(); 
+  total_length = 2*end_thickness + conn_length +tube_length + tip_length;
+
+  // Rotating for good view angle of the hole on thigiverse.
+  rotate([0, 0, -160]) difference() {
+    union() {
+      connector();
+      translate([0, 0, end_thickness + conn_length - eps]) tube();
+      translate([0, 0, end_thickness + conn_length +tube_length - eps2]) tip(); 
+    }
+    // For debugging. Cut cross section.
+    if (cross_section_enabled) {
+      translate([0, 0, -eps]) 
+        cube(size= [tube_diameter + eps, tube_diameter + eps, total_length]);
+    }
   }
 }
 
-// For debugging. Main part with cross section.
-module main_part_cross_section() {
-  total_length = 2*end_thickness + conn_length +tube_length + tip_length;
-  difference() {
-    main_part();
-    translate([0, 0, -eps])  
-        #cube(size= [tube_diameter + eps, 
-             tube_diameter + eps,
-             total_length]);
-  }
-}
 
 main_part();
-
-// For debugging
-//main_part_cross_section();
-
-//translate([0, 0, tube_length-10]) rotate([-90, 0, 0]) cylinder(d = 5, h=tube_diameter);
-
-//tip();
-//connector();
-//tube();
