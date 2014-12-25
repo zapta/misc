@@ -15,8 +15,8 @@ enable_release_hole = 1;
 enable_cross_cut = 1;
 
 // Designed in inkspace, exported as dxf using the BetterDxf
-// inkspace extension. Defines the contur f the handle.
-contur_file_name = "handle_contur.dxf";
+// inkspace extension. Defines the contour f the handle.
+contour_file_name = "handle_contour.dxf";
 
 eps = 0.01;
 eps2 = 2*eps;
@@ -110,7 +110,7 @@ module body() {
   difference() {
     rotate_extrude(convexity = 10) 
       translate([0, dxf_import_y_offset, 0]) 
-      import(file = contur_file_name);
+      import(file = contour_file_name);
      // Chamber
       translate([0, 0, 92]) cylinder(d=9, h=20);
     if (enable_release_hole) {
