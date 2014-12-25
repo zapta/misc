@@ -12,11 +12,11 @@ $fn=72;
 enable_release_hole = 1;
 
 // 0 or 1. For debugging.
-enable_cross_cut = 0;
+enable_cross_cut = 1;
 
 // Designed in inkspace, exported as dxf using the BetterDxf
 // inkspace extension. Defines the contur f the handle.
-contur_file_name = "contur.dxf";
+contur_file_name = "handle_contur.dxf";
 
 eps = 0.01;
 eps2 = 2*eps;
