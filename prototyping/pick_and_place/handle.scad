@@ -9,10 +9,10 @@
 $fn=72;
 
 // 0 or 1
-enable_release_hole = 1;
+enable_release_hole = 0;
 
 // 0 or 1. For debugging.
-enable_cross_cut = 1;
+enable_cross_cut = 0;
 
 // Designed in inkspace, exported as dxf using the BetterDxf
 // inkspace extension. Defines the contour f the handle.
@@ -51,8 +51,6 @@ conn_clearance_diameter = 10;
 
 conn_hole_diameter = conn_diameter - 2*conn_wall_thickness;
 
-
-
 // r1 is center radius of extrusion, r2 is donut thinkness).
 module donut(r1, r2) {
   rotate_extrude() translate([r1, 0, 0]) circle(r = r2);
@@ -77,6 +75,16 @@ module support_ring(id, r) {
     cylinder(r=id/2+r, h=r);
     translate([0, 0, r]) donut(id/2+r, r);
     translate([0, 0, -eps]) cylinder(r=id/2, h=r+eps2);
+  }
+}
+
+// Release chamber. Having cone top to reduce the hangover
+// effect. The chamber doesn't occupy the entire handle to 
+// reduce the vaccum 'capacitance' (volume).
+module chamber() {
+  hull() {
+    cylinder(d=9, h=15);
+    cylinder(d=tip_hole_diameter, h=21);
   }
 }
 
@@ -112,7 +120,7 @@ module body() {
       translate([0, dxf_import_y_offset, 0]) 
       import(file = contour_file_name);
      // Chamber
-      translate([0, 0, 92]) cylinder(d=9, h=20);
+      translate([0, 0, 92]) chamber();
     if (enable_release_hole) {
       // Release hole
       translate([0, 0, body_height - release_hole_offset]) rotate([90, 0, -90]) 
@@ -121,7 +129,6 @@ module body() {
    
   
     // Through hole above to the chamber (narower for mechanicla strength).
-   // translate([0, 0, 95]) cylinder(d=3.3, 50);
     // Connector space
     translate([0, 0, -eps])
             cylinder(d=conn_clearance_diameter, h=conn_length);
@@ -130,7 +137,7 @@ module body() {
 // The entire part.
 module main() {
   // Rotating for good view angle of the hole on thigiverse.
-  rotate([0, 0, -160]) difference() {
+  rotate([0, 0, -205]) difference() {
     union() {
       body();
       translate([0, 0, body_height-eps]) tip(); 
