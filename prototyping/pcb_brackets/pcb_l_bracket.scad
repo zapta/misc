@@ -5,23 +5,25 @@
 // 
 // Circle roundness. Higher is smoother but slower to compile.
 
-// [ global ]
+/* [global] */
 
-// Parts to print
+// Parts to print.
 num_parts = 2;  // [1:Single, 2:Pair]
 
 // Nominal thickness of the bracket.
 thickness = 1.6;  
 
 // Inner length [mm] of cw hand.
-inner_length1 = 50;
-// Width [mm] of cw hand.
-width1 = 30;
+inner_length_1 = 50;
 
 // Inner length [mm] of ccw hand.
-inner_length2 = 20;
+inner_length_2 = 30;
+
+// Width [mm] of cw hand.
+width_1 = 30;
+
 // Width [mm] of ccw hand.
-width2 = 30;
+width_2 = 30;
 
 // Radius of external corners [mm].
 corner_radius=2;
@@ -29,13 +31,13 @@ corner_radius=2;
 // Radius of center hole [mm].
 center_hole_radius = 2;
 
-// Seperation [mm] between the two pieces.
-pieces_seperation = 10;
+// Seperation [mm] when printing two pieces.
+pieces_seperation = 20;
 
-// [ hidden ]
+/* [hidden] */
 
 // Reduce to 18 for quick debugging.
-$fn=180;
+$fn=64;
 
 // Small distances. Used to make sure relationship between
 // shapes are well defined. Do not effect dimensions of main object.
@@ -59,24 +61,29 @@ module rounded_l_shape(xl, yl, zl, xw, yw, r) {
   }  
 }
 
-module one_part() {
+module first_part() {
  difference() {
-    rounded_l_shape(inner_length1, inner_length2, thickness, 
-        width1, width2, corner_radius);
-    translate([width2, width1, 0]) 
+    rounded_l_shape(inner_length_1, inner_length_2, thickness, 
+        width_1, width_2, corner_radius);
+    translate([width_2, width_1, 0]) 
         cylinder(r=center_hole_radius, h=thickness+eps);
   }
 }
 
+module second_part() {
+  x_offset = inner_length_1 + width_2 + 
+      max(0, width_2 + pieces_seperation - inner_length_1);
+  y_offset = inner_length_2 + 2*width_1 + pieces_seperation;
+  translate([x_offset, y_offset, 0]) rotate([0, 0, 180]) first_part();
+}
+ 
 // A L shape with rounded corners and center release hole.
 module main() {
-  one_part();
+  first_part();
   if (num_parts > 1) {
-    translate([inner_length1+width2, 
-               inner_length2+2*width1+pieces_seperation, 
-               0]) rotate([0, 0, 180]) one_part();
+    second_part();
   }
- 
 }
 
 main();
+
