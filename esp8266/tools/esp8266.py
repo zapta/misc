@@ -27,7 +27,7 @@ def parseArgs(argv):
     help="serial port connected to ESP8266")
   parser.add_option(
     "-s", "--speed", dest="speed",
-    default=9600,
+    default=115200,
     help="ESP8266 serial speed")
   parser.add_option(
     "-d", "--debug", dest="debug",
@@ -60,9 +60,10 @@ def esc_str_for_display(str):
   return result
 
 def esc_data_char_for_tx(c):
-  if (c >= ' ' and c <= '~' and c != '\\'):
+  if (c >= ' ' and c <= '~' and c != '\\' and c != '"'):
     return c
-  return '\\%03o' % ord(c)
+  # NOTE: Lua uses DECIMAL escape values.
+  return '\\%03d' % ord(c)
 
 def tx(str):
   debug('TX [%s]' % esc_str_for_display(str))
@@ -79,13 +80,26 @@ def rx_till_prompt():
   return data[:-2].strip()
 
 def esp8266_cmd(str):
-  time.sleep(0.5)
+  time.sleep(0.1)
   tx(str+'\n')
   return rx_till_prompt();
 
-# Copy a local file to the ESP8266 file storage.
+def setup_no_echo():
+  esp8266_cmd('uart.setup(0, %d, 8, 0, 1, 0)' % FLAGS.speed)
+
+def cmd_reset(argv):
+  print("Reseting ESP8266 board...")
+  esp8266_cmd('node.restart()')
+  while True:
+    resp = rx_till_prompt()
+    print('RESP: [%s]' % resp)
+    if "NodeMCU" in resp:
+      break
+  setup_no_echo();
+  print("Reset done.")
+
 # Syntax: send_file <local_file_name>.
-def cmd_send_file(args):
+def cmd_push_file(args):
   local_file_name = args[0]
 
   # Read source file.
@@ -115,6 +129,46 @@ def cmd_send_file(args):
   
   esp8266_cmd('file.close()')
 
+#@@@@
+# Syntax: get_file <remote_file_name>.
+def cmd_pull_file(args):
+  file_name = args[0]
+
+  # Read source file.
+  #f = open(local_file_name, 'rb' )
+  #content = f.read()
+  #f.close()
+  #print
+  #print('File size: [%d] bytes' % len(content))
+
+  # Compute destination file name.
+  #remote_file_name = os.path.basename(local_file_name)
+
+  # Open remote file for writing.
+  print
+  print("Reading ESP8266 file [%s]:" % file_name)
+  esp8266_cmd('file.open("%s", "r")' % (file_name))
+  esp8266_cmd('repeat b=file.read(40) if b then print("DATA["..b.."]> ") end until not b print("END> ")')
+
+  while True:
+    resp = rx_till_prompt()
+    print('RESP: [%s]' % resp)
+    #if resp == "CONNECTED":
+    #  break
+
+  # Read data
+  #max_bytes_per_line = 100
+  #data = ''
+
+  #for i, char in enumerate(content):
+  #  data += esc_data_char_for_tx(char)
+  #  if len(data) >= max_bytes_per_line or i == len(content) - 1:
+  #    esp8266_cmd('w("%s") f()' % data)
+  #    data = ''
+  #    print str(int(100 * i / (len(content) - 1))).rjust(3), '%'
+  
+  esp8266_cmd('file.close()')
+
 # Delete one or more files from the ESP8266 file storage.
 # Syntax: delete_files <remote_file_name>...
 def cmd_delete_files(args):
@@ -126,9 +180,8 @@ def cmd_delete_files(args):
 # List the files on the ESP8266 file storage.
 # Syntax: list_files
 def cmd_list_files(args):
-  print('\nListing ESP8266 files:')
   esp8266_cmd('l = file.list();')
-  response = esp8266_cmd('for k,v in pairs(l) do print("  "..k..": "..v.." bytes")  end')
+  response = esp8266_cmd('print("File list:") for k,v in pairs(l) do print("  "..k..": "..v.." bytes")  end')
   print(response)
  
 
@@ -137,6 +190,7 @@ def cmd_list_files(args):
 def cmd_test_script(args):
   ssid = args[0]
   password = args[1]
+
 
   print("Connecting to AP (%s, %s)..." % (ssid, password))
   esp8266_cmd('print(wifi.setmode(wifi.STATION))')
@@ -158,10 +212,10 @@ def cmd_test_script(args):
   #esp8266_cmd('conn:on("receive", function(conn, str) print(str) end)')
   esp8266_cmd('conn:on("receive", function(conn, str) print(string.format("RECEIVE %04d> ", string.len(str))) end)')
 
-  esp8266_cmd('conn:on("connection", function(conn) print("CONNECTED > ") end)')
-  esp8266_cmd('conn:on("reconnection", function(conn) print("RECONNECTED > ") end)')
-  esp8266_cmd('conn:on("disconnection", function(conn) print("DISCONNECTED > ") end)')
-  esp8266_cmd('conn:on("sent", function(conn) print("SENT > ") end)')
+  esp8266_cmd('conn:on("connection", function(conn) print("CONNECTED> ") end)')
+  esp8266_cmd('conn:on("reconnection", function(conn) print("RECONNECTED> ") end)')
+  esp8266_cmd('conn:on("disconnection", function(conn) print("DISCONNECTED> ") end)')
+  esp8266_cmd('conn:on("sent", function(conn) print("SENT> ") end)')
 
   #esp8266_cmd('conn:connect(443, "www.google.com")')
   esp8266_cmd('conn:connect(9000, "192.168.0.90")')
@@ -183,15 +237,29 @@ def cmd_test_script(args):
       break
 
   print('test_script done.')
- 
+
 
 def main(argv):
   args = parseArgs(argv)
 
   cmd_table = {
-    'send_file' : cmd_send_file,
+    'push_file' : cmd_push_file,
+    'push' : cmd_push_file,
+
     'list_files' : cmd_list_files,
+    'list_file' : cmd_list_files,
+    'list' : cmd_list_files,
+    'ls' : cmd_list_files,
+
     'delete_files' : cmd_delete_files,
+    'delete' : cmd_delete_files,
+    'rm' : cmd_delete_files,
+
+    'reset' : cmd_reset,
+
+    'pull_file' : cmd_pull_file,
+    'pull' : cmd_pull_file,
+
     'test_script' : cmd_test_script,
   }
 
@@ -202,7 +270,8 @@ def main(argv):
     # Open serial port to ESP8266 and disable ESP8266 echo.
     global ser
     ser = serial.Serial(FLAGS.port, FLAGS.speed, timeout=1)
-    esp8266_cmd('uart.setup(0, %d, 8, 0, 1, 0)' % FLAGS.speed)
+    setup_no_echo();
+    #esp8266_cmd('uart.setup(0, %d, 8, 0, 1, 0)' % FLAGS.speed)
 
     # Run the command
     cmd_handler = cmd_table[cmd_name]

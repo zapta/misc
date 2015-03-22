@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# Flash a new binary. Requires connecting GPIO_0 to ground.
+# Flash a new binary. 
+# Requires connecting GPIO_0 to ground.
 
 port="/dev/tty.usbserial-A602VGAX"
 baud="9600"
-file="nodemcu_20150212.bin"
+file="nodemcu_20150213.bin"
 
 ./esptool.py \
   --port ${port} \
