@@ -8,7 +8,10 @@ print("\n\ninit.lua 115200")
 local pin_value = gpio.read(4)
 print("gpio2 level: " .. pin_value)
 if (gpio.read(4) == 1) then
-  dofile("config.lua")
-  dofile("conn.lua")
+  -- Starting without the timer fails due to insufficient memory.
+  tmr.alarm(1, 1000, 0, function() 
+    dofile("config.lua")
+    dofile("conn.lua")
+  end)
 end
 

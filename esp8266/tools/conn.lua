@@ -165,7 +165,6 @@ state_table = {
 
 -- Periodic ticks handler/dispatcher.
 function onTick()
-  --print("#" .. state .. ": " .. s_sticks)
   report() 
   state_table[state]()
   s_sticks = s_sticks + 1
