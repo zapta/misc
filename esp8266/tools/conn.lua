@@ -1,119 +1,178 @@
 -- Cloud connection module. Responsible for connecting to the WIFI access
 -- point and maintaining a persistent connection with the cloud server.
 --
--- Uses timer 1.
-
-local conn = {}
-
--- Credentials are comming from a seperate file that is not checkedin in git
--- and can be customized for each deployment.
-credentials = require "_credentials"
+-- Uses timer #1.
+--
+-- Usage:
+--   node.restart()
+--   dofile("config.lua")
+--   dofile("conn.lua")
+--
+-- TX:
+--   sock:send(data_str)
+--
+-- RX line:
+--   +xx   // xx is the byte hex value (lower case).
+--
+-- State line:
+--   !c    // c = 0(disconnection), 1(connected)
+--
+--
+-- When parsing lines, first strip 1 or more occurances of '> ' at the 
+-- begining of the file. These are caused by the Lua prompt as result to 
+-- commands such as send().
+-- Lines that don't start with '+' or '!' after stripping the prompt should be ignored.
+--
+-- NOTE: using shorter than desired function and variable names and printed
+-- messages to reduce the runtime memory footprint.
 
 -- Connection states
-STATE_IDLE = 0
-STATE_CONNECT_WIFI = 1
-STATE_WAIT_WIFI = 2
-STATE_WAIT_SOCKET = 3
-STATE_CONNECTED = 4
-STATE_DISCONNECTED = 5
+S_IDLE = 0
+S_CON_WIFI = 1
+S_WAIT_WIFI = 2
+S_WAIT_SOCK = 3
+S_CONN = 4
+S_DISCONN = 5
 
-state = STATE_IDLE
+-- The socket used for the TCPIP connection.
+state = S_IDLE
 
-ticks_in_state = 0
+-- Number of ticks while in this state. 0 for first ticker
+-- call, 1 for next, etc.
+s_sticks = 0
 
-socket = nil
+sock = nil
+
+-----------------------------------------------------------
 
 function setState(new_state)
-  print("state "..state.." -> "..new_state)
+  --print("#"..state.."->#"..new_state)
   state = new_state
-  ticks_in_state = 0
+  report() 
+  s_sticks = 0
 end
 
-function disconnect()
-  if socket then
-    socket:close()
-    socket = nil;
+function close()
+  if sock then
+    sock:close()
+    sock = nil;
   end
   wifi.sta.disconnect()
-  setState(STATE_DISCONNECTED)
 end
 
-function conn.start()
-  print("conn.start")
-
-  wifi.setmode(wifi.STATION)
-  wifi.sta.autoconnect(0)
-  disconnect()
-  
-  ssid, password = credentials.wifi()
-  -- print("["..ssid.."]["..password.."]")
-  wifi.sta.config(ssid, password)
-
-  setState(STATE_CONNECT_WIFI)
-  tmr.alarm(1, 1000, 1, onTick)
+-- Report state to the client.
+function report() 
+  -- Field1: '1' connected, '0' disconnected. A new connection is guaranteed
+  -- to have a report transitioning from '0' to '1' so clients can detect new
+  -- connections.
+  local f1 = 0
+  if state == S_CONN then 
+    f1 = 1
+  end
+  print("!"..f1)
 end
 
-function onTickStateConnectWifi()
-  print("# CONNECT_WIFI")
+-----------------------------------------------------------
+
+-- Handle the connect to WIFI event
+function sConnectWifi()
   wifi.sta.connect()
-  setState(STATE_WAIT_WIFI)
+  setState(S_WAIT_WIFI)
 end
 
-function onTickStateWaitWifi()
-  status = wifi.sta.status()
-  print("# WAIT_WIFI " .. ticks_in_state .. " " .. status)
-  if status == 1 then
+-- Callback for sock:on("recieve"). 
+-- Assuming without verification that it's comes from the current socket.
+function onRx(sock, str) 
+  for i = 1, #str do
+    local b = string.byte(str, i)
+    print(string.format("+%02x", b))
+  end
+end
+
+ -- Set event callbacks for a new socket.
+function setEvents(sock)
+  sock:on("receive", onRx)
+  sock:on("connection", 
+      function(sock) 
+        print("CON") 
+        setState(S_CONN) 
+      end)
+  sock:on("reconnection", 
+      function(sock) 
+        print("RECON") 
+        setState(S_CONN) 
+      end)
+  sock:on("disconnection", 
+      function(sock) 
+        print("DISCON") 
+        setState(S_DISCONN)
+      end)
+  -- NOTE: not using the "sent" callback.
+end
+
+-- Handle wait for wifi connection state.
+function sWaitWifi()
+  local st = wifi.sta.status()
+  -- 1 is the 'connecting' state.
+  if st == 1 then
     return 
   end
 
-  if status == 5 then
-    setState(STATE_WAIT_SOCKET)
-    socket = net.createConnection(net.TCP, 0)
-    socket:on("receive", function(socket, str) print(string.format("RECEIVED %04d", string.len(str))) end)
-    socket:on("connection", function(socket) print("CONNECTED") setState(STATE_CONNECTED) end)
-    socket:on("reconnection", function(socket) print("RECONNECTED") setState(STATE_CONNECTED) end)
-    socket:on("disconnection", function(socket) print("DISCONNECTED") disconnect() end)
-    socket:on("sent", function(socket) print("SENT") end) 
-    print("Connecting TCP")
-    socket:connect(9000, "192.168.0.90")
+  -- 5 is the 'connected' state.
+  if st == 5 then
+    sock = net.createConnection(net.TCP, 0)
+    setEvents(sock)
+    setState(S_WAIT_SOCK)
+    sock:connect(9000, "192.168.0.90")
     return
   end
 
-  print("AP connection error (" .. status .. ")")
-  disconnect()
+  -- The rest are error.
+  print("WIFI ERR " .. st)
+  setState(S_DISCONN)
 end
 
-function onTickStateWaitSocket()
-  print("# WAIT_SOCKET " .. ticks_in_state)
-  -- This state is exit by the on:connection event.
+-- Handle wait for socket connection.
+function sWaitSock()
+  -- Exit by the on connection event.
 end
 
-function onTickStateConnected()
-  if (ticks_in_state % 10) == 0 then
-    print("# CONNECTED " .. ticks_in_state)
+-- Handle the connected state.
+function sConn()
+  -- Exit by connection failure or stop.
+end
+
+-- Handle the disconnected state.
+function sDisconn()
+  -- Clear resources at first tick.
+  if s_sticks == 0 then
+    close()
+  -- Reconnect after 10 ticks.
+  elseif s_sticks == 10 then
+    setState(S_CON_WIFI)
   end
 end
 
-function onTickStateDisconnected()
-  if (ticks_in_state % 10) == 0 then
-    print("# DISCONNECTED " .. ticks_in_state)
-  end
-  -- TODO: initiate auto reconnection
-end
+-----------------------------------------------------------
 
 state_table = {
-  [STATE_IDLE] = onTickStateIdle,
-  [STATE_CONNECT_WIFI] = onTickStateConnectWifi,
-  [STATE_WAIT_WIFI] = onTickStateWaitWifi,
-  [STATE_WAIT_SOCKET] = onTickStateWaitSocket,
-  [STATE_CONNECTED] = onTickStateConnected,
-  [STATE_DISCONNECTED] = onTickStateDisconnected,
+  [S_CON_WIFI] = sConnectWifi,
+  [S_WAIT_WIFI] = sWaitWifi,
+  [S_WAIT_SOCK] = sWaitSock,
+  [S_CONN] = sConn,
+  [S_DISCONN] = sDisconn,
 }
 
+-- Periodic ticks handler/dispatcher.
 function onTick()
+  --print("#" .. state .. ": " .. s_sticks)
+  report() 
   state_table[state]()
-  ticks_in_state = ticks_in_state + 1
+  s_sticks = s_sticks + 1
 end
 
-
-return conn
+-- Assumes dofile("config.lua") was run.
+print("conn.start")
+close()
+setState(S_CON_WIFI)
+tmr.alarm(1, 1000, 1, onTick)
