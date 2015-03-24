@@ -123,7 +123,7 @@ function sWaitWifi()
     sock = net.createConnection(net.TCP, 0)
     setEvents(sock)
     setState(S_WAIT_SOCK)
-    sock:connect(9000, "192.168.0.90")
+    sock:connect(gw_port, gw_host)
     return
   end
 
