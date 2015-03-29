@@ -4,9 +4,7 @@
 -- Uses timer #1.
 --
 -- Usage:
---   node.restart()
---   dofile("config.lua")
---   dofile("conn.lua")
+--   run()  -- defined by init.lua
 --
 -- TX:
 --   sock:send(data_str)
@@ -39,7 +37,7 @@ state = S_IDLE
 
 -- Number of ticks while in this state. 0 for first ticker
 -- call, 1 for next, etc.
-s_sticks = 0
+s_ticks = 0
 
 sock = nil
 
@@ -49,7 +47,7 @@ function setState(new_state)
   --print("#"..state.."->#"..new_state)
   state = new_state
   report() 
-  s_sticks = 0
+  s_ticks = 0
 end
 
 function close()
@@ -145,10 +143,11 @@ end
 -- Handle the disconnected state.
 function sDisconn()
   -- Clear resources at first tick.
-  if s_sticks == 0 then
+  if s_ticks == 0 then
     close()
-  -- Reconnect after 10 ticks.
-  elseif s_sticks == 10 then
+  -- Reconnect after 10 ticks to prevent a too tight loop.
+  -- TODO: consider exponential backoff to save battery.
+  elseif s_ticks == 10 then
     setState(S_CON_WIFI)
   end
 end
@@ -165,13 +164,18 @@ state_table = {
 
 -- Periodic ticks handler/dispatcher.
 function onTick()
-  report() 
+  -- TODO: Filtering out status reports to ease development. Works because we 
+  -- report also on each state change. Remove condition to reduce memory usager, that is,
+  -- report on each tick.
+  if (s_ticks > 0 and s_ticks % 5) == 0 then
+    report() 
+  end
   state_table[state]()
-  s_sticks = s_sticks + 1
+  s_ticks = s_ticks + 1
 end
 
--- Assumes dofile("config.lua") was run.
-print("conn.start")
+-- Assumes dofile("config.lua") alredy run.
+print("conn")
 close()
 setState(S_CON_WIFI)
 tmr.alarm(1, 1000, 1, onTick)
