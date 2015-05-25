@@ -1,6 +1,8 @@
 // Experimental work in progress
+//
+// Print with material support.
 
-$fn = 18;
+$fn = 180;
 
 eps = 0.01;
 eps2 = 2*eps;
@@ -53,7 +55,7 @@ module nozzle() {
   y = nozzle_length * sin(nozzle_horizontal_angle);
   w2 = nozzle_wall_thickness * 2;
   
-  echo("Nozzle height", h);
+  //echo("Nozzle height", h);
   difference() {
     hull() {
       cylinder(d=nozzle_base_od, h=eps);
@@ -92,6 +94,8 @@ module main() {
       base();
     }
       // translate([-100 - 6, -50, -eps])  cube([100, 100, 100]);
+       translate([-40, 0, 6])  cube([40, 40, 7]);
+     //cube{30, 50, 7]);
 
   }
   
@@ -108,6 +112,11 @@ module main() {
 
 
 main();
+
+   //
+
+     //translate([30, -eps, -eps]) rotate([0, 0, -10]) cube([40, 80, 8]);
+
 
 //main();
 
