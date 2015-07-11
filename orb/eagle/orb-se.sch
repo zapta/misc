@@ -216,8 +216,8 @@ http://www.bccomponents.com/</description>
 <wire x1="-4.65" y1="-1.55" x2="-4.65" y2="1.55" width="0.2032" layer="51" curve="-36.869898"/>
 <wire x1="-4.65" y1="-1.55" x2="4.65" y2="-1.55" width="0.2032" layer="21" curve="143.130102"/>
 <wire x1="-4.65" y1="1.55" x2="4.65" y2="1.55" width="0.2032" layer="21" curve="-143.130102"/>
-<smd name="+" x="4" y="0" dx="4" dy="2.5" layer="1"/>
-<smd name="-" x="-4" y="0" dx="4" dy="2.5" layer="1"/>
+<smd name="+" x="4.5" y="0" dx="5" dy="2.5" layer="1"/>
+<smd name="-" x="-4.5" y="0" dx="5" dy="2.5" layer="1"/>
 <text x="-5.29" y="5.53" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.325" y="-6.785" size="1.27" layer="27">&gt;VALUE</text>
 </package>
@@ -377,6 +377,7 @@ Source: www.ecsxtal.com .. Crystal 3.6864MHz CSM_7X_DU.PDF</description>
 <pad name="G4" x="3.2" y="2.45" drill="0.508" diameter="1.5" shape="square" stop="no"/>
 <text x="-12.7" y="5.08" size="1.27" layer="27">&gt;VALUE</text>
 <text x="-12.7" y="2.54" size="1.27" layer="25">&gt;NAME</text>
+<rectangle x1="1.0668" y1="1.5748" x2="1.0922" y2="3.3528" layer="41"/>
 </package>
 <package name="C0805">
 <description>&lt;b&gt;CAPACITOR&lt;/b&gt;&lt;p&gt;</description>

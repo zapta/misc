@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="1" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
@@ -146,6 +146,7 @@ by exp-lbrs-filter.ulp</description>
 <pad name="G4" x="3.2" y="2.45" drill="0.508" diameter="1.5" shape="square" stop="no"/>
 <text x="-12.7" y="5.08" size="1.27" layer="27">&gt;VALUE</text>
 <text x="-12.7" y="2.54" size="1.27" layer="25">&gt;NAME</text>
+<rectangle x1="1.0668" y1="1.5748" x2="1.0922" y2="3.3528" layer="41"/>
 </package>
 <package name="CRYSTAL">
 <description>&lt;b&gt;SMD CRYSTAL&lt;/b&gt;&lt;p&gt;
@@ -323,8 +324,8 @@ http://www.bccomponents.com/</description>
 <wire x1="-4.65" y1="-1.55" x2="-4.65" y2="1.55" width="0.2032" layer="51" curve="-36.869898"/>
 <wire x1="-4.65" y1="-1.55" x2="4.65" y2="-1.55" width="0.2032" layer="21" curve="143.130102"/>
 <wire x1="-4.65" y1="1.55" x2="4.65" y2="1.55" width="0.2032" layer="21" curve="-143.130102"/>
-<smd name="+" x="4" y="0" dx="4" dy="2.5" layer="1"/>
-<smd name="-" x="-4" y="0" dx="4" dy="2.5" layer="1"/>
+<smd name="+" x="4.5" y="0" dx="5" dy="2.5" layer="1"/>
+<smd name="-" x="-4.5" y="0" dx="5" dy="2.5" layer="1"/>
 <text x="-5.29" y="5.53" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.325" y="-6.785" size="1.27" layer="27">&gt;VALUE</text>
 </package>
