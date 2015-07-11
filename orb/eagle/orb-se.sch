@@ -985,6 +985,8 @@ Source: www.ecsxtal.com .. Crystal 3.6864MHz CSM_7X_DU.PDF</description>
 <part name="+5V4" library="orb-se" deviceset="+5V" device=""/>
 <part name="+5V5" library="orb-se" deviceset="+5V" device=""/>
 <part name="+5V6" library="orb-se" deviceset="+5V" device=""/>
+<part name="NC$2" library="orb-se" deviceset="NC" device=""/>
+<part name="NC$3" library="orb-se" deviceset="NC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -1113,6 +1115,8 @@ Source: www.ecsxtal.com .. Crystal 3.6864MHz CSM_7X_DU.PDF</description>
 <instance part="+5V4" gate="G$1" x="48.26" y="116.84"/>
 <instance part="+5V5" gate="G$1" x="66.04" y="116.84"/>
 <instance part="+5V6" gate="G$1" x="83.82" y="116.84"/>
+<instance part="NC$2" gate="G$1" x="223.52" y="149.86" rot="R180"/>
+<instance part="NC$3" gate="G$1" x="30.48" y="149.86" rot="R180"/>
 </instances>
 <busses>
 </busses>

@@ -122,12 +122,16 @@
 <wire x1="5.518609375" y1="56.515" x2="10.16" y2="56.515" width="0.1" layer="20"/>
 <circle x="50" y="50" radius="40.165" width="0.0254" layer="48"/>
 <circle x="50" y="50" radius="35" width="12" layer="30"/>
-<text x="50.038" y="33.528" size="1.524" layer="21" font="vector" ratio="10">MICRO ORB
+<text x="51.562" y="33.274" size="1.524" layer="21" font="vector" ratio="10">MICRO ORB
 SPECIAL EDITION
 REV 1</text>
-<text x="28.702" y="33.528" size="1.524" layer="21" font="vector" ratio="10">BRIGHT LIGHT
+<text x="28.448" y="33.274" size="1.524" layer="21" font="vector" ratio="10">BRIGHT LIGHT
 DO NOT LOOK 
 DIRECTLY !!</text>
+<text x="55.626" y="51.816" size="1.27" layer="21" font="vector" ratio="10">G</text>
+<text x="55.626" y="49.53" size="1.27" layer="21" font="vector" ratio="10">R</text>
+<text x="55.626" y="47.244" size="1.27" layer="21" font="vector" ratio="10">B</text>
+<text x="40.64" y="41.91" size="1.524" layer="21" font="vector" ratio="10">go/microorb-se</text>
 </plain>
 <libraries>
 <library name="orb-se">
@@ -674,17 +678,15 @@ design rules under a new name.</description>
 <element name="MH$5" library="orb-se" package="MOUNTING_HOLE" value="MOUNTING_HOLE" x="50" y="15.84" smashed="yes"/>
 <element name="MH$6" library="orb-se" package="MOUNTING_HOLE" value="MOUNTING_HOLE" x="20.41" y="32.92" smashed="yes"/>
 <element name="U1" library="orb-se" package="SOIC14" value="ATINY44A" x="43.815" y="70.485" smashed="yes" rot="R90">
-<attribute name="NAME" x="48.641" y="65.4685" size="1.27" layer="25" font="vector" ratio="10" rot="R180"/>
+<attribute name="NAME" x="49.149" y="65.7225" size="1.27" layer="25" font="vector" ratio="10" rot="R180"/>
 </element>
 <element name="D1" library="orb-se" package="SOT23" value="AZ23C3V6" x="28.194" y="64.262" smashed="yes">
 <attribute name="NAME" x="27.305" y="60.325" size="1.27" layer="25" font="vector"/>
 </element>
 <element name="C1" library="orb-se" package="153CLV-1010" value="1000U 10V" x="31.369" y="52.832" smashed="yes" rot="R90">
-<attribute name="NAME" x="39.58" y="53.271" size="1.27" layer="25" font="vector" rot="R180"/>
+<attribute name="NAME" x="39.58" y="57.843" size="1.27" layer="25" font="vector" rot="R180"/>
 </element>
-<element name="LED1" library="orb-se" package="OVSTRGBBCR4" value="OVSTRGBBCR4" x="50" y="50" smashed="yes">
-<attribute name="NAME" x="48.222" y="43.904" size="1.27" layer="25" font="vector"/>
-</element>
+<element name="LED1" library="orb-se" package="OVSTRGBBCR4" value="OVSTRGBBCR4" x="50" y="50" smashed="yes"/>
 <element name="R1" library="orb-se" package="R2512W" value="10R 1W" x="43.815" y="29.845" smashed="yes" rot="R180">
 <attribute name="NAME" x="45.72" y="27.94" size="1.27" layer="25" font="vector" rot="R180"/>
 </element>
@@ -960,8 +962,8 @@ design rules under a new name.</description>
 <contactref element="ISP" pad="5"/>
 <contactref element="R8" pad="1"/>
 <contactref element="U1" pad="4"/>
-<wire x1="62.484" y1="64.516" x2="53.274" y2="64.516" width="0.2032" layer="1"/>
-<wire x1="63.5" y1="63.5" x2="62.484" y2="64.516" width="0.2032" layer="1"/>
+<wire x1="62.484" y1="64.516" x2="53.274" y2="64.516" width="0" layer="19" extent="1-16"/>
+<wire x1="63.5" y1="63.5" x2="62.484" y2="64.516" width="0" layer="19" extent="1-16"/>
 <wire x1="45.847" y1="70.485" x2="46.4185" y2="70.485" width="0.2032" layer="1"/>
 <wire x1="53.213" y1="64.516" x2="53.274" y2="64.516" width="0.2032" layer="1"/>
 <wire x1="53.213" y1="64.516" x2="46.4185" y2="70.485" width="0" layer="19" extent="1-1"/>
@@ -1029,6 +1031,21 @@ design rules under a new name.</description>
 <wire x1="61.094" y1="55.136" x2="64.922" y2="51.308" width="1.27" layer="1"/>
 </signal>
 </signals>
+<errors>
+<approved hash="18,29,bc51a00c27eac417"/>
+<approved hash="18,29,5b16a70c20eb2351"/>
+<approved hash="18,29,53ee335e3b949872"/>
+<approved hash="18,29,0c504fa7f42f7897"/>
+<approved hash="18,29,6f7c03135d90b0ad"/>
+<approved hash="18,29,404f033ea0a26e98"/>
+<approved hash="18,29,987e4c1fe456b0d5"/>
+<approved hash="18,29,4bdcc7f6b3f4deb5"/>
+<approved hash="18,29,52800c372b3c74c1"/>
+<approved hash="4,1,d34dd82128b12ba9"/>
+<approved hash="4,1,13c5f8eac9eaebd0"/>
+<approved hash="4,16,d34dd82128b12ba9"/>
+<approved hash="4,16,13c5f8eac9eaebd0"/>
+</errors>
 </board>
 </drawing>
 <compatibility>
