@@ -1,5 +1,5 @@
 
-od1 = 16;
+od1 = 15.1;  // for 10cc syringe
 h1 = 50;
 
 od2 = 10;
@@ -13,8 +13,8 @@ $fn=180;
 phase = 0.5;
 
 guide_len = h1+h2-2;
-guide_diameter = 3.2;
-guide_spacing = 11;
+guide_diameter = 3.1;
+guide_spacing = 10.5;
 
 screw_hole_len = h1+h2-2;
 screw_hole_diameter = 5.5;
