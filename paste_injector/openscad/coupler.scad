@@ -14,7 +14,7 @@ od = 15;
 body_offset_from_center = 2;
 
 // Length of hole for shaft 1.
-h1 = 12;
+h1 = 10;
 
 // Length of hole for shaft 2.
 h2 = 12;
