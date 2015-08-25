@@ -8,7 +8,7 @@ guide_hole_diameter = 2.5;
 guide_spacing = 10.5;
 guide_hole_offset = 1.5;
 
-screw_hole_diameter = 5;
+shaft_hole_diameter = 5.5;
 
 //base_diameter = 20;
 base_height = 10;
@@ -71,7 +71,7 @@ module bottom_holes(d) {
 }
 
 module shaft_hole() {
- translate([0, 0, -eps1]) cylinder(d=screw_hole_diameter, h=base_height+eps2);
+ translate([0, 0, -eps1]) cylinder(d=shaft_hole_diameter, h=base_height+eps2);
 }
 
 
