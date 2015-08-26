@@ -97,7 +97,7 @@ module cavity() {
   translate([0, 0, base_height]) cylinder(d=cavity_diameter, h=total_height);  
 }
 
-module part1() {
+module body() {
   difference() {
     blank(total_height);
     cavity();
@@ -108,18 +108,18 @@ module part1() {
   }
 }
 
-module part2() {
+module plate() {
   difference() {
-    blank(4);
-    translate([0, 0, -eps1]) cylinder(d=19, h=10);
+    blank(3);
+    translate([0, 0, -eps1]) cylinder(d=18.5, h=10);
     bottom_holes(4);
   }  
 }
 
 module main() {
-  part1();
+  body();
   
-  translate([0, -40, 0]) part2();
+  translate([0, -40, 0]) plate();
 }
 
 main();

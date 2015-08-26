@@ -17,7 +17,7 @@ const int kMinDistance = 250;
 
 AccelStepper stepper(kHalfStep, kMotorPin1, kMotorPin3, kMotorPin2, kMotorPin4);
 
-const int kSpeed = 1000; //speed of the stepper (steps per second)
+const int kSpeed = 500; //speed of the stepper (steps per second)
 
 // True -> apply pressue. 
 boolean direction = true; //keep track if we are turning or going straight next
