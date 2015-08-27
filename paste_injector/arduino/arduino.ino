@@ -1,5 +1,10 @@
 // Controller the solder paste injector.
 
+// TODO: turn off the power to the motor after a long idle period.
+// TODO: perform a longer backlash after a long idle period.
+// TODO: try a continious mode (slow push).
+// TODO: add a way to set speed, etc (poitentiometers?)
+
 #include <AccelStepper.h>
 
 const int kHalfStep = 8;
@@ -13,15 +18,15 @@ const int  kMotorPin4 = 9;
 const int kForwardButtonPin = 10;
 const int kBackwardButtonPin = 11;
 
-const int kForwardSteps = 400;
-const int kBacklashSteps = 200;
-const int kBackwardSteps = 300;
+// Distnaces in steps. Positive extrudes, negative pulls back.
+const int kForwardSteps  =  400;
+const int kBacklashSteps = -200;
+const int kBackwardSteps = -300;
 
-const int kForwardSpeed = 500;
+// Speeds in steps/sec.
+const int kForwardSpeed  =  500;
 const int kBacklashSpeed = 1000;
 const int kBackwardSpeed = 1000;
-
-//const int kMinDistance = 250;
 
 // NOTE: the pins are not listed by their numeric order.
 AccelStepper stepper(kHalfStep, 
@@ -49,10 +54,14 @@ inline bool isBackwardButtonPressed() {
   !digitalRead(kBackwardButtonPin);  
 }
 
-// Steps: positive -> extrude.
-void setMotion(int steps, int speed) {
+// Steps: positive -> extrude, negative pulls back.
+void startMotion(int steps, int speed) {
   stepper.move(steps);
   stepper.setSpeed(speed);
+}
+
+inline bool isMotionInProgress() {
+  return stepper.distanceToGo();
 }
 
 void setup() {
@@ -64,28 +73,31 @@ void setup() {
 
   stepper.setMaxSpeed(1000.0);
 
-  setMotion(1, 500);
+  // TODO: is this really required?
+  startMotion(1, 500);
 }
 
 void loop() {
+  // This updates the stepper library. Should be call in short
+  // intervales.
   stepper.runSpeedToPosition();
 
-  if (stepper.distanceToGo()) {
+  if (isMotionInProgress()) {
     return;
   }
 
-  // Here when last motion completed.
+  // Here when last motion operation is completed.
   switch (state) {
     case IDLE:
     case BACKLASH:
     case BACKWARD:
       // Forward button.
       if (isForwardButtonPressed()) { 
-        setMotion(kForwardSteps, kForwardSpeed); 
+        startMotion(kForwardSteps, kForwardSpeed); 
         state = FORWARD;
       // Backward button.
       } else if (isBackwardButtonPressed()) { 
-        setMotion(-kBackwardSteps, kBackwardSpeed);
+        startMotion(kBackwardSteps, kBackwardSpeed);
         state = BACKWARD;
       // Default, be in IDLE state.
       } else {
@@ -96,16 +108,17 @@ void loop() {
     case FORWARD:
       // Forward button: continue forward.
       if (isForwardButtonPressed()) { 
-        setMotion(kForwardSteps, kForwardSpeed); 
+        startMotion(kForwardSteps, kForwardSpeed); 
         state = FORWARD;
         return;
       }     
       // Forward done: do backlash to reduce oozing.
-      setMotion(-kBacklashSteps, kBacklashSpeed);
+      startMotion(kBacklashSteps, kBacklashSpeed);
       state = BACKLASH;
       break;
 
     default:
+      // Should never happend.
       state = IDLE;
   }
 }
