@@ -2,24 +2,31 @@
 
 // TODO: turn off the power to the motor after a long idle period.
 // TODO: perform a longer backlash after a long idle period.
-// TODO: try a continious mode (slow push).
-// TODO: add a way to set speed, etc (poitentiometers?)
 
 #include <AccelStepper.h>
 
 
 enum State {
-  IDLE = 0,
+  // Not moving.
+  IDLE,
+  // Moving forward as long as the forward button is pressed.
+  // Speed is controlled by the potentiometer.
   FORWARD,
+  // Moving a fixed distance at a fast speed backward after releasing
+  // the Forward button.
   BACKLASH,
+  // Moving backward at a fast speed as long as the Backward button
+  // is pressed.
   BACKWARD,
- // STOPPING,
+ 
 };
 
 static State state = IDLE;
 
-// Arduino Pro Mini onboard LED>
+// Onboard LED. For debugging. Active high.
 const int kLedPin = 13;
+
+// Potentiometer analog input pin.
 const int kPotPin = A0;
 
 // The mottor has 8 half steps for a full revolution, before the down gearing.
@@ -101,7 +108,7 @@ int mapPotValue(int potValue) {
 
 static unsigned long timeLastPotReadMillis = 0;
 
-int readPotAsSpeed() {
+static int readPotAsSpeed() {
    timeLastPotReadMillis = millis();
    const int potValue = analogRead(kPotPin);
    return mapPotValue(potValue);
@@ -121,23 +128,8 @@ inline bool isBackwardButtonPressed() {
   return !digitalRead(kBackwardButtonPin);  
 }
 
-// Steps: positive -> extrude, negative pulls back.
-//void startFixedMotion(int steps, int speed) {
-//  stepper.move(steps);
-//  stepper.setSpeed(speed);
-//}
-
-
-
-//inline bool isFixedMotionInProgress() {
-//  stepper.runSpeedToPosition();
-//  return stepper.distanceToGo();
-//}
-
 void setup() {
   pinMode(kLedPin, OUTPUT);
-
-  //pinMode(kPotentiometerPin);
   
    // initialize the pushbutton pin as an input:
   pinMode(kForwardButtonPin, INPUT_PULLUP);  
@@ -146,109 +138,67 @@ void setup() {
   Serial.begin(115200);
 
   stepper.setMaxSpeed(4000.0);
-   stepper.move(1);
+
+  // This is required to get the motor library going.
+  stepper.move(1);
   stepper.setSpeed(500);
-  //startFixedMotion(1, 500);
   while (stepper.distanceToGo()) {
     stepper.runSpeedToPosition();
   }
-
-  digitalWrite(kLedPin, 1);
-  
 }
 
 void loop() {
-//   const int potValue = analogRead(kPotPin);
-//   Serial.println();
-//   int m = mapPot(potValue);
-//   Serial.print(potValue);
-//   Serial.print(" --> ");
-//   Serial.println(m);
-//   delay(100);
-//   return;
-   //return;
-  
-  // This updates the stepper library. Should be call in short
-  // intervales.
-  //stepper.runSpeedToPosition();
-
-  //digitalWrite(kLedPin, 0);
-
-  //if (isMotionInProgress()) {  
-  //  return;
-  //}
-
-//digitalWrite(kLedPin, 0);
-
   // Here when last motion operation is completed.
   switch (state) {
 
-  case IDLE:    
+    case IDLE:    
       // Forward button.
       if (isForwardButtonPressed()) { 
         stepper.setSpeed(readPotAsSpeed());
         setState(FORWARD);
-        //startMotion(kForwardSteps, readPotAsSpeed()); 
-        //state = FORWARD;
-      // Backward button.
-      } else if (isBackwardButtonPressed()) { 
+        return;
+      }   
+      // Backward button. 
+      if (isBackwardButtonPressed()) { 
         stepper.setSpeed(kBackwardSpeed);
-        //startFixedMotion(kBackwardSteps, kBackwardSpeed);
         setState(BACKWARD);
-      // Default, be in IDLE state.
+        return;
       }
       break;
 
-      case FORWARD:
+    case FORWARD:
       stepper.runSpeed();
-      // Forward button: continue forward.
+      // If forward button got released, stop the forward motion and do the 
+      // backlash sequece to avoid oozing.
       if (!isForwardButtonPressed()) { 
-//        startMotion(kForwardSteps, readPotAsSpeed()); 
-//        state = FORWARD;
-//        return;
-//      }     
-      // Forward done: do backlash to reduce oozing.
-       // startFixedMotion(kBacklashSteps, kBacklashSpeed);
         stepper.move(kBacklashSteps);
-  stepper.setSpeed(kBacklashSpeed);
+        stepper.setSpeed(kBacklashSpeed);
         setState(BACKLASH);
-      } else if (millisSinceLastPotRead() >= 100) {
-          stepper.setSpeed(readPotAsSpeed());  
+        return;
+      }
+      // Update the speed from the pot once in a while.
+      if (millisSinceLastPotRead() >= 100) {
+        stepper.setSpeed(readPotAsSpeed());  
       }
       break;
       
-    case  BACKLASH:
-    stepper.runSpeedToPosition();
- // return stepper.distanceToGo();
+    case BACKLASH:
+      stepper.runSpeedToPosition();
       if (!stepper.distanceToGo()) {
-        setState(IDLE);  
+        setState(IDLE); 
+        return; 
       }
       break;
 
     case BACKWARD:
-     stepper.runSpeed();
-      // Forward button: continue forward.
+      stepper.runSpeed();
+      // If backeard button got released then stop the backward motion.
       if (!isBackwardButtonPressed()) { 
-//        startMotion(kForwardSteps, readPotAsSpeed()); 
-//        state = FORWARD;
-//        return;
-//      }     
-        // stepper.moveTo();
         stepper.move(0);
-        //stepper.setSpeed(kBackwardSpeed);
-        // startFixedMotion(-1, kBackwardSpeed);
-      // Forward done: do backlash to reduce oozing.
-        //startFixedMotion(kBacklashSteps, kBacklashSpeed);
         setState(IDLE);
+        return;
       }
       break;
-
-//    case STOPPING:
-////      stepper.runSpeedToPosition();
-////      if (!stepper.distanceToGo()) {
-//        setState(IDLE);
-//    //  }
-//      break;
 
     default:
       // Should never happend.
