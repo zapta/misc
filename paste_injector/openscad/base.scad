@@ -4,11 +4,11 @@ $fn=180;
 
 
 //guide_len = h1+h2-2;
-guide_hole_diameter = 2.5;
-guide_spacing = 10.5;
-guide_hole_offset = 1.5;
+//guide_hole_diameter = 2.5;
+//guide_spacing = 10.5;
+//guide_hole_offset = 1.5;
 
-shaft_hole_diameter = 5.5;
+shaft_hole_diameter = 6;
 
 //base_diameter = 20;
 base_height = 10;
@@ -38,20 +38,20 @@ base_corner_offset = 0;
 eps1 = 0.001;
 eps2 = 2*eps1;
 
-module guide_holes() {
-//difference() {
-// cylinder(d=base_diameter, h=base_height);
-
-translate([-guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter, h=base_height+eps1-guide_hole_offset);
-  
- translate([-guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter/3, h=base_height+eps2);
-  
-  translate([guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter, h=base_height+eps1-guide_hole_offset);
-  
-   translate([guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter/3, h=base_height+eps2);
-
+//module guide_holes() {
+////difference() {
+//// cylinder(d=base_diameter, h=base_height);
+//
+//translate([-guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter, h=base_height+eps1-guide_hole_offset);
+//  
+// translate([-guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter/3, h=base_height+eps2);
+//  
+//  translate([guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter, h=base_height+eps1-guide_hole_offset);
+//  
+//   translate([guide_spacing/2, 0, -eps1]) cylinder(d=guide_hole_diameter/3, h=base_height+eps2);
+//
+////}
 //}
-}
 
 module motor_holes() {
   translate([motor_screws_space/2, -motor_screws_holes_offset, total_height-motor_screws_holes_depth]) 
@@ -101,7 +101,7 @@ module body() {
   difference() {
     blank(total_height);
     cavity();
-    guide_holes();
+    //guide_holes();
     shaft_hole();
     motor_holes();
     bottom_holes(bottom_screws_holes_diameter);
