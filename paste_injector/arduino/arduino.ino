@@ -1,11 +1,11 @@
 // Controller the solder paste injector.
 
 // TODO: turn off the power to the motor after a long idle period.
-// TODO: perform a longer backlash after a long idle period.
+// TODO: perform a longer backlash after a long inactivity period.
 
 #include <AccelStepper.h>
 
-
+// Finite state machine states.
 enum State {
   // Not moving.
   IDLE,
@@ -18,7 +18,6 @@ enum State {
   // Moving backward at a fast speed as long as the Backward button
   // is pressed.
   BACKWARD,
- 
 };
 
 static State state = IDLE;
@@ -41,15 +40,16 @@ const int  kMotorPin4 = 9;
 const int kForwardButtonPin = 10;
 const int kBackwardButtonPin = 11;
 
-// Distnaces in steps. Positive extrudes, negative pulls back.
-const int kForwardSteps  =    10;
-const int kBacklashSteps =  -300;
-const int kBackwardSteps =  -300;
+const int kBacklashSteps =  300;
+
 
 // Speeds in steps/sec.
-//const int kForwardSpeed  =   25;
 const int kBacklashSpeed = 1000;
-const int kBackwardSpeed = 1000;
+const int kBackwardSpeed = 1000;   
+
+// If forward speed is higher than this speed 
+// then do a backlash before stopping.
+const int kMinForwardSpeedForBacklash = 100;
 
 // NOTE: the pins are not listed by their numeric order.
 AccelStepper stepper(kHalfStep, 
@@ -61,6 +61,7 @@ AccelStepper stepper(kHalfStep,
 // TODO: why do we need this to compile. The function is just below.
 static void setState(State newState);
 
+// A common function to change state.
 static void setState(State newState) {
   if (newState != state) {
     Serial.print(state);
@@ -70,6 +71,7 @@ static void setState(State newState) {
   }
 }
 
+// Consts of a single segment of the pot value mapping function.
 struct MapSegment {
   const int inMin;
   const int inMax;
@@ -77,41 +79,45 @@ struct MapSegment {
   const int outMax;
 };
 
+// Consts for all the segments of the pot value mapping function.
 static const MapSegment kMapSegments[] = {
-  {  0,   128,  1,   2}, 
-  {128,   256,  2,   4}, 
-  {256,   384,  4,  10}, 
-  {384,   512, 10,  22}, 
-  {512,  640,  22,  48}, 
-  {640,  768,  48, 105}, 
-  {768,  896, 105, 229}, 
-  {896, 1023, 229, 500}, 
+  {  0,   128,  1,    2}, 
+  {128,   256,  2,    4}, 
+  {256,   384,  4,   10}, 
+  {384,   512, 10,   22}, 
+  {512,  640,  22,   48}, 
+  {640,  768,  48,  105}, 
+  {768,  896, 105,  229}, 
+  {896, 1023, 229, 1000}, 
 };
 
+// NUmber of segments in kMapSegments.
 const int kNumMapSegments = sizeof(kMapSegments) / sizeof(kMapSegments[0]);
 
+// Map pot value to speed. We use an aproximation of a logarithmic
+// function using the linear segments in kMapSegments.
 int mapPotValue(int potValue) {
-  //potValue = constrain(potValue, 0, 500);
-  //Serial.println(potValue);
+  potValue = constrain(potValue, 0, 1023);
   for (int i=0; i<kNumMapSegments; i++) {
     const MapSegment& s = kMapSegments[i];
-    //Serial.println(i);
     if (potValue <= s.inMax) {
-      //Serial.println("y");
       // TODO: precompute dIn and dOut.
       return (int) (((long)potValue - s.inMin) * (s.outMax - s.outMin) / (s.inMax - s.inMin)) + s.outMin;
     }
   }
-  //Serial.println("x");
   return kMapSegments[kNumMapSegments-1].outMax;
 }
 
+// These two are updated each time readPostAsSpeed() is called.
 static unsigned long timeLastPotReadMillis = 0;
+static int lastPogValueAsSpeed = 0;
 
+// Read pot value and return it mapped to speed. 
 static int readPotAsSpeed() {
    timeLastPotReadMillis = millis();
    const int potValue = analogRead(kPotPin);
-   return mapPotValue(potValue);
+   lastPogValueAsSpeed = mapPotValue(potValue);
+   return lastPogValueAsSpeed;
 }
 
 inline long millisSinceLastPotRead() {
@@ -119,15 +125,20 @@ inline long millisSinceLastPotRead() {
 }
 
 inline bool isForwardButtonPressed() {
-  // Active low.
+  // TODO: debounce.
+  //
+  // Active low. 
   return !digitalRead(kForwardButtonPin);  
 }
 
 inline bool isBackwardButtonPressed() {
+  // TODO: debounce.
+  //
   // Active low.
   return !digitalRead(kBackwardButtonPin);  
 }
 
+// Arduino initialization function.
 void setup() {
   pinMode(kLedPin, OUTPUT);
   
@@ -147,43 +158,56 @@ void setup() {
   }
 }
 
+// Arduino main loop function.
 void loop() {
   // Here when last motion operation is completed.
   switch (state) {
 
     case IDLE:    
-      // Forward button.
+      // TODO: do we need to keep updating the motor driver evne when stopped?
+      //
+      // Handle Forward button press.
       if (isForwardButtonPressed()) { 
         stepper.setSpeed(readPotAsSpeed());
         setState(FORWARD);
         return;
       }   
-      // Backward button. 
+      // Handle Backward button press. 
       if (isBackwardButtonPressed()) { 
-        stepper.setSpeed(kBackwardSpeed);
+        stepper.setSpeed(-kBackwardSpeed);
         setState(BACKWARD);
         return;
       }
       break;
 
     case FORWARD:
+      // Update motor drive. This state uses continious fixed speed mode.
       stepper.runSpeed();
-      // If forward button got released, stop the forward motion and do the 
-      // backlash sequece to avoid oozing.
+      // Handle Forward button release.
       if (!isForwardButtonPressed()) { 
-        stepper.move(kBacklashSteps);
-        stepper.setSpeed(kBacklashSpeed);
-        setState(BACKLASH);
+        // If moved fast do anti oozing.
+        if (lastPogValueAsSpeed >= kMinForwardSpeedForBacklash) {
+          stepper.move(-kBacklashSteps);
+          stepper.setSpeed(kBacklashSpeed);
+          setState(BACKLASH);
+        } else {
+          // Moved slow. Just stop.
+          stepper.move(0);
+          setState(IDLE);
+        }
         return;
+        
       }
-      // Update the speed from the pot once in a while.
+      // Handle pot changes.
       if (millisSinceLastPotRead() >= 100) {
         stepper.setSpeed(readPotAsSpeed());  
       }
       break;
       
     case BACKLASH:
+      // Update motor driver. This state uses fixe distance move mode.
       stepper.runSpeedToPosition();
+      // Handle movement done.
       if (!stepper.distanceToGo()) {
         setState(IDLE); 
         return; 
@@ -191,8 +215,9 @@ void loop() {
       break;
 
     case BACKWARD:
+      // Update motor driver. This state uses continious fixed speed mode.
       stepper.runSpeed();
-      // If backeard button got released then stop the backward motion.
+      // Handle Backward button release.
       if (!isBackwardButtonPressed()) { 
         stepper.move(0);
         setState(IDLE);
@@ -203,6 +228,7 @@ void loop() {
     default:
       // Should never happend.
       Serial.println("Unknown state");
+      // This also prints the unknown state.
       setState(IDLE);
   }
 }
