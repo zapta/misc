@@ -1,8 +1,7 @@
-// Threaded plunger for 10cc syringe.
-//
-// Includes an embeded M5 nut. To embed the nut, set the 3D slicer
-// to stop just before the first layer on top of the nut, insert
-// the nut, and continue the printing.
+// Threaded plunger for 10cc syringe. Using McMaster 94180A353 M4 threaded
+// insert (use any conic solder iron to insert after printing). The conic tip
+// should be placed between the plunger and the rubber cylinder to displace
+// the air pocket.
 
 // Circle reslolution. Higher is smoother.
 $fn=180;
@@ -12,7 +11,7 @@ od1 = 15.1;
 h1 = 37.5;
 
 // Section 2 - middle.
-od2 = 8;
+od2 = 9;
 h2 = 1;
 
 // Section 3 - toward the syringe tip. Dimension set to
@@ -28,14 +27,13 @@ echo("*** total height: ", total_height);
 chamfer = 0.5;
 
 // Shaft hole length.
-screw_hole_len = total_height - 4;
+screw_hole_len = total_height - 2;
 screw_hole_diameter = 6;
 
-// For M4 hex nut. Diameter is between oposing corners.
-// Use trial and error to get good fit with your printer's tolerances.
-//nut_thickness = 3.3;
-//nut_diameter = 8.5;
-//nut_offset_from_edge = 2;
+tip_cone_height = 2;
+tip_top_diameter = 2;
+tip_base_height = 0.4;
+tip_base_diameter = od3;
 
 // Very small sizes. Used to maintain manifold.
 eps1 = 0.001;
@@ -65,31 +63,38 @@ module chamfered_cylinder(d, h, c1, s1, c2, s2) {
 }
 
 module body() {
-  chamfered_cylinder(od1, h1, 2*chamfer, 1, (od1-od2)/2, 2);  
+  // NOTE: using 6.0 chamfer slop to improve printing.
+  chamfered_cylinder(od1, h1, 2*chamfer, 1, (od1-od2)/2, 6.0);  
   translate([0, 0, h1-eps1]) cylinder(d=od2, h=h2+eps1);  
-  translate([0, 0, h1+h2-eps1]) chamfered_cylinder(od3, h3, chamfer/2, 1, chamfer/2, 1);
+  translate([0, 0, h1+h2-eps1]) chamfered_cylinder(od3, h3, chamfer/2, 1.0, chamfer/2, 1.0);
 }
 
-module main() {
+module tip() {
+  chamfered_cylinder(tip_base_diameter, tip_base_height+eps1, 0.2, 1.0, eps1, 1.0);
+  translate([0, 0, tip_base_height]) 
+    cylinder(d1=tip_base_diameter, d2=tip_top_diameter, h=tip_cone_height); 
+}
+
+module plunger() {
   difference() {
     body();
     m4_threaded_insert(screw_hole_diameter, screw_hole_len);
   }
 }
 
-// Cross cut for debugging.
-difference() {
-  main();
-  translate([0, 0, -eps1]) cube([100, 100, 100]);
+// The plunger and tip, oriented for printing.
+module main() {
+  translate([0, 0, total_height]) rotate([180, 0, 0]) plunger();;
+  translate([2*od1, 0, 0]) tip();
 }
 
-// The real part oriented for printing.
-//translate([0, 0, total_height]) rotate([180, 0, 0]) main();
-
+// Plunger cross cut for debugging.
 //difference() {
-//translate([0, 0, total_height]) rotate([180, 0, 0]) main();
-//  translate([0, 0, 12])cylinder(d=30, h=total_height-24);
+//  plunger();
+//  translate([0, 0, -eps1]) cube([100, 100, 100]);
 //}
+
+main();
 
 
 
