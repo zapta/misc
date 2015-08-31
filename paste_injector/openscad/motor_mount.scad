@@ -25,15 +25,17 @@ total_height = bottom_height + cavity_height;
 
 base_corner_radius1 = 5;  // convex side
 base_corner_radius2 = 3;  // flat side
-base_corner_offset = 0;
+base_corner_offset  = 0;
 
-syringe_holder_height1 = 2;
-syringe_holder_height2 = 3;
+syringe_holder_height1 = 3;
+syringe_holder_height2 = 6;
 syringe_hole_diameter = 18.5;
 syringe_hole_wall = 3;
 
-syringe_holder_screw_diameter = 4.0+1.0;
-syringe_holder_screw_head_diameter = 7;
+syringe_holder_screw_diameter = 4.0+0.5;
+syringe_holder_screw_head_diameter = 8;
+
+chamfer = 0.5;
 
 eps1 = 0.001;
 eps2 = 2*eps1;
@@ -50,9 +52,9 @@ module m4_threaded_insert(h) {
   translate([0, 0, -eps1]) {
     // NOTE: diameter are compensated to actual print results.
     // May vary among printers.
-    cylinder(d1=B, d2=A, h=eps1+L*2/3);
-    cylinder(d=A, h=eps1+L);
-    translate([0, 0, L-eps1]) cylinder(d=D, h=h+eps1-L);
+    cylinder(d1=B, d2=A, h=eps1+L*2/3, $f2=32);
+    cylinder(d=A, h=eps1+L, $f2=32);
+    translate([0, 0, L-eps1]) cylinder(d=D, h=h+eps1-L, $f2=32);
   }
 }
 
@@ -64,7 +66,6 @@ module chamfered_cylinder(d, h, c1, s1, c2, s2) {
 }
 
 module motor_holes() {
-  
   translate([motor_screws_space/2, -motor_screws_holes_offset, total_height]) 
       rotate([180, 0, 0]) 
       m4_threaded_insert(motor_screws_holes_depth);
@@ -84,7 +85,7 @@ module syringe_screws() {
 
 // Hole at the bottom of the base for the shreded shaft.
 module shaft_hole() {
- translate([0, 0, -eps1]) cylinder(d=shaft_hole_diameter, h=bottom_height+eps2);
+ translate([0, 0, -eps1]) cylinder(d=shaft_hole_diameter, h=bottom_height+eps2, $f2=32);
 }
 
 // The motor mount before any substraction. It accepts a height parameter so 
@@ -109,7 +110,7 @@ module base_pattern(h) {
 
 // The coupler cavity cut.
 module cavity() {
-  translate([0, 0, bottom_height]) cylinder(d=cavity_diameter, h=total_height);  
+  translate([0, 0, bottom_height]) cylinder(d=cavity_diameter, h=total_height, $fn=64);  
 }
 
 module motor_mount() {
@@ -127,7 +128,7 @@ module syringe_holder_blank() {
     translate([0, 0, syringe_holder_height1]) rotate([0, 180, 0]) 
         base_pattern(syringe_holder_height1);
   
-  chamfered_cylinder(syringe_hole_diameter+2*syringe_hole_wall, syringe_holder_height1+syringe_holder_height2, eps1, 1.0, 2.0, 1.0);
+    chamfered_cylinder(syringe_hole_diameter+2*syringe_hole_wall, syringe_holder_height1+syringe_holder_height2, eps1, 1.0, 2.0, 1.0);
   } 
 }
 
@@ -135,17 +136,33 @@ module syringe_holder() {
   total_h=syringe_holder_height1+syringe_holder_height2+eps2;
   difference() {
     syringe_holder_blank();
-    translate([0, 0, -eps1]) cylinder(d=syringe_hole_diameter, h=total_h+eps2);
     
-    // Screw holes.
-    translate([-syringe_screws_space/2, 0, -eps1]) 
-        cylinder(d=syringe_holder_screw_diameter, h=total_h+eps2);
-    translate([syringe_screws_space/2, 0, -eps1]) 
-        cylinder(d=syringe_holder_screw_diameter, h=total_h+eps2);
+    // Syringe hole + chamfer;
+    translate([0, 0, -eps1]) {
+      cylinder(d=syringe_hole_diameter, h=total_h+eps2);
+      cylinder(d1=syringe_hole_diameter + 2*chamfer, d2=eps1, 
+          h=(syringe_hole_diameter + 2*chamfer)/2);
+    }
+    
+    
+    
+    // Screw holes + chamfers.
+    translate([-syringe_screws_space/2, 0, -eps1]) {
+      cylinder(d=syringe_holder_screw_diameter, h=total_h+eps2);
+      cylinder(d1=syringe_holder_screw_diameter + 2*chamfer, d2=eps1, 
+          h=(syringe_holder_screw_diameter + 2*chamfer)/2);
+    }
+    
+    translate([syringe_screws_space/2, 0, -eps1]) {
+      cylinder(d=syringe_holder_screw_diameter, h=total_h+eps2);
+      cylinder(d1=syringe_holder_screw_diameter + 2*chamfer, d2=eps1, 
+          h=(syringe_holder_screw_diameter + 2*chamfer)/2);
+    }
     
     // Screw heads insets.
     translate([-syringe_screws_space/2, 0, syringe_holder_height1]) 
         cylinder(d=syringe_holder_screw_head_diameter, h=syringe_holder_height2+eps2);
+    
     translate([syringe_screws_space/2, 0, syringe_holder_height1]) 
         cylinder(d=syringe_holder_screw_head_diameter, h=syringe_holder_height2+eps2);
   }  
@@ -157,3 +174,5 @@ module main() {
 }
 
 main();
+
+ 
