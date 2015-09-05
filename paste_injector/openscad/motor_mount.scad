@@ -18,7 +18,7 @@ motor_screws_space = 35;
 motor_screws_holes_offset = 8;
 motor_screws_holes_depth = 20;
 
-syringe_screws_space = 30;
+syringe_screws_space = 31;
 syringe_screws_holes_depth = 20;
 
 total_height = bottom_height + cavity_height;
@@ -33,7 +33,7 @@ syringe_hole_diameter = 18.5;
 syringe_hole_wall = 3;
 
 syringe_holder_screw_diameter = 4.0+0.5;
-syringe_holder_screw_head_diameter = 8;
+syringe_holder_screw_head_diameter = 9.0+0.5;
 
 chamfer = 0.5;
 

@@ -29,7 +29,7 @@ const int kLedPin = 13;
 const int kPotPin = A0;
 
 // The mottor has 8 half steps for a full revolution, before the down gearing.
-const int kHalfStep = 8;
+const int kHalfStep = 4;
 
 // Arduino output pins to the 28BYJ-48 motor driver.
 const int  kMotorPin1 = 6;     
@@ -44,8 +44,8 @@ const int kBacklashSteps =  300;
 
 
 // Speeds in steps/sec.
-const int kBacklashSpeed = 1000;
-const int kBackwardSpeed = 1000;   
+const int kBacklashSpeed = 200;
+const int kBackwardSpeed = 200;   
 
 // If forward speed is higher than this speed 
 // then do a backlash before stopping.
@@ -88,7 +88,7 @@ static const MapSegment kMapSegments[] = {
   {512,  640,  22,   48}, 
   {640,  768,  48,  105}, 
   {768,  896, 105,  229}, 
-  {896, 1023, 229, 1000}, 
+  {896, 1023, 229,  400}, 
 };
 
 // NUmber of segments in kMapSegments.

@@ -7,8 +7,8 @@
 $fn=180;
 
 // Section 1 - away from the syringe tip.
-od1 = 15.1;  
-h1 = 37.5;
+od1 = 13;  
+h1 = 38;
 
 // Section 2 - middle.
 od2 = 9;
