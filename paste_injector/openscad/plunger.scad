@@ -88,13 +88,19 @@ module main() {
   translate([2*od1, 0, 0]) tip();
 }
 
-// Plunger cross cut for debugging.
-//difference() {
-//  plunger();
-//  translate([0, 0, -eps1]) cube([100, 100, 100]);
-//}
+// Plunger cross cut for debugging. Do not print.
+module crossCut() {
+   translate([-2*od1, 0, total_height]) rotate([180, 0, 0]) {
+    difference() {
+      plunger();
+      translate([0, 0, -eps1]) cube([100, 100, 100]);
+    }
+  }
+}
 
 main();
+
+crossCut();
 
 
 
