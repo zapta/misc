@@ -3,11 +3,11 @@
 // TODO: turn off the power to the motor after a long idle period.
 // TODO: perform a longer backlash after a long inactivity period.
 
-#include <AccelStepper.h>
+#include "motor.h"
 
 // Finite state machine states.
 enum State {
-  // Not moving.
+  // Not moving, motor on.
   IDLE,
   // Moving forward as long as the forward button is pressed.
   // Speed is controlled by the potentiometer.
@@ -18,6 +18,8 @@ enum State {
   // Moving backward at a fast speed as long as the Backward button
   // is pressed.
   BACKWARD,
+  // Same as IDLE but motor coils are not energized.
+  SLEEP,
 };
 
 static State state = IDLE;
@@ -26,37 +28,24 @@ static State state = IDLE;
 const int kLedPin = 13;
 
 // Potentiometer analog input pin.
-const int kPotPin = A0;
+static const int kPotPin = A0;
 
-// The mottor has 8 half steps for a full revolution, before the down gearing.
-const int kHalfStep = 4;
+static const int kForwardButtonPin = 10;
+static const int kBackwardButtonPin = 11;
 
-// Arduino output pins to the 28BYJ-48 motor driver.
-const int  kMotorPin1 = 6;     
-const int  kMotorPin2 = 7;    
-const int  kMotorPin3 = 8;     
-const int  kMotorPin4 = 9;     
+static const uint16_t kBacklashTimeMillis = 1000;
 
-const int kForwardButtonPin = 10;
-const int kBackwardButtonPin = 11;
-
-const int kBacklashSteps =  300;
-
+static const uint32_t kSleepTimeMillis = 60*1000;
 
 // Speeds in steps/sec.
-const int kBacklashSpeed = 200;
-const int kBackwardSpeed = 200;   
+static const int kBacklashSpeed = 500;
+static const int kBackwardSpeed = 500;
 
-// If forward speed is higher than this speed 
+// If forward speed is higher than this speed
 // then do a backlash before stopping.
-const int kMinForwardSpeedForBacklash = 100;
+static const int kMinForwardSpeedForBacklash = 100;
 
-// NOTE: the pins are not listed by their numeric order.
-AccelStepper stepper(kHalfStep, 
-    kMotorPin1, 
-    kMotorPin3, 
-    kMotorPin2, 
-    kMotorPin4);
+static uint32_t current_state_start_time_millis = 0;
 
 // TODO: why do we need this to compile. The function is just below.
 static void setState(State newState);
@@ -68,7 +57,12 @@ static void setState(State newState) {
     Serial.print(" --> ");
     Serial.println(newState);
     state = newState;
+    current_state_start_time_millis = millis();
   }
+}
+
+static inline uint32_t millisInCurrentState() {
+  return (millis() - current_state_start_time_millis);
 }
 
 // Consts of a single segment of the pot value mapping function.
@@ -81,14 +75,14 @@ struct MapSegment {
 
 // Consts for all the segments of the pot value mapping function.
 static const MapSegment kMapSegments[] = {
-  {  0,   128,  1,    2}, 
-  {128,   256,  2,    4}, 
-  {256,   384,  4,   10}, 
-  {384,   512, 10,   22}, 
-  {512,  640,  22,   48}, 
-  {640,  768,  48,  105}, 
-  {768,  896, 105,  229}, 
-  {896, 1023, 229,  400}, 
+  {  0,   128,  1,    2},
+  {128,   256,  2,    4},
+  {256,   384,  4,   10},
+  {384,   512, 10,   22},
+  {512,  640,  22,   48},
+  {640,  768,  48,  105},
+  {768,  896, 105,  229},
+  {896, 1023, 229,  500},
 };
 
 // NUmber of segments in kMapSegments.
@@ -98,26 +92,26 @@ const int kNumMapSegments = sizeof(kMapSegments) / sizeof(kMapSegments[0]);
 // function using the linear segments in kMapSegments.
 int mapPotValue(int potValue) {
   potValue = constrain(potValue, 0, 1023);
-  for (int i=0; i<kNumMapSegments; i++) {
+  for (int i = 0; i < kNumMapSegments; i++) {
     const MapSegment& s = kMapSegments[i];
     if (potValue <= s.inMax) {
       // TODO: precompute dIn and dOut.
       return (int) (((long)potValue - s.inMin) * (s.outMax - s.outMin) / (s.inMax - s.inMin)) + s.outMin;
     }
   }
-  return kMapSegments[kNumMapSegments-1].outMax;
+  return kMapSegments[kNumMapSegments - 1].outMax;
 }
 
 // These two are updated each time readPostAsSpeed() is called.
 static unsigned long timeLastPotReadMillis = 0;
-static int lastPogValueAsSpeed = 0;
+static int lastPotValueAsSpeed = 0;
 
-// Read pot value and return it mapped to speed. 
+// Read pot value and return it mapped to speed.
 static int readPotAsSpeed() {
-   timeLastPotReadMillis = millis();
-   const int potValue = analogRead(kPotPin);
-   lastPogValueAsSpeed = mapPotValue(potValue);
-   return lastPogValueAsSpeed;
+  timeLastPotReadMillis = millis();
+  const int potValue = analogRead(kPotPin);
+  lastPotValueAsSpeed = mapPotValue(potValue);
+  return lastPotValueAsSpeed;
 }
 
 inline long millisSinceLastPotRead() {
@@ -127,101 +121,99 @@ inline long millisSinceLastPotRead() {
 inline bool isForwardButtonPressed() {
   // TODO: debounce.
   //
-  // Active low. 
-  return !digitalRead(kForwardButtonPin);  
+  // Active low.
+  return !digitalRead(kForwardButtonPin);
 }
 
 inline bool isBackwardButtonPressed() {
   // TODO: debounce.
   //
   // Active low.
-  return !digitalRead(kBackwardButtonPin);  
+  return !digitalRead(kBackwardButtonPin);
 }
 
 // Arduino initialization function.
 void setup() {
-  pinMode(kLedPin, OUTPUT);
-  
-   // initialize the pushbutton pin as an input:
-  pinMode(kForwardButtonPin, INPUT_PULLUP);  
-  pinMode(kBackwardButtonPin, INPUT_PULLUP);  
-
   Serial.begin(115200);
+  
+  pinMode(kLedPin, OUTPUT);
 
-  stepper.setMaxSpeed(4000.0);
-
-  // This is required to get the motor library going.
-  stepper.move(1);
-  stepper.setSpeed(500);
-  while (stepper.distanceToGo()) {
-    stepper.runSpeedToPosition();
-  }
+  motor::setup();
+  motor::setSpeed(0, true);
 }
 
 // Arduino main loop function.
 void loop() {
+  // Update the motor outputs as needed.
+  motor::loop();
+
   // Here when last motion operation is completed.
   switch (state) {
-
-    case IDLE:    
-      // TODO: do we need to keep updating the motor driver evne when stopped?
+    case IDLE:
+      if (millisInCurrentState() >= kSleepTimeMillis) {
+        motor::sleep();
+        setState(SLEEP);
+        return;
+      }
       //
       // Handle Forward button press.
-      if (isForwardButtonPressed()) { 
-        stepper.setSpeed(readPotAsSpeed());
+      if (isForwardButtonPressed()) {
+        motor::setSpeed(readPotAsSpeed(), true);
         setState(FORWARD);
         return;
-      }   
-      // Handle Backward button press. 
-      if (isBackwardButtonPressed()) { 
-        stepper.setSpeed(-kBackwardSpeed);
+      }
+      // Handle Backward button press.
+      if (isBackwardButtonPressed()) {
+        motor::setSpeed(kBackwardSpeed, false);
         setState(BACKWARD);
         return;
       }
       break;
 
     case FORWARD:
-      // Update motor drive. This state uses continious fixed speed mode.
-      stepper.runSpeed();
       // Handle Forward button release.
-      if (!isForwardButtonPressed()) { 
+      if (!isForwardButtonPressed()) {
         // If moved fast do anti oozing.
-        if (lastPogValueAsSpeed >= kMinForwardSpeedForBacklash) {
-          stepper.move(-kBacklashSteps);
-          stepper.setSpeed(kBacklashSpeed);
+        if (lastPotValueAsSpeed >= kMinForwardSpeedForBacklash) {
+          motor::setSpeed(kBacklashSpeed, false);
           setState(BACKLASH);
         } else {
           // Moved slow. Just stop.
-          stepper.move(0);
+          motor::setSpeed(0, true);
           setState(IDLE);
         }
         return;
-        
+
       }
       // Handle pot changes.
       if (millisSinceLastPotRead() >= 100) {
-        stepper.setSpeed(readPotAsSpeed());  
+        motor::setSpeed(readPotAsSpeed(), true);
       }
       break;
-      
+
     case BACKLASH:
-      // Update motor driver. This state uses fixe distance move mode.
-      stepper.runSpeedToPosition();
       // Handle movement done.
-      if (!stepper.distanceToGo()) {
-        setState(IDLE); 
-        return; 
+      if (millisInCurrentState() >= kBacklashTimeMillis) {
+        motor::setSpeed(0, true);
+        setState(IDLE);
+        return;
       }
       break;
 
     case BACKWARD:
-      // Update motor driver. This state uses continious fixed speed mode.
-      stepper.runSpeed();
       // Handle Backward button release.
-      if (!isBackwardButtonPressed()) { 
-        stepper.move(0);
+      if (!isBackwardButtonPressed()) {
+        motor::setSpeed(0, true);
         setState(IDLE);
         return;
+      }
+      break;
+
+    case SLEEP:
+      if (isForwardButtonPressed() || isBackwardButtonPressed()) {
+        motor::setSpeed(0, false);
+        setState(IDLE);
+        return;  
       }
       break;
 
