@@ -1,7 +1,6 @@
 // Controller the solder paste injector.
 
-// TODO: turn off the power to the motor after a long idle period.
-// TODO: perform a longer backlash after a long inactivity period.
+// For motor pin connection see motor_io.cpp.
 
 #include "motor.h"
 
@@ -24,18 +23,25 @@ enum State {
 
 static State state = IDLE;
 
-// Onboard LED. For debugging. Active high.
+// Arduino pin for nnboard LED. For debugging. Active high.
 const int kLedPin = 13;
 
-// Potentiometer analog input pin.
+// Arduino potentiometer analog input pin.
 static const int kPotPin = A0;
 
+// Arduino input pin for the forward button. Active low.
 static const int kForwardButtonPin = 10;
+
+// Arduino input pin for the backward button. Active low.
 static const int kBackwardButtonPin = 11;
 
-static const uint16_t kBacklashTimeMillis = 1000;
+// After a fast forward, move back for this time period
+// to reduce oozing.
+static const uint16_t kBacklashTimeMillis = 2000;
 
-static const uint32_t kSleepTimeMillis = 60*1000;
+// After this idle time, the power to the motor is
+// disconnected. 
+static const uint32_t kSleepTimeMillis =20*1000;
 
 // Speeds in steps/sec.
 static const int kBacklashSpeed = 500;
@@ -43,8 +49,9 @@ static const int kBackwardSpeed = 500;
 
 // If forward speed is higher than this speed
 // then do a backlash before stopping.
-static const int kMinForwardSpeedForBacklash = 100;
+static const int kMinForwardSpeedForBacklash = 250;
 
+// Time in millis since entering the current state.
 static uint32_t current_state_start_time_millis = 0;
 
 // TODO: why do we need this to compile. The function is just below.
@@ -183,7 +190,6 @@ void loop() {
           setState(IDLE);
         }
         return;
-
       }
       // Handle pot changes.
       if (millisSinceLastPotRead() >= 100) {

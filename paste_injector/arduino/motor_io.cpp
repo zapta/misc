@@ -1,4 +1,4 @@
-// Motor pins driver.
+// Output pin driver for a 28BYJ-48 motor.
 
 #include <arduino.h>
 
@@ -10,22 +10,31 @@
 
 namespace motor_io {
 
-// Using a single port for all 4 motor pins.
-static const uint8_t kPin1Mask = (1 << 2);  // Arduino pin 2
-static const uint8_t kPin2Mask = (1 << 3);  // Arduino pin 3
-static const uint8_t kPin3Mask = (1 << 4);  // Arduino pin 4
-static const uint8_t kPin4Mask = (1 << 5);  // Arduino pin 5
+// Using a single port for all 4 motor pins. Connect
+// motor's red wire to +5V.
+//
+// Motor blue wire. Arduino pin 2.
+static const uint8_t kPin1Mask = (1 << 2);  
+
+// Motor pink wire. Arduino pin 3.
+static const uint8_t kPin2Mask = (1 << 3); 
+
+ // Motor yellow wire. Arduino pin 4.
+static const uint8_t kPin3Mask = (1 << 4); 
+
+ // Motor orange wire. Arduino pin 5.
+static const uint8_t kPin4Mask = (1 << 5);  
 
 // Activated pins in each steps throughout one cycle.
 static const uint8_t kStepTable[] = {
-  kPin1Mask | kPin2Mask,   // step 0
-  kPin2Mask,               // step 1
-  kPin2Mask | kPin3Mask,   // step 2
-  kPin3Mask,               // step 3
-  kPin3Mask | kPin4Mask,   // step 4
-  kPin4Mask,               // step 5
-  kPin4Mask | kPin1Mask,   // step 6
-  kPin1Mask                // step 7
+  kPin1Mask,               // step 0
+  kPin1Mask | kPin2Mask,   // step 1
+  kPin2Mask,               // step 2
+  kPin2Mask | kPin3Mask,   // step 3
+  kPin3Mask,               // step 4
+  kPin3Mask | kPin4Mask,   // step 5
+  kPin4Mask,               // step 6
+  kPin4Mask | kPin1Mask     // step 7  
 };
 
 // A union of all pin masks.
