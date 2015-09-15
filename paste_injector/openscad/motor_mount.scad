@@ -29,7 +29,7 @@ base_corner_offset  = 0;
 
 syringe_holder_height1 = 3;
 syringe_holder_height2 = 6;
-syringe_hole_diameter = 18.5;
+syringe_hole_diameter = 16.5+1.0;
 syringe_hole_wall = 3;
 
 syringe_holder_screw_diameter = 4.0+0.5;

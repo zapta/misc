@@ -8,16 +8,16 @@ $fn=180;
 
 // Section 1 - away from the syringe tip.
 od1 = 13;  
-h1 = 38;
+h1 = 42.8;
 
 // Section 2 - middle.
-od2 = 9;
-h2 = 1;
+od2 = 8.5;
+h2 = 1.0;
 
 // Section 3 - toward the syringe tip. Dimension set to
 // fit into the syringe rubber cylinder.
-od3 = 12.8;
-h3 = 1.5;
+od3 = 11.5;
+h3 = 1.2;
 
 // Total plunger height.
 total_height = h1 + h2 + h3;
@@ -30,14 +30,21 @@ chamfer = 0.5;
 screw_hole_len = total_height - 2;
 screw_hole_diameter = 6;
 
-tip_cone_height = 2;
-tip_top_diameter = 2;
+tip_cone_height = 1.4;
+tip_top_diameter = 5;
 tip_base_height = 0.4;
 tip_base_diameter = od3;
 
 // Very small sizes. Used to maintain manifold.
 eps1 = 0.001;
 eps2 = 2*eps1;
+
+// c1, c2 are chamfers at bottom and top respectivly. s1, s2 are chamfers's slopes.
+module chamfered_cylinder(d, h, c1, s1, c2, s2) {
+    cylinder(d1=d-2*c1, d2=d, h=s1*c1);
+    translate([0, 0, s1*c1-eps1]) cylinder(d=d, h=h-s1*c1-s2*c2+eps2);
+    translate([0, 0, h-s2*c2]) cylinder(d1=d, d2=d-2*c2, h=s2*c2);
+}
 
 // Hole for a M4 metal insert, mcmaster part number 94180A353.
 // h is the total depth for the screw hole.
@@ -51,15 +58,8 @@ module m4_threaded_insert(d, h) {
     // May vary among printers.
     cylinder(d1=B, d2=A, h=eps1+L*2/3); 
     cylinder(d=A, h=eps1+L);
-    translate([0, 0, L-eps1]) cylinder(d=d, h=h+eps1-L);
+    translate([0, 0, L-eps1]) chamfered_cylinder(d, h+eps2-L, eps1, 1,   1.5*chamfer, 1);
   }
-}
-
-// c1, c2 are chamfers at bottom and top respectivly. s1, s2 are chamfers's slopes.
-module chamfered_cylinder(d, h, c1, s1, c2, s2) {
-    cylinder(d1=d-2*c1, d2=d, h=s1*c1);
-    translate([0, 0, s1*c1-eps1]) cylinder(d=d, h=h-s1*c1-s2*c2+eps2);
-    translate([0, 0, h-s2*c2]) cylinder(d1=d, d2=d-2*c2, h=s2*c2);
 }
 
 module body() {
