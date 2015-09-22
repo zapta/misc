@@ -151,6 +151,9 @@ void setup() {
   
   pinMode(kLedPin, OUTPUT);
 
+  pinMode(kForwardButtonPin, INPUT_PULLUP);
+  pinMode(kBackwardButtonPin, INPUT_PULLUP);
+
   motor::setup();
   motor::setSpeed(0, true);
 }
