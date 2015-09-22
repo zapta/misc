@@ -6,19 +6,19 @@
 
 // Finite state machine states.
 enum State {
-  // Not moving, motor on.
-  IDLE,
+  // Not moving, motor is on.
+  IDLE = 0,
   // Moving forward as long as the forward button is pressed.
   // Speed is controlled by the potentiometer.
-  FORWARD,
+  FORWARD = 1,
   // Moving a fixed distance at a fast speed backward after releasing
   // the Forward button.
-  BACKLASH,
+  BACKLASH = 2,
   // Moving backward at a fast speed as long as the Backward button
   // is pressed.
-  BACKWARD,
+  BACKWARD = 3,
   // Same as IDLE but motor coils are not energized.
-  SLEEP,
+  SLEEP = 4,
 };
 
 static State state = IDLE;
@@ -70,6 +70,12 @@ static void setState(State newState) {
 
 static inline uint32_t millisInCurrentState() {
   return (millis() - current_state_start_time_millis);
+}
+
+// Using this as a poor man debouncing in states that we entered
+// due to a button action.
+static inline boolean debouncingDelay() {
+   return millisInCurrentState() >= 25;
 }
 
 // Consts of a single segment of the pot value mapping function.
@@ -162,6 +168,10 @@ void loop() {
         setState(SLEEP);
         return;
       }
+      // Handle buttons unly after minimal debouncing delay.
+      if (!debouncingDelay()) {
+        return;
+      }
       //
       // Handle Forward button press.
       if (isForwardButtonPressed()) {
@@ -179,7 +189,7 @@ void loop() {
 
     case FORWARD:
       // Handle Forward button release.
-      if (!isForwardButtonPressed()) {
+      if (!isForwardButtonPressed() && debouncingDelay()) {
         // If moved fast do anti oozing.
         if (lastPotValueAsSpeed >= kMinForwardSpeedForBacklash) {
           motor::setSpeed(kBacklashSpeed, false);
@@ -198,6 +208,14 @@ void loop() {
       break;
 
     case BACKLASH:
+      // If any of the button is pressed, go back to direct 
+      // button control. Using a short delay as a poor man debouncing
+      // Since we enter here as a result of button action.
+      if ((isForwardButtonPressed() || isBackwardButtonPressed()) && debouncingDelay()) {
+        motor::setSpeed(0, false);
+        setState(IDLE);
+        return;  
+      }
       // Handle movement done.
       if (millisInCurrentState() >= kBacklashTimeMillis) {
         motor::setSpeed(0, true);
@@ -208,7 +226,7 @@ void loop() {
 
     case BACKWARD:
       // Handle Backward button release.
-      if (!isBackwardButtonPressed()) {
+      if (!isBackwardButtonPressed() && debouncingDelay()) {
         motor::setSpeed(0, true);
         setState(IDLE);
         return;
