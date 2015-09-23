@@ -362,9 +362,9 @@ Source: http://dkc3.digikey.com/Media/PDF/Data%20Sheets/E-Switch%20PDFs/TL1105%2
 <pad name="A2" x="-2.25" y="-3.25" drill="1" diameter="1.6764" rot="R90"/>
 <pad name="B1" x="2.25" y="3.25" drill="1" diameter="1.6764" rot="R90"/>
 <pad name="B2" x="2.25" y="-3.25" drill="1" diameter="1.6764" rot="R90"/>
+<pad name="GND" x="4.1" y="0" drill="1" diameter="1.6764" rot="R90"/>
 <text x="-5.08" y="-2.54" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 <text x="5.08" y="-2.54" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
-<pad name="GND" x="4.1" y="0" drill="1" diameter="1.6764" rot="R90"/>
 </package>
 <package name="R0603">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
@@ -531,12 +531,12 @@ chip</description>
 <package name="TRIMPOT">
 <description>&lt;b&gt;POTENTIOMETER&lt;/b&gt;&lt;p&gt;
 distributor Schukat</description>
+<circle x="0" y="0" radius="4.8895" width="0.1524" layer="21"/>
+<pad name="C" x="0" y="-2.54" drill="0.889" diameter="1.778"/>
 <pad name="CCW" x="-2.54" y="-2.54" drill="0.889" diameter="1.778" rot="R90"/>
 <pad name="CW" x="2.54" y="-2.54" drill="0.889" diameter="1.778" rot="R90"/>
-<pad name="C" x="0" y="-2.54" drill="0.889" diameter="1.778"/>
 <text x="-5.461" y="-5.08" size="1.27" layer="25" ratio="10" rot="R90">&gt;NAME</text>
 <text x="6.731" y="-5.08" size="1.27" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
-<circle x="0" y="0" radius="4.8895" width="0.1524" layer="21"/>
 </package>
 <package name="LED0603">
 <description>&lt;b&gt;Hyper CHIPLED Hyper-Bright LED&lt;/b&gt;&lt;p&gt;
@@ -738,11 +738,11 @@ Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
 <wire x1="-2.032" y1="1.524" x2="-3.048" y2="1.524" width="0.254" layer="94"/>
 <wire x1="-3.048" y1="1.524" x2="-3.048" y2="-1.27" width="0.254" layer="94"/>
 <wire x1="-3.048" y1="-1.27" x2="-2.032" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="2.54" y1="2.54" x2="2.54" y2="-2.54" width="0.127" layer="94"/>
 <pin name="1" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
 <pin name="2" x="0" y="5.08" visible="off" length="short" direction="pas" rot="R270"/>
-<text x="-10.16" y="3.81" size="1.778" layer="95">&gt;NAME</text>
 <pin name="GND" x="2.54" y="-5.08" visible="off" length="short" direction="pwr" rot="R90"/>
-<wire x1="2.54" y1="2.54" x2="2.54" y2="-2.54" width="0.127" layer="94" style="shortdash"/>
+<text x="-10.16" y="3.81" size="1.778" layer="95">&gt;NAME</text>
 </symbol>
 <symbol name="R-US">
 <wire x1="-2.54" y1="0" x2="-2.159" y2="1.016" width="0.2032" layer="94"/>
@@ -827,9 +827,9 @@ Source: http://www.osram.convergy.de/ ... Lb_q993.pdf</description>
 <wire x1="2.032" y1="-2.159" x2="2.667" y2="-3.429" width="0.1524" layer="94"/>
 <wire x1="2.667" y1="-3.429" x2="1.397" y2="-3.429" width="0.1524" layer="94"/>
 <wire x1="1.397" y1="-3.429" x2="2.032" y2="-2.159" width="0.1524" layer="94"/>
+<pin name="C" x="5.08" y="0" visible="off" length="short" direction="pas" rot="R180"/>
 <pin name="CCW" x="0" y="-7.62" visible="off" length="short" direction="pas" rot="R90"/>
 <pin name="CW" x="0" y="7.62" visible="off" length="short" direction="pas" rot="R270"/>
-<pin name="C" x="5.08" y="0" visible="off" length="short" direction="pas" rot="R180"/>
 <text x="-5.08" y="-2.54" size="1.778" layer="95" rot="R90">&gt;NAME</text>
 <text x="-2.54" y="-2.54" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
 </symbol>
@@ -1133,7 +1133,7 @@ Source: murata.co.jp</description>
 <connects>
 <connect gate="G$1" pin="D+" pad="3"/>
 <connect gate="G$1" pin="D-" pad="2"/>
-<connect gate="G$1" pin="GND" pad="5"/>
+<connect gate="G$1" pin="GND" pad="5 A B C D"/>
 <connect gate="G$1" pin="ID" pad="4"/>
 <connect gate="G$1" pin="VBUS" pad="1"/>
 </connects>
@@ -1277,7 +1277,7 @@ Source: murata.co.jp</description>
 <text x="48.26" y="154.94" size="3.048" layer="97">TODO: verify footprints and pinout</text>
 <text x="172.72" y="68.58" size="3.048" layer="97">ISP</text>
 <text x="2.54" y="154.94" size="3.048" layer="97">POWER</text>
-<text x="15.24" y="96.52" size="3.048" layer="97">SPEED</text>
+<text x="15.24" y="96.52" size="3.048" layer="97">PUSH SPEED</text>
 <text x="96.52" y="71.12" size="3.048" layer="97">MOTOR DRIVER</text>
 <text x="200.66" y="116.84" size="3.048" layer="97">MCU</text>
 <text x="48.26" y="147.32" size="3.048" layer="97">TODO: separate analog GND and VCC</text>
