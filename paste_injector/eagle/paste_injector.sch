@@ -1255,6 +1255,10 @@ Source: murata.co.jp</description>
 <part name="U$6" library="paste_injector" deviceset="NC" device=""/>
 <part name="U$7" library="paste_injector" deviceset="NC" device=""/>
 <part name="R1" library="paste_injector" deviceset="TRIMPOT" device="CA9V" value="10K"/>
+<part name="U$8" library="paste_injector" deviceset="NC" device=""/>
+<part name="U$10" library="paste_injector" deviceset="NC" device=""/>
+<part name="U$11" library="paste_injector" deviceset="NC" device=""/>
+<part name="U$12" library="paste_injector" deviceset="NC" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -1375,6 +1379,10 @@ Source: murata.co.jp</description>
 <instance part="U$6" gate="G$1" x="231.14" y="180.34" rot="R180"/>
 <instance part="U$7" gate="G$1" x="231.14" y="177.8" rot="R180"/>
 <instance part="R1" gate="G$1" x="2.54" y="111.76"/>
+<instance part="U$8" gate="G$1" x="182.88" y="182.88" rot="R180"/>
+<instance part="U$10" gate="G$1" x="106.68" y="104.14" rot="R180"/>
+<instance part="U$11" gate="G$1" x="106.68" y="101.6" rot="R180"/>
+<instance part="U$12" gate="G$1" x="106.68" y="99.06" rot="R180"/>
 </instances>
 <busses>
 </busses>

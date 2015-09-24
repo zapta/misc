@@ -16,7 +16,7 @@ h2 = 1.0;
 
 // Section 3 - toward the syringe tip. Dimension set to
 // fit into the syringe rubber cylinder.
-od3 = 11.5;
+od3 = 12.5;
 h3 = 1.2;
 
 // Total plunger height.
