@@ -1207,7 +1207,7 @@ Source: murata.co.jp</description>
 <part name="ISP" library="paste_injector" deviceset="PINHD-2X3" device="" value="PINHD-2X3"/>
 <part name="GND14" library="paste_injector" deviceset="GND" device=""/>
 <part name="GND8" library="paste_injector" deviceset="GND" device=""/>
-<part name="R3" library="paste_injector" deviceset="RES-" device="R0603" value="5K"/>
+<part name="R3" library="paste_injector" deviceset="RES-" device="R0603" value="10K"/>
 <part name="C4" library="paste_injector" deviceset="CAP-" device="C0603" value="0.1uF"/>
 <part name="C1" library="paste_injector" deviceset="CPOL-US" device="A/3216-18R" value="10uF"/>
 <part name="GND1" library="paste_injector" deviceset="GND" device=""/>
@@ -1241,7 +1241,7 @@ Source: murata.co.jp</description>
 <part name="J3" library="paste_injector" deviceset="PINHD-1X5" device=""/>
 <part name="Q1" library="paste_injector" deviceset="CSTCR" device="" technology="6M00G53Z"/>
 <part name="D1" library="paste_injector" deviceset="LED" device=""/>
-<part name="R2" library="paste_injector" deviceset="RES-" device="R0603" value="5K"/>
+<part name="R2" library="paste_injector" deviceset="RES-" device="R0603" value="3K3"/>
 <part name="GND3" library="paste_injector" deviceset="GND" device=""/>
 <part name="P+8" library="paste_injector" deviceset="+5V" device=""/>
 <part name="U$4" library="paste_injector" deviceset="NC" device=""/>
