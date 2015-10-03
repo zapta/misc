@@ -7,6 +7,8 @@ TODO list for the motorized paste dispenser.
 * Swap the location of the USB and ISP connector (more clearance for the PUSH button).
 * Position the pot such that its dial extends outside of the corner of the board.
 
+**BOM**
+
 ** Mechanical Design
 
 **SOFTWARE**
