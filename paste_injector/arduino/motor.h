@@ -16,6 +16,8 @@ extern void sleep();
 
 // 0 indicates stop. Turns on motor is it's off.
 extern void setSpeed(uint16_t steps_per_sec, boolean is_forward);
+
+extern bool isNonZeroSpeed();
   
 }  // namespace motor
 

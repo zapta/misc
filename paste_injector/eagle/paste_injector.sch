@@ -1268,18 +1268,15 @@ Source: murata.co.jp</description>
 <wire x1="281.94" y1="238.76" x2="281.94" y2="0" width="0.1524" layer="94"/>
 <wire x1="281.94" y1="0" x2="-35.56" y2="0" width="0.1524" layer="94"/>
 <wire x1="-35.56" y1="0" x2="-35.56" y2="238.76" width="0.1524" layer="94"/>
-<text x="273.558" y="7.112" size="2.54" layer="97">0</text>
-<text x="48.26" y="154.94" size="3.048" layer="97">TODO: verify footprints and pinout</text>
+<text x="273.558" y="7.112" size="2.54" layer="97">1</text>
 <text x="172.72" y="68.58" size="3.048" layer="97">ISP</text>
-<text x="2.54" y="154.94" size="3.048" layer="97">POWER</text>
-<text x="15.24" y="96.52" size="3.048" layer="97">PUSH SPEED</text>
-<text x="96.52" y="71.12" size="3.048" layer="97">MOTOR DRIVER</text>
+<text x="2.54" y="154.94" size="3.048" layer="97">POWER (USB)</text>
+<text x="15.24" y="96.52" size="3.048" layer="97">SPEED</text>
+<text x="78.74" y="71.12" size="3.048" layer="97">MOTOR DRIVER</text>
 <text x="200.66" y="116.84" size="3.048" layer="97">MCU</text>
-<text x="48.26" y="147.32" size="3.048" layer="97">TODO: separate analog GND and VCC</text>
-<text x="231.14" y="71.12" size="3.048" layer="97">MOTOR</text>
+<text x="231.14" y="71.12" size="3.048" layer="97">MOTOR PADS</text>
 <text x="233.68" y="185.166" size="1.524" layer="97">(open col.)</text>
-<text x="81.28" y="175.26" size="3.048" layer="97">FTDI BASIC</text>
-<text x="2.54" y="220.98" size="5.08" layer="97">STATUS: NON VERIFIED DRAFT.</text>
+<text x="66.04" y="175.26" size="3.048" layer="97">FTDI BASIC HEADER</text>
 <text x="106.934" y="187.198" size="1.778" layer="98">DTR</text>
 <text x="106.934" y="189.738" size="1.778" layer="98">TXO</text>
 <text x="106.934" y="192.278" size="1.778" layer="98">RXI</text>
@@ -1287,6 +1284,8 @@ Source: murata.co.jp</description>
 <text x="106.934" y="197.358" size="1.778" layer="98">CTS</text>
 <text x="106.934" y="199.898" size="1.778" layer="132">GND</text>
 <text x="233.68" y="182.626" size="1.524" layer="97">(open col.)</text>
+<text x="78.74" y="17.78" size="3.048" layer="97">STATUS LED</text>
+<text x="-2.54" y="17.78" size="3.048" layer="97">PUSH-BUTTONS</text>
 </plain>
 <instances>
 <instance part="GND16" gate="1" x="180.34" y="127"/>
@@ -1693,7 +1692,7 @@ Source: murata.co.jp</description>
 <label x="241.3" y="157.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="FORWARD" class="0">
+<net name="PULL" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="PD6(AIN0)"/>
 <wire x1="231.14" y1="154.94" x2="251.46" y2="154.94" width="0.1524" layer="91"/>
@@ -1702,11 +1701,11 @@ Source: murata.co.jp</description>
 <segment>
 <pinref part="S1" gate="G$1" pin="2"/>
 <wire x1="0" y1="45.72" x2="0" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="0" y1="58.42" x2="40.64" y2="58.42" width="0.1524" layer="91"/>
-<label x="22.86" y="55.88" size="1.778" layer="95"/>
+<wire x1="0" y1="58.42" x2="35.56" y2="58.42" width="0.1524" layer="91"/>
+<label x="27.94" y="58.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="BACKWARD" class="0">
+<net name="PUSH" class="0">
 <segment>
 <pinref part="U1" gate="G$1" pin="PD7(AIN1)"/>
 <wire x1="231.14" y1="152.4" x2="251.46" y2="152.4" width="0.1524" layer="91"/>
@@ -1715,8 +1714,8 @@ Source: murata.co.jp</description>
 <segment>
 <pinref part="S2" gate="G$1" pin="2"/>
 <wire x1="15.24" y1="45.72" x2="15.24" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="50.8" x2="40.64" y2="50.8" width="0.1524" layer="91"/>
-<label x="22.86" y="50.8" size="1.778" layer="95"/>
+<wire x1="15.24" y1="50.8" x2="35.56" y2="50.8" width="0.1524" layer="91"/>
+<label x="27.94" y="50.8" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">

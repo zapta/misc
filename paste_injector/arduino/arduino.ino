@@ -4,24 +4,21 @@
 
 #include "motor.h"
 
-// Finite state machine states.
-enum State {
+// Finite state machine states. Using 8bit enums.
+namespace states {
   // Not moving, motor is on.
-  IDLE = 0,
+  static const uint8_t IDLE = 0;
   // Moving forward as long as the forward button is pressed.
   // Speed is controlled by the potentiometer.
-  FORWARD = 1,
-  // Moving a fixed distance at a fast speed backward after releasing
-  // the Forward button.
-  BACKLASH = 2,
+  static const uint8_t FORWARD = 1;
   // Moving backward at a fast speed as long as the Backward button
   // is pressed.
-  BACKWARD = 3,
+  static const uint8_t BACKWARD = 3;
   // Same as IDLE but motor coils are not energized.
-  SLEEP = 4,
+  static const uint8_t SLEEP = 4;
 };
 
-static State state = IDLE;
+static uint8_t state = states::IDLE;
 
 // Arduino pin for nnboard LED. For debugging. Active high.
 const int kLedPin = 13;
@@ -29,36 +26,27 @@ const int kLedPin = 13;
 // Arduino potentiometer analog input pin.
 static const int kPotPin = A0;
 
-// Arduino input pin for the forward button. Active low.
-static const int kForwardButtonPin = 10;
+// Arduino input pin for the forward (push) button. Active low.
+static const int kForwardButtonPin = 7;
 
-// Arduino input pin for the backward button. Active low.
-static const int kBackwardButtonPin = 11;
-
-// After a fast forward, move back for this time period
-// to reduce oozing.
-static const uint16_t kBacklashTimeMillis = 2000;
+// Arduino input pin for the backward (pull) button. Active low.
+static const int kBackwardButtonPin = 6;
 
 // After this idle time, the power to the motor is
 // disconnected. 
 static const uint32_t kSleepTimeMillis =20*1000;
 
 // Speeds in steps/sec.
-static const int kBacklashSpeed = 500;
 static const int kBackwardSpeed = 500;
-
-// If forward speed is higher than this speed
-// then do a backlash before stopping.
-static const int kMinForwardSpeedForBacklash = 250;
 
 // Time in millis since entering the current state.
 static uint32_t current_state_start_time_millis = 0;
 
 // TODO: why do we need this to compile. The function is just below.
-static void setState(State newState);
+//static void setState(uint8_t newState);
 
 // A common function to change state.
-static void setState(State newState) {
+static void setState(uint8_t newState) {
   if (newState != state) {
     Serial.print(state);
     Serial.print(" --> ");
@@ -124,6 +112,8 @@ static int readPotAsSpeed() {
   timeLastPotReadMillis = millis();
   const int potValue = analogRead(kPotPin);
   lastPotValueAsSpeed = mapPotValue(potValue);
+  Serial.print("S:");
+  Serial.println(lastPotValueAsSpeed);
   return lastPotValueAsSpeed;
 }
 
@@ -159,16 +149,20 @@ void setup() {
 }
 
 // Arduino main loop function.
-void loop() {
+void loop() {  
   // Update the motor outputs as needed.
   motor::loop();
 
+  // TODO: have a more interesting LED pattern. Currently it's on iff
+  // in a state that turns the motor.
+  digitalWrite(kLedPin, motor::isNonZeroSpeed());
+
   // Here when last motion operation is completed.
   switch (state) {
-    case IDLE:
+    case states::IDLE:
       if (millisInCurrentState() >= kSleepTimeMillis) {
         motor::sleep();
-        setState(SLEEP);
+        setState(states::SLEEP);
         return;
       }
       // Handle buttons unly after minimal debouncing delay.
@@ -179,67 +173,43 @@ void loop() {
       // Handle Forward button press.
       if (isForwardButtonPressed()) {
         motor::setSpeed(readPotAsSpeed(), true);
-        setState(FORWARD);
+        setState(states::FORWARD);
         return;
       }
       // Handle Backward button press.
       if (isBackwardButtonPressed()) {
         motor::setSpeed(kBackwardSpeed, false);
-        setState(BACKWARD);
+        setState(states::BACKWARD);
         return;
       }
       break;
 
-    case FORWARD:
+    case states::FORWARD:
       // Handle Forward button release.
       if (!isForwardButtonPressed() && debouncingDelay()) {
-        // If moved fast do anti oozing.
-        if (lastPotValueAsSpeed >= kMinForwardSpeedForBacklash) {
-          motor::setSpeed(kBacklashSpeed, false);
-          setState(BACKLASH);
-        } else {
-          // Moved slow. Just stop.
-          motor::setSpeed(0, true);
-          setState(IDLE);
-        }
+        motor::setSpeed(0, true);
+        setState(states::IDLE);
         return;
       }
       // Handle pot changes.
-      if (millisSinceLastPotRead() >= 100) {
+      if (millisSinceLastPotRead() >= 250) {
         motor::setSpeed(readPotAsSpeed(), true);
       }
       break;
 
-    case BACKLASH:
-      // If any of the button is pressed, go back to direct 
-      // button control. Using a short delay as a poor man debouncing
-      // Since we enter here as a result of button action.
-      if ((isForwardButtonPressed() || isBackwardButtonPressed()) && debouncingDelay()) {
-        motor::setSpeed(0, false);
-        setState(IDLE);
-        return;  
-      }
-      // Handle movement done.
-      if (millisInCurrentState() >= kBacklashTimeMillis) {
-        motor::setSpeed(0, true);
-        setState(IDLE);
-        return;
-      }
-      break;
-
-    case BACKWARD:
+    case states::BACKWARD:
       // Handle Backward button release.
       if (!isBackwardButtonPressed() && debouncingDelay()) {
         motor::setSpeed(0, true);
-        setState(IDLE);
+        setState(states::IDLE);
         return;
       }
       break;
 
-    case SLEEP:
+    case states::SLEEP:
       if (isForwardButtonPressed() || isBackwardButtonPressed()) {
         motor::setSpeed(0, false);
-        setState(IDLE);
+        setState(states::IDLE);
         return;  
       }
       break;
@@ -248,6 +218,6 @@ void loop() {
       // Should never happend.
       Serial.println("Unknown state");
       // This also prints the unknown state.
-      setState(IDLE);
+      setState(states::IDLE);
   }
 }

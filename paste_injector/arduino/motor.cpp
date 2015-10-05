@@ -15,6 +15,10 @@ static boolean is_forward = true;
 // If 0 indicates zero speed.
 static uint32_t step_time_micros = 0;
 
+bool isNonZeroSpeed() {
+  return step_time_micros != 0;
+}
+
 static void doStep() {
   if (is_forward) {
     step_counter++;
