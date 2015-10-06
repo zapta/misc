@@ -1232,8 +1232,6 @@ Source: murata.co.jp</description>
 <part name="P+3" library="paste_injector" deviceset="+5V" device=""/>
 <part name="P+4" library="paste_injector" deviceset="+5V" device=""/>
 <part name="P+5" library="paste_injector" deviceset="+5V" device=""/>
-<part name="C2" library="paste_injector" deviceset="CPOL-US" device="A/3216-18R" value="10uF"/>
-<part name="GND4" library="paste_injector" deviceset="GND" device=""/>
 <part name="GND17" library="paste_injector" deviceset="GND" device=""/>
 <part name="P+7" library="paste_injector" deviceset="+5V" device=""/>
 <part name="S1" library="paste_injector" deviceset="PUSH_BUTTON" device=""/>
@@ -1338,8 +1336,6 @@ Source: murata.co.jp</description>
 <instance part="P+5" gate="1" x="195.58" y="91.44" smashed="yes">
 <attribute name="VALUE" x="198.628" y="89.916" size="1.778" layer="96" rot="R90"/>
 </instance>
-<instance part="C2" gate="G$1" x="114.3" y="91.44"/>
-<instance part="GND4" gate="1" x="114.3" y="81.28"/>
 <instance part="GND17" gate="1" x="2.54" y="99.06"/>
 <instance part="P+7" gate="1" x="2.54" y="124.46" smashed="yes">
 <attribute name="VALUE" x="5.588" y="122.936" size="1.778" layer="96" rot="R90"/>
@@ -1450,11 +1446,6 @@ Source: murata.co.jp</description>
 <junction x="78.74" y="101.6"/>
 <junction x="78.74" y="99.06"/>
 <junction x="78.74" y="96.52"/>
-</segment>
-<segment>
-<pinref part="C2" gate="G$1" pin="-"/>
-<pinref part="GND4" gate="1" pin="GND"/>
-<wire x1="114.3" y1="86.36" x2="114.3" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="GND17" gate="1" pin="GND"/>
@@ -1584,9 +1575,6 @@ Source: murata.co.jp</description>
 <wire x1="106.68" y1="96.52" x2="114.3" y2="96.52" width="0.1524" layer="91"/>
 <wire x1="114.3" y1="96.52" x2="114.3" y2="99.06" width="0.1524" layer="91"/>
 <pinref part="P+2" gate="1" pin="+5V"/>
-<pinref part="C2" gate="G$1" pin="+"/>
-<wire x1="114.3" y1="93.98" x2="114.3" y2="96.52" width="0.1524" layer="91"/>
-<junction x="114.3" y="96.52"/>
 </segment>
 <segment>
 <wire x1="182.88" y1="190.5" x2="180.34" y2="190.5" width="0.1524" layer="91"/>
