@@ -10,6 +10,8 @@ id1 = 5.0 + 0.7;
 h1 = 10;
 // Width between the flatten sides of the motor shaft hole.
 w1 = 3.0 + 0.5;
+// Height of full round hole at the motor end.
+motoer_base_height = 3.5;
 
 // --- M4 threaded shart end
 // Inner diameter of hole for shaft 2. This one fits the 
@@ -110,7 +112,7 @@ module main() {
   difference() {
     translate([0, body_offset_from_center, 0]) body();
     translate([0, 0, -eps1]) flatten_cylinder(id1, w1, h1+eps2);
-    translate([0, 0, -eps1]) cylinder(d=id1, h=2.5);
+    translate([0, 0, -eps1]) cylinder(d=id1, h=motoer_base_height);
     translate([0, 0, h1]) cylinder(d=id2, h=h2+eps1); 
     screw(hole_offset_from_end);
     screw(total_height - hole_offset_from_end);

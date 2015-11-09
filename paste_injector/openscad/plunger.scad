@@ -100,7 +100,8 @@ module crossCut() {
 
 main();
 
-crossCut();
+// For debugging.
+//crossCut();
 
 
 
