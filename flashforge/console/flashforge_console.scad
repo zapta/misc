@@ -1,4 +1,4 @@
-$fn=36;
+$fn=128;
 
 eps1=0.001;
 eps2=2*eps1;
@@ -20,6 +20,7 @@ module rounded_cube(x, y, h, r) {
 }
 
 module base_holes() {
+  $fn=16;
   dx=base_screw_space_x/2;
   dy=base_screw_space_y/2;
   translate([-dx, -dy, -eps1]) cylinder(d=2.5, h=base_thickness+eps2);
@@ -40,6 +41,7 @@ module base_tab(x, y, dir) {
 }
 
 module base_tabs() {
+  $fn=24;
   dx=base_screw_space_x/2;
   dy=base_screw_space_y/2;
   hull() {
@@ -51,6 +53,7 @@ module base_tabs() {
 }
 
 module base_plate() {
+  $fn=24;
   difference() {
     union() {
       base_tabs();
@@ -74,34 +77,33 @@ module base_slop() {
     translate([-(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
     translate([(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
     
-    translate([-(x/2-r), -(y/2-r), h]) sphere(r=r);
-    translate([(x/2-r), -(y/2-r), h]) sphere(r=r);
+    translate([-(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
+    translate([(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
   }
 }
 
 module base_hollow() {
+  $fn=16;
   x=162.5-4;
   y=68-4;
   r=4-2;
   w=2;
   h=50;
   translate([0, 0, -eps2]) hull() {
-     rounded_cube(x, y, 1, 3);
+    rounded_cube(x, y, 1, 3);
     
-   translate([-(x/2-r), (y/2-r), 8]) sphere(r=r);
+    translate([-(x/2-r), (y/2-r), 8]) sphere(r=r);
     translate([(x/2-r), (y/2-r), 8]) sphere(r=r); 
     
     translate([-(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
     translate([(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
     
-    translate([-(x/2-r), -(y/2-r), h]) sphere(r=r);
-    translate([(x/2-r), -(y/2-r), h]) sphere(r=r);
+    translate([-(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
+    translate([(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
   } 
 }
 
 module main_pre_cut() {
-  // Adjust the front surface to but just below  the x=0 plane.
-  translate([0, -17, -30.869]) rotate([ 45, 0, 0]) 
   difference() {
     union() {
       base_plate();
@@ -131,9 +133,10 @@ module m3_threaded_insert(h) {
 
 // 2mm is added for the height for the front surface thinckness.
 module m3_threaded_post(x, y, w, h) {
+  $fn=24;
   h1 = h+1;
   // @@@ TODO: change 5 to 0.
-  translate([x, y, 3]) translate([0, 0, -1]) rotate([180, 0, 0]) difference() {
+  translate([x, y, 0]) translate([0, 0, -1]) rotate([180, 0, 0]) difference() {
     cylinder(d=w, h=h1);  
     translate([0, 0, h1+eps1]) rotate([180, 0, 0]) m3_threaded_insert(h1+2);
   }
@@ -154,17 +157,50 @@ module lcd_cut() {
  }
 }
 
+module button_hole(x, y) {
+  translate([x, y, -4]) cylinder(d=10, h=5);
+}
+
+// Tool access hole to the screws on the back of the faceplate.
+module tool_access_hole(x, y) {
+  translate([x, y, -15]) rotate([180, 0, 0]) cylinder(d=6, h=50);
+}
+
 module main() {
   difference() {
     union() {
-      main_pre_cut();
-      m3_threaded_post(40, -30, 10, 5);
+      // Adjust the front surface to but just below  the x=0 plane.
+      translate([0, -17, -30.869]) rotate([ 45, 0, 0]) 
+          main_pre_cut();
+      
+      m3_threaded_post(-70, -10, 8, 7);
+      m3_threaded_post(30, -10, 8, 7);
+      m3_threaded_post(-70, -50, 8, 7);
+      m3_threaded_post(30, -50, 8, 7);
     }
+    
+    #tool_access_hole(-70, -50);
+    #tool_access_hole(30, -50);
+    
     translate([-20, -30, 0]) lcd_cut();
+    
+    button_hole(50, -15);
+    button_hole(50, -30);
+    button_hole(50, -45);
+    button_hole(35, -30);
+    button_hole(65, -30);
   } 
 }
 
 main();
+
+//difference() {
+//main_pre_cut();
+//translate([0, -100, -eps1]) cube([200, 200, 200]);  
+//translate([-100, 0, -eps1]) cube([200, 200, 200]); 
+//}
+
+
 
 //difference() {
 //  translate([-100, -100, -2]) cube([200, 200, 2]);
