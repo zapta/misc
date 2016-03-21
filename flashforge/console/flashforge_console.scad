@@ -63,22 +63,30 @@ module base_plate() {
   }
 }
 
-module base_slop() {
+module base_slope() {
   hull() {
     x=162.5;
     y=68;
     r=4;
-    h=50;
+    h0=8;
+    h1=55;
+    
     rounded_cube(x, y, base_thickness, r);
     
-    translate([-(x/2-r), (y/2-r), 8]) sphere(r=r);
-    translate([(x/2-r), (y/2-r), 8]) sphere(r=r); 
+    // Front panel rear points
+    translate([-(x/2-r), (y/2-r), h0]) sphere(r=r);
+    translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
     
-    translate([-(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
-    translate([(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
+    // Front paenl front point.
+    translate([-(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
     
-    translate([-(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
-    translate([(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
+    // Front panel front/botton points.
+    translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+    
+//    translate([-(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
+//    translate([(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
   }
 }
 
@@ -88,18 +96,31 @@ module base_hollow() {
   y=68-4;
   r=4-2;
   w=2;
-  h=50;
+  h0=8;
+  h1=50;
   translate([0, 0, -eps2]) hull() {
     rounded_cube(x, y, 1, 3);
+  
+   // Front panel rear points
+    translate([-(x/2-r), (y/2-r), h0]) sphere(r=r);
+    translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
     
-    translate([-(x/2-r), (y/2-r), 8]) sphere(r=r);
-    translate([(x/2-r), (y/2-r), 8]) sphere(r=r); 
+    // Front paenl front point.
+    #translate([-(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
     
-    translate([-(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
-    translate([(x/2-r), (y/2-r)-(h-8), h]) sphere(r=r);
-    
-    translate([-(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
-    translate([(x/2-r), -(y/2-r)+17, h]) sphere(r=r);
+    // Front panel front/botton points.
+    translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+//    
+//    translate([-(x/2-r), (y/2-r), h0]) sphere(r=r);
+//    translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
+//    
+//    translate([-(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
+//    translate([(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
+//    
+//    translate([-(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
+//    translate([(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
   } 
 }
 
@@ -107,7 +128,7 @@ module main_pre_cut() {
   difference() {
     union() {
       base_plate();
-      base_slop();
+      base_slope();
     }
     base_hollow();
   }
@@ -134,65 +155,108 @@ module m3_threaded_insert(h) {
 // 2mm is added for the height for the front surface thinckness.
 module m3_threaded_post(x, y, w, h) {
   $fn=24;
-  h1 = h+1;
+  h1 = h+0.1;
   // @@@ TODO: change 5 to 0.
-  translate([x, y, 0]) translate([0, 0, -1]) rotate([180, 0, 0]) difference() {
+  translate([x, y, 0]) translate([0, 0, -(2-0.1)]) rotate([180, 0, 0]) difference() {
     cylinder(d=w, h=h1);  
     translate([0, 0, h1+eps1]) rotate([180, 0, 0]) m3_threaded_insert(h1+2);
   }
 }
 
+// Centered at (0, 0).
 module lcd_cut() {
- translate([0, 0, -4]) {
-   rounded_cube(77+4, 25+4, 5, 3);  
-   hull() {
-    dx=32.9;;
-    dy=6.8;
-    r=4.5;
-    translate([dx, -dy, 0]) rotate([45, 0, 45+0]) cylinder(r=r, h=15);
-    translate([dx, dy, 0]) rotate([45, 0, 45+90]) cylinder(r=r, h=15);
-    translate([-dx, dy, 0]) rotate([45, 0, 45+180]) cylinder(r=r, h=15);
-    translate([-dx, -dy, 0]) rotate([45, 0, 45+270]) cylinder(r=r, h=15);
-  }
- }
+  translate([0, 0, -4])
+   rounded_cube(77+2, 25+2, 5, 3);  
+}
+
+module lcd_inserts() {
+  h = 9.9;
+  w = 8;
+  dx = 82/2;
+  dy = 55/2;
+  m3_threaded_post(dx, dy, w, h);
+  m3_threaded_post(dx, -dy, w, h);
+  m3_threaded_post(-dx, dy, w, h);
+  m3_threaded_post(-dx, -dy, w, h);
 }
 
 module button_hole(x, y) {
-  translate([x, y, -4]) cylinder(d=10, h=5);
+  translate([x, y, -4]) cylinder(d=10.32, h=5);
+}
+
+// Center button at (0, 0).
+module button_holes() {
+  dx=15.5;
+  dy=15.5;
+  button_hole(0, 0);
+  button_hole(0, dy);
+  button_hole(0, -dy);
+  button_hole(-dx, 0);
+  button_hole(+dx, 0);
+}
+
+// Center button at (0, 0)
+module button_inserts() {
+  m3_threaded_post(21, 15, 10, 5); 
+  m3_threaded_post(21, -15, 10, 5); 
+  m3_threaded_post(-18.6, 22.3, 10, 5); 
+  m3_threaded_post(-18.6, -22.3, 10, 5); 
 }
 
 // Tool access hole to the screws on the back of the faceplate.
 module tool_access_hole(x, y) {
-  translate([x, y, -15]) rotate([180, 0, 0]) cylinder(d=6, h=50);
+  $fn=32;
+  translate([x, y, -12.5]) rotate([180, 0, 0]) cylinder(d=8, h=50);
 }
 
 module main() {
+  lcd_center_x = -32.5;
+  lcd_center_y = -29;
+  
+  buttons_center_x = lcd_center_x+80;
+  buttons_center_y = lcd_center_y;
+  
   difference() {
     union() {
       // Adjust the front surface to but just below  the x=0 plane.
-      translate([0, -17, -30.869]) rotate([ 45, 0, 0]) 
+      translate([0, -16.5, -30.869]) rotate([ 45, 0, 0]) 
           main_pre_cut();
       
-      m3_threaded_post(-70, -10, 8, 7);
-      m3_threaded_post(30, -10, 8, 7);
-      m3_threaded_post(-70, -50, 8, 7);
-      m3_threaded_post(30, -50, 8, 7);
+      translate([lcd_center_x, lcd_center_y, 0]) lcd_inserts();
+      
+      translate([buttons_center_x, buttons_center_y, 0])       button_inserts();
+
+//      m3_threaded_post(-70, -10, 8, 7);
+//      m3_threaded_post(30, -10, 8, 7);
+//      m3_threaded_post(-70, -50, 8, 7);
+//      m3_threaded_post(30, -50, 8, 7);
     }
     
-    #tool_access_hole(-70, -50);
-    #tool_access_hole(30, -50);
+    #tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
+    #tool_access_hole(lcd_center_x+(82/2), lcd_center_y-(55/2));
     
-    translate([-20, -30, 0]) lcd_cut();
+    //#tool_access_hole(buttons_center_x+21, buttons_center_y-15);
+    #tool_access_hole(buttons_center_x-18.6, buttons_center_y-22.3);
+
+  
     
-    button_hole(50, -15);
-    button_hole(50, -30);
-    button_hole(50, -45);
-    button_hole(35, -30);
-    button_hole(65, -30);
+    translate([lcd_center_x, lcd_center_y, 0]) lcd_cut();
+    
+    translate([buttons_center_x, buttons_center_y, 0]) 
+      button_holes();
+    
+//    button_hole(50, -15);
+//    button_hole(50, -30);
+//    button_hole(50, -45);
+//    button_hole(35, -30);
+//    button_hole(65, -30);
   } 
 }
 
 main();
+
+//rotate([45, 0, 0]) translate([0, -68/2, -8]) 
+//base_slope();
 
 //difference() {
 //main_pre_cut();
