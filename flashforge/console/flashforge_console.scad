@@ -5,7 +5,7 @@ eps2=2*eps1;
 
 base_screw_space_x = 170;
 base_screw_space_y = 39.35;
-base_thickness = 2;
+base_thickness = 3;
 base_corner_radius = 4;
 
 module rounded_cube(x, y, h, r) {
@@ -23,10 +23,11 @@ module base_holes() {
   $fn=16;
   dx=base_screw_space_x/2;
   dy=base_screw_space_y/2;
-  translate([-dx, -dy, -eps1]) cylinder(d=2.5, h=base_thickness+eps2);
-  translate([dx, -dy, -eps1]) cylinder(d=2.5, h=base_thickness+eps2);
-  translate([-dx, dy, -eps1]) cylinder(d=2.5, h=base_thickness+eps2);
-  translate([dx, dy, -eps1]) cylinder(d=2.5, h=base_thickness+eps2);  
+  d=2.8;
+  translate([-dx, -dy, -eps1]) cylinder(d=d, h=base_thickness+eps2);
+  translate([dx, -dy, -eps1]) cylinder(d=d, h=base_thickness+eps2);
+  translate([-dx, dy, -eps1]) cylinder(d=d, h=base_thickness+eps2);
+  translate([dx, dy, -eps1]) cylinder(d=d, h=base_thickness+eps2);  
 }
 
 module base_tab(x, y, dir) {
@@ -44,11 +45,15 @@ module base_tabs() {
   $fn=24;
   dx=base_screw_space_x/2;
   dy=base_screw_space_y/2;
+  // Ideally should be 11.9 but we make it longer and later chop
+  // it to be flat with the front face for better printability on
+  // Flashforge.
+  top_extension = 30;
   hull() {
+    base_tab(-dx, dy + top_extension, 0);  
+    base_tab(dx, dy + top_extension, 180);  
     base_tab(-dx, -dy, 0); 
-    base_tab(-dx, dy + 11.9, 0);  
     base_tab(dx, -dy, 180); 
-    base_tab(dx, dy + 11.9, 180);  
   }
 }
 
@@ -57,7 +62,7 @@ module base_plate() {
   difference() {
     union() {
       base_tabs();
-      rounded_cube(171.5, 73.3, 2, 4);
+      rounded_cube(169.5, 73.3, base_thickness, 4);
     }
     base_holes();
   }
@@ -84,9 +89,6 @@ module base_slope() {
     // Front panel front/botton points.
     translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
     translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
-    
-//    translate([-(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
-//    translate([(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
   }
 }
 
@@ -112,15 +114,6 @@ module base_hollow() {
     // Front panel front/botton points.
     translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
     translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
-//    
-//    translate([-(x/2-r), (y/2-r), h0]) sphere(r=r);
-//    translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
-//    
-//    translate([-(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
-//    translate([(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
-//    
-//    translate([-(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
-//    translate([(x/2-r), -(y/2-r)+17, h1]) sphere(r=r);
   } 
 }
 
@@ -170,7 +163,7 @@ module lcd_cut() {
 }
 
 module lcd_inserts() {
-  h = 9.9;
+  h = 8.9;
   w = 8;
   dx = 82/2;
   dy = 55/2;
@@ -181,7 +174,7 @@ module lcd_inserts() {
 }
 
 module button_hole(x, y) {
-  translate([x, y, -4]) cylinder(d=10.32, h=5);
+  translate([x, y, -4]) cylinder(d=11.5, h=5);
 }
 
 // Center button at (0, 0).
@@ -197,10 +190,11 @@ module button_holes() {
 
 // Center button at (0, 0)
 module button_inserts() {
-  m3_threaded_post(21, 15, 10, 5); 
-  m3_threaded_post(21, -15, 10, 5); 
-  m3_threaded_post(-18.6, 22.3, 10, 5); 
-  m3_threaded_post(-18.6, -22.3, 10, 5); 
+  m3_threaded_post(21, 15.5, 10, 6); 
+  m3_threaded_post(21, -15.5, 10, 6); 
+  
+  m3_threaded_post(-18.6, 23.05, 10, 6); 
+  m3_threaded_post(-18.6, -23.05, 10, 6); 
 }
 
 // Tool access hole to the screws on the back of the faceplate.
@@ -213,72 +207,45 @@ module main() {
   lcd_center_x = -32.5;
   lcd_center_y = -29;
   
-  buttons_center_x = lcd_center_x+80;
+  buttons_center_x = lcd_center_x+85;
   buttons_center_y = lcd_center_y;
   
   difference() {
     union() {
-      // Adjust the front surface to but just below  the x=0 plane.
-      translate([0, -16.5, -30.869]) rotate([ 45, 0, 0]) 
-          main_pre_cut();
+      difference() {
+        // Adjust the front surface to but just below  the x=0 plane.
+        translate([0, -16.5, -30.869]) rotate([ 45, 0, 0]) 
+            main_pre_cut();
+        // Chop the extra length of the base plate. This will make it flash 
+        // with the front face for better printability.
+        translate([-100, 0, 0]) cube([200, 30, 30]);
+      }
       
       translate([lcd_center_x, lcd_center_y, 0]) lcd_inserts();
       
       translate([buttons_center_x, buttons_center_y, 0])       button_inserts();
-
-//      m3_threaded_post(-70, -10, 8, 7);
-//      m3_threaded_post(30, -10, 8, 7);
-//      m3_threaded_post(-70, -50, 8, 7);
-//      m3_threaded_post(30, -50, 8, 7);
     }
     
     #tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
     #tool_access_hole(lcd_center_x+(82/2), lcd_center_y-(55/2));
     
-    //#tool_access_hole(buttons_center_x+21, buttons_center_y-15);
+    // NOTE: slanted and shifted to have a better entry point that doesn't intersect
+    // with the edge.
+    # translate([0, 1, -3]) rotate([-8, 0, 0]) 
+        tool_access_hole(buttons_center_x+21, buttons_center_y-15);
+    
     #tool_access_hole(buttons_center_x-18.6, buttons_center_y-22.3);
-
-  
     
     translate([lcd_center_x, lcd_center_y, 0]) lcd_cut();
     
     translate([buttons_center_x, buttons_center_y, 0]) 
       button_holes();
-    
-//    button_hole(50, -15);
-//    button_hole(50, -30);
-//    button_hole(50, -45);
-//    button_hole(35, -30);
-//    button_hole(65, -30);
   } 
 }
 
-main();
+//main();
 
-//rotate([45, 0, 0]) translate([0, -68/2, -8]) 
-//base_slope();
+// Rotating to printing position.
+rotate([180, 0, 0]) main();
 
-//difference() {
-//main_pre_cut();
-//translate([0, -100, -eps1]) cube([200, 200, 200]);  
-//translate([-100, 0, -eps1]) cube([200, 200, 200]); 
-//}
-
-
-
-//difference() {
-//  translate([-100, -100, -2]) cube([200, 200, 2]);
-//  lcd_cut();
-//  
-//  
-//  //translate([-100, -100, 0]) cube([200, 200, eps1]);
-//  //translate([0, -17, -30.869]) rotate([ 45, 0, 0]) intersection() {
-////    main();
-//  //  translate([0, -100, -eps1]) cube([200, 200, 200]);  
-//  //  translate([-100, 0, -eps1]) cube([200, 200, 200]);  
-//  //}
-//}
-
-//lcd_cut();
-//lcd_cut();
 
