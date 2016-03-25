@@ -1,6 +1,6 @@
 $fn=128;
 
-eps1=0.001;
+eps1=0.01;
 eps2=2*eps1;
 
 base_screw_space_x = 170;
@@ -99,7 +99,7 @@ module base_hollow() {
   r=4-2;
   w=2;
   h0=8;
-  h1=50;
+  h1=55;
   translate([0, 0, -eps2]) hull() {
     rounded_cube(x, y, 1, 3);
   
@@ -108,8 +108,8 @@ module base_hollow() {
     translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
     
     // Front paenl front point.
-    #translate([-(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
-    translate([(x/2-r), (y/2-r)-(h1-h0), h1]) sphere(r=r);
+    translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
     
     // Front panel front/botton points.
     translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
@@ -123,9 +123,11 @@ module main_pre_cut() {
       base_plate();
       base_slope();
     }
-    base_hollow();
+    translate([0, 0, -eps1]) base_hollow();
   }
 }
+
+
 
 // Hole for a M3 metal insert, mcmaster part number 94180a333.
 // h is the total depth for the screw hole. Already includes an
@@ -159,11 +161,11 @@ module m3_threaded_post(x, y, w, h) {
 // Centered at (0, 0).
 module lcd_cut() {
   translate([0, 0, -4])
-   rounded_cube(77+2, 25+2, 5, 3);  
+   rounded_cube(81.5, 25+2, 5, 1.5);  
 }
 
 module lcd_inserts() {
-  h = 8.9;
+  h = 8.5;
   w = 8;
   dx = 82/2;
   dy = 55/2;
@@ -200,33 +202,56 @@ module button_inserts() {
 // Tool access hole to the screws on the back of the faceplate.
 module tool_access_hole(x, y) {
   $fn=32;
-  translate([x, y, -12.5]) rotate([180, 0, 0]) cylinder(d=8, h=50);
+  translate([x, y, -12.5]) rotate([180, 0, 0]) cylinder(d=7, h=50);
+}
+
+// Rotate main_pre_cut such that the front panel is on the 
+// z=0 plane.
+module rotated_main_pre_cut() {
+  //translate([0, -16.5, -30.869]) 
+  rotate([ 45, 0, 0]) translate([0, -34, -9.7])
+            main_pre_cut();  
+}
+
+module rotated_main_outline() {
+  //translate([0, -16.5, -30.869]) 
+  rotate([ 45, 0, 0]) translate([0, -34, -9.7]) {
+      base_plate();
+      base_slope();
+  } 
 }
 
 module main() {
-  lcd_center_x = -32.5;
-  lcd_center_y = -29;
+  lcd_center_x = -32.5 - 2.5;
+  lcd_center_y = -29+1;
   
-  buttons_center_x = lcd_center_x+85;
+  buttons_center_x = lcd_center_x+85+2.5;
   buttons_center_y = lcd_center_y;
   
   difference() {
     union() {
       difference() {
+        rotated_main_pre_cut();
         // Adjust the front surface to but just below  the x=0 plane.
-        translate([0, -16.5, -30.869]) rotate([ 45, 0, 0]) 
-            main_pre_cut();
+        //translate([0, -16.5, -30.869]) rotate([ 45, 0, 0]) 
+        //    main_pre_cut();
         // Chop the extra length of the base plate. This will make it flash 
         // with the front face for better printability.
         translate([-100, 0, 0]) cube([200, 30, 30]);
       }
       
-      translate([lcd_center_x, lcd_center_y, 0]) lcd_inserts();
+      // We intersect the inserts with the outline to eliminate 
+      // two small bumps at the top of the front panel.
+      intersection() {
+        //rotated_main_outline();
+        translate([lcd_center_x, lcd_center_y, 0]) lcd_inserts();
+      }
       
       translate([buttons_center_x, buttons_center_y, 0])       button_inserts();
     }
     
-    #tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
+    #translate([-2, 0, +10]) rotate([0, -8, 0]) tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
+    
     #tool_access_hole(lcd_center_x+(82/2), lcd_center_y-(55/2));
     
     // NOTE: slanted and shifted to have a better entry point that doesn't intersect
@@ -236,7 +261,7 @@ module main() {
     
     #tool_access_hole(buttons_center_x-18.6, buttons_center_y-22.3);
     
-    translate([lcd_center_x, lcd_center_y, 0]) lcd_cut();
+    translate([lcd_center_x + 5.75, lcd_center_y, 0]) lcd_cut();
     
     translate([buttons_center_x, buttons_center_y, 0]) 
       button_holes();
@@ -245,7 +270,10 @@ module main() {
 
 //main();
 
+//main_pre_cut();
 // Rotating to printing position.
 rotate([180, 0, 0]) main();
+
+//rotate([45, 0, 0]) translate([0, -34, -9.7]) main_pre_cut();
 
 
