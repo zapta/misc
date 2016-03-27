@@ -1,3 +1,8 @@
+// Slanted display console for Flashforge Creator Pro.
+// March 2016.
+
+// TODO: major code cleanup.
+
 $fn=128;
 
 eps1=0.01;
@@ -70,9 +75,9 @@ module base_plate() {
 
 module base_slope() {
   hull() {
+    r=4;
     x=162.5;
     y=68;
-    r=4;
     h0=8;
     h1=55;
     
@@ -94,26 +99,23 @@ module base_slope() {
 
 module base_hollow() {
   $fn=16;
-  x=162.5-4;
-  y=68-4;
   r=4-2;
   w=2;
+  x=162.5-(2*w); //4;
+  // The wall thickness at the bottom is 2w for better printablility.
+  y=68-(2*w+w); //4;
   h0=8;
   h1=55;
-  translate([0, 0, -eps2]) hull() {
-    rounded_cube(x, y, 1, 3);
+  translate([0, w, -eps2]) hull() {
+    rounded_cube(x, y-1, 1, r);
   
    // Front panel rear points
-    translate([-(x/2-r), (y/2-r), h0]) sphere(r=r);
-    translate([(x/2-r), (y/2-r), h0]) sphere(r=r); 
+    translate([-(x/2-r), (y/2-r-1), h0]) sphere(r=r);
+    translate([(x/2-r), (y/2-r-1), h0]) sphere(r=r); 
     
     // Front paenl front point.
-    translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
-    translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
-    
-    // Front panel front/botton points.
-    translate([-(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
-    translate([(x/2-r), (y/2-r)-(h1-h0)-1, h1]) sphere(r=r);
+    translate([-(x/2-r), (y/2-r)-(h1-h0)+0.5, h1-2]) sphere(r=r);
+    translate([(x/2-r), (y/2-r)-(h1-h0)+0.5, h1-2]) sphere(r=r);
   } 
 }
 
@@ -160,19 +162,20 @@ module m3_threaded_post(x, y, w, h) {
 
 // Centered at (0, 0).
 module lcd_cut() {
-  translate([0, 0, -4])
-   rounded_cube(81.5, 25+2, 5, 1.5);  
+  translate([-5.57, 0.25+0.5, -4])
+   rounded_cube(81.5, 28.17+1, 5, 1.5);  
 }
 
 module lcd_inserts() {
-  h = 8.5;
-  w = 8;
-  dx = 82/2;
-  dy = 55/2;
-  m3_threaded_post(dx, dy, w, h);
-  m3_threaded_post(dx, -dy, w, h);
-  m3_threaded_post(-dx, dy, w, h);
-  m3_threaded_post(-dx, -dy, w, h);
+  h = 9.5;
+  d = 9;
+  //dx = 82/2;
+  dx = 92.7/2;
+  dy = 55.25/2;
+  m3_threaded_post(dx-0.4, dy, d, h);
+  m3_threaded_post(dx-0.4, -dy, d, h);
+  m3_threaded_post(-dx, dy, d, h);
+  m3_threaded_post(-dx, -dy, d, h);
 }
 
 module button_hole(x, y) {
@@ -181,8 +184,8 @@ module button_hole(x, y) {
 
 // Center button at (0, 0).
 module button_holes() {
-  dx=15.5;
-  dy=15.5;
+  dx=15.5+0.3; //-0.4-0.7;
+  dy=15.5+0.3; //-0.4-0.7;
   button_hole(0, 0);
   button_hole(0, dy);
   button_hole(0, -dy);
@@ -192,40 +195,46 @@ module button_holes() {
 
 // Center button at (0, 0)
 module button_inserts() {
-  m3_threaded_post(21, 15.5, 10, 6); 
-  m3_threaded_post(21, -15.5, 10, 6); 
+  m3_threaded_post(21+0.4, 15.5, 10, 6); 
+  m3_threaded_post(21+0.4, -15.5, 10, 6); 
   
-  m3_threaded_post(-18.6, 23.05, 10, 6); 
-  m3_threaded_post(-18.6, -23.05, 10, 6); 
+  m3_threaded_post(-18.6+0.4, 23.05, 10, 6); 
+  m3_threaded_post(-18.6+0.4, -23.05, 10, 6); 
 }
 
 // Tool access hole to the screws on the back of the faceplate.
 module tool_access_hole(x, y) {
   $fn=32;
-  translate([x, y, -12.5]) rotate([180, 0, 0]) cylinder(d=7, h=50);
+  translate([x, y, -12.5]) rotate([180, 0, 0]) cylinder(d=6.5, h=50);
 }
 
 // Rotate main_pre_cut such that the front panel is on the 
 // z=0 plane.
 module rotated_main_pre_cut() {
-  //translate([0, -16.5, -30.869]) 
-  rotate([ 45, 0, 0]) translate([0, -34, -9.7])
+  pivot_y = 68/2;
+  pivot_z = 8 + 4*sin(45/2);
+ // translate([0, -16.5, -30.869]) 
+  rotate([ 45, 0, 0]) translate([0, -34, -9.7]) 
+  //rotate([ 45, 0, 0]) translate([0, -pivot_y, -pivot_z])
             main_pre_cut();  
 }
 
 module rotated_main_outline() {
+  pivot_y = 68/2;
+  pivot_z = 8 + 4*sin(45/2);
   //translate([0, -16.5, -30.869]) 
   rotate([ 45, 0, 0]) translate([0, -34, -9.7]) {
+  //rotate([ 45, 0, 0]) translate([0, -pivot_y, -pivot_z]) {
       base_plate();
       base_slope();
   } 
 }
 
 module main() {
-  lcd_center_x = -32.5 - 2.5;
-  lcd_center_y = -29+1;
+  lcd_center_x = -32.5 - 2.5+5.35+0.7;
+  lcd_center_y = -29-4+2+1.5;
   
-  buttons_center_x = lcd_center_x+85+2.5;
+  buttons_center_x = lcd_center_x+85+2.5-5.35-2.2;
   buttons_center_y = lcd_center_y;
   
   difference() {
@@ -250,9 +259,9 @@ module main() {
       translate([buttons_center_x, buttons_center_y, 0])       button_inserts();
     }
     
-    #translate([-2, 0, +10]) rotate([0, -8, 0]) tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
+    #translate([-7, 0, +8]) rotate([0, -8, 0])    tool_access_hole(lcd_center_x-(82/2), lcd_center_y-(55/2));
     
-    #tool_access_hole(lcd_center_x+(82/2), lcd_center_y-(55/2));
+    #tool_access_hole(lcd_center_x+(82/2)+5, lcd_center_y-(55/2));
     
     // NOTE: slanted and shifted to have a better entry point that doesn't intersect
     // with the edge.
@@ -268,12 +277,16 @@ module main() {
   } 
 }
 
-//main();
 
-//main_pre_cut();
-// Rotating to printing position.
-rotate([180, 0, 0]) main();
 
-//rotate([45, 0, 0]) translate([0, -34, -9.7]) main_pre_cut();
+intersection() {
+ //Rotating to printing position.
+ rotate([180, 0, 0]) main();
+  
+ // For debugging (printing a small section).
+ //translate([23, 0, -5]) cube([200, 65, 14]);  
+}
+
+
 
 
