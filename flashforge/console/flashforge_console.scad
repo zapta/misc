@@ -172,8 +172,8 @@ module lcd_inserts() {
   //dx = 82/2;
   dx = 92.7/2;
   dy = 55.25/2;
-  m3_threaded_post(dx-0.4, dy, d, h);
-  m3_threaded_post(dx-0.4, -dy, d, h);
+  m3_threaded_post(dx-0, dy, d, h);
+  m3_threaded_post(dx-0, -dy, d, h);
   m3_threaded_post(-dx, dy, d, h);
   m3_threaded_post(-dx, -dy, d, h);
 }
@@ -285,6 +285,9 @@ intersection() {
   
  // For debugging (printing a small section).
  //translate([23, 0, -5]) cube([200, 65, 14]);  
+  
+ //  translate([-82, -5, -5]) cube([105, 67, 18]);  
+
 }
 
 
