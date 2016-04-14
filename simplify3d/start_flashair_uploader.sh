@@ -1,7 +1,20 @@
 #!/bin/bash 
 
+# Usage
+# Add this line in the Simplify3D "Additional terminal commands for post processing" field.
+# <path to this file> [output_filepath]
+
 # NOTE: working directory is established by the caller. If need a specific
 # directory, make sure to set it here.
+
+# TODO: assert on curl results.
+# TODO: force curl timeout.
+# TODO: include file name/size in the notification
+# TODO: include upload time in notification.
+# TODO: include useful info in error notifications (e.g. log file).
+# TODO: tie notification clicks to log file
+# TODO: replace literals with consts
+# TODO: include instructions for setting up the Flashair card.
 
 # Network address of the Flashair SD card.
 flashair_ip="192.168.0.8"
@@ -25,6 +38,25 @@ function notification {
     last_notification="$1"
     /usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message "$last_notification"
   fi
+}
+
+function fat32_timestamp {
+  # Get current date
+  date=$(date "+%-y,%-m,%-d,%-H,%-M,%-S")
+
+  # Split to tokens
+  IFS=',' read -ra tokens <<< "$date"
+  YY="${tokens[0]}"
+  MM="${tokens[1]}"
+  DD="${tokens[2]}"
+  hh="${tokens[3]}"
+  mm="${tokens[4]}"
+  ss="${tokens[5]}"
+
+  # Compute timestamp (8 hex chars)
+  fat32_date=$((DD + 32*MM + 512*(YY+20)))
+  fat32_time=$((ss/2 + 32*mm + 2048*hh))
+  printf "%04x%04x" $fat32_date $fat32_time
 }
 
 function main {
@@ -64,6 +96,7 @@ function main {
       continue
     fi
   
+    # NOTE: the stat format may be specific to OSX (?).
     gcode_time=$(stat -f%m "$gcode")
     x3g_time=$(stat -f%m "$x3g")
     if [[ "$x3g_time" -lt "$gcode_time" ]]
@@ -76,6 +109,7 @@ function main {
       continue
     fi
   
+    # NOTE: the stat format may be specific to OSX (?).
     size=$(stat -f%z "$x3g")
     echo "New size: ${size}"
     if [[ "$size" -eq 0 ]]
@@ -108,13 +142,19 @@ function main {
       break
     fi
   done
-  
+
+  fat32_timestamp=$(fat32_timestamp)
+
+  notification 'Settinf file time...'
+  curl -v \
+    ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
+ 
   notification 'Starting to upload...'
   curl -v \
     -F "userid=1" \
     -F "filecomment=This is a 3D file" \
     -F "image=@${x3g}" \
-    192.168.0.8/upload.cgi
+    ${flashair_ip}/upload.cgi
   
   echo "Status: $?"
   
@@ -123,5 +163,5 @@ function main {
 
 main &>/tmp/flashair_uploader_log &
 
-echo running in background.
+echo "Loader started in in background..."
 
