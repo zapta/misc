@@ -16,80 +16,95 @@
 # TODO: replace literals with consts
 # TODO: include instructions for setting up the Flashair card.
 
+# Change banner time. This is persistent and affects all banners.
+# TODO: is there a way to extend the banner time just for this script?
+# defaults write com.apple.notificationcenterui bannerTime 20
+
 # Network address of the Flashair SD card.
 flashair_ip="192.168.0.8"
 
-# Abort the script is it's running longer than this time in secs.
-timeout_secs=60
+# Abort the script if the x3g file is not ready for uploading within
+# this time in secs from the launch of this script.
+wait_timeout_secs=60
 
-# Process command line args.
-gcode="$1"
-x3g="${gcode/%gcode/x3g}"
 
-echo "gcode: [${gcode}]"
-echo "x3g: [${x3g}]"
+function init {
+  # Process command line args.
+  gcode_path="$1"
+  x3g_path="${gcode_path/%gcode/x3g}"
+  x3g_name=$(basename "${x3g_path}")
+  
+  echo "gcode_path: [${gcode_path}]"
+  echo "x3g_path: [${x3g_path}]"
+  echo "x3g_name: [${x3g_name}]"
+}
 
-last_notification=""
 
 function notification {
   echo $1
-  if [ "$last_notification" != "$1" ]
+  echo $2
+  if [ "$last_notification" != "$1#$2" ]
   then
-    last_notification="$1"
-    /usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message "$last_notification"
+    last_notification="$1#$2"
+    /usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Uploader' -subtitle "$1" -message "$2"
   fi
 }
 
+
 function fat32_timestamp {
   # Get current date
-  date=$(date "+%-y,%-m,%-d,%-H,%-M,%-S")
+  local date=$(date "+%-y,%-m,%-d,%-H,%-M,%-S")
 
   # Split to tokens
+  # TODO: make tokens variable local.
   IFS=',' read -ra tokens <<< "$date"
-  YY="${tokens[0]}"
-  MM="${tokens[1]}"
-  DD="${tokens[2]}"
-  hh="${tokens[3]}"
-  mm="${tokens[4]}"
-  ss="${tokens[5]}"
+  local YY="${tokens[0]}"
+  local MM="${tokens[1]}"
+  local DD="${tokens[2]}"
+  local hh="${tokens[3]}"
+  local mm="${tokens[4]}"
+  local ss="${tokens[5]}"
 
   # Compute timestamp (8 hex chars)
-  fat32_date=$((DD + 32*MM + 512*(YY+20)))
-  fat32_time=$((ss/2 + 32*mm + 2048*hh))
+  local fat32_date=$((DD + 32*MM + 512*(YY+20)))
+  local fat32_time=$((ss/2 + 32*mm + 2048*hh))
   printf "%04x%04x" $fat32_date $fat32_time
 }
 
+
 function main {
-  start_time=$(date +%s)
+  init $*
+
+  notification "Waiting" "Waiting for file: ${x3g_name}"
+
+  local start_time=$(date +%s)
   
-  last_size=0
+  local last_size=0
   while true
   do
   
     echo
     echo ==========================
   
-    time_now=$(date +%s)
-    running_time=$((time_now - $start_time))
+    local time_now=$(date +%s)
+    local running_time=$((time_now - $start_time))
   
     sleep 0.5
   
     echo "---- loop, running_time=$running_time, last_size=${last_size}, stable_count=${stable_count}"
   
-    if [[ $running_time -ge 60 ]]
+    if [[ $running_time -ge $wait_timeout_secs ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'TIMEOUT, aborting'
-      notification 'TIMEOUT, aborting'
+      notification "ERROR" "Aborted due to timeout: ${x3g_name}"
       echo "Timeout, aborting"
       exit 1
     fi
   
-    ls -l ${gcode/%gcode/*}
+    ls -l ${gcode_path/%gcode/*}
   
-    if [[ ! -f "${x3g}" ]]
+    if [[ ! -f "${x3g_path}" ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'Waiting for creation'
-      notification 'Waiting for creation'
+      #notification "Waiting" "Waiting for file creation: ${x3g_name}"
       echo "X3G gile not found"
       last_size=0
       stable_count=0
@@ -97,12 +112,11 @@ function main {
     fi
   
     # NOTE: the stat format may be specific to OSX (?).
-    gcode_time=$(stat -f%m "$gcode")
-    x3g_time=$(stat -f%m "$x3g")
+    local gcode_time=$(stat -f%m "$gcode_path")
+    local x3g_time=$(stat -f%m "$x3g_path")
     if [[ "$x3g_time" -lt "$gcode_time" ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'Waiting for new file'
-      notification 'Waiting for new file'
+      #notification "Waiting" "Waiting for a newer file: ${x3g_name}"
       echo "X3G file is older than gcode"
       last_size=$size
       stable_count=0
@@ -110,12 +124,11 @@ function main {
     fi
   
     # NOTE: the stat format may be specific to OSX (?).
-    size=$(stat -f%z "$x3g")
+    size=$(stat -f%z "$x3g_path")
     echo "New size: ${size}"
     if [[ "$size" -eq 0 ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'Waiting for non zero size'
-      notification 'Waiting for non zero size'
+      #notification "Waiting" "Waiting for non zero size: ${x3g_name}"
       echo "X3G file has zero size"
       last_size=$size
       stable_count=0
@@ -124,8 +137,7 @@ function main {
   
     if [[  "$size" -ne $last_size ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'Waiting for size stabilization'
-      notification 'Waiting for size stabilization'
+      #notification "Waiting" "Waiting for file size stabilization: ${x3g_name}"
       echo "X3G file has zero or unstable size"
       last_size=$size
       stable_count=0
@@ -136,32 +148,34 @@ function main {
     # TODO: Revisit this limit. From experience stable 3secs are sufficient. 
     if [[ $stable_count = 6 ]]
     then
-      #/usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Upload' -message 'File is stable'
-      notification 'File is stable'
+      #notification "File ready", "File size is ${size}: ${x3g_name}"
       echo "Stable"
       break
     fi
   done
 
-  fat32_timestamp=$(fat32_timestamp)
+  local fat32_timestamp=$(fat32_timestamp)
+  notification "Uploading" "Sending file data..."
 
-  notification 'Settinf file time...'
+  #notification "Uploading" "Setting file timestamp: ${x3g_name}"
   curl -v \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
  
-  notification 'Starting to upload...'
+  #notification "Uploading" "Sending file data..."
   curl -v \
     -F "userid=1" \
     -F "filecomment=This is a 3D file" \
-    -F "image=@${x3g}" \
+    -F "image=@${x3g_path}" \
     ${flashair_ip}/upload.cgi
   
   echo "Status: $?"
   
-  notification 'Uploading done'
+  notification "DONE" "File uploaded to Flashair: ${size} ${x3g_name}"
 }
 
-main &>/tmp/flashair_uploader_log &
-
+main $* &>/tmp/flashair_uploader_log &
 echo "Loader started in in background..."
+
+#main $*
+
 
