@@ -18,7 +18,7 @@
 
 # Change banner time. This is persistent and affects all banners.
 # TODO: is there a way to extend the banner time just for this script?
-# defaults write com.apple.notificationcenterui bannerTime 20
+defaults write com.apple.notificationcenterui bannerTime 60 
 
 # Network address of the Flashair SD card.
 flashair_ip="192.168.0.8"
