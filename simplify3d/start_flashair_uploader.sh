@@ -25,9 +25,11 @@ flashair_ip="192.168.0.8"
 
 # Abort the script if the x3g file is not ready for uploading within
 # this time in secs from the launch of this script.
+# NOTE: this may require user login/out or even OS reboot to take affect.
 wait_timeout_secs=60
 
 
+# Called upon script starts. Accepts command line args.
 function init {
   # Process command line args.
   gcode_path="$1"
@@ -40,6 +42,8 @@ function init {
 }
 
 
+# Max OSX specific display popup notification. 
+# Required installation of terminal-notifier.
 function notification {
   echo $1
   echo $2
@@ -51,6 +55,8 @@ function notification {
 }
 
 
+# Return the current date/time as a FAT32 timestamp (a string with
+# 8 hex characters)
 function fat32_timestamp {
   # Get current date
   local date=$(date "+%-y,%-m,%-d,%-H,%-M,%-S")
@@ -71,10 +77,13 @@ function fat32_timestamp {
   printf "%04x%04x" $fat32_date $fat32_time
 }
 
-
-function main {
-  init $*
-
+# Simplify3D post processing hook is brain dead when it uses X3G output
+# file format. The terminal command postprocessing script it calls 
+# before the X3G file is ready or requires the user to apply heiuristics
+# to determine when the generation fo the X3G file is complete.
+# This function uses such heiuristics and blocks until the X3G file 
+# is ready or until a timeout, whichever occurs first.
+function wait_x3g_file_ready {
   notification "Waiting" "Waiting for file: ${x3g_name}"
 
   local start_time=$(date +%s)
@@ -153,15 +162,28 @@ function main {
       break
     fi
   done
+}
+
+
+function main {
+  init $*
+
+  wait_x3g_file_ready
 
   local fat32_timestamp=$(fat32_timestamp)
-  notification "Uploading" "Sending file data..."
+  #notification "Uploading" "Sending file data..."
 
-  #notification "Uploading" "Setting file timestamp: ${x3g_name}"
+  # This notification should be replaced quickly with the Uploading
+  # notification below. If not, it indicates that the Flashair card
+  # is not available. Hence the 'Connecting' title.
+  # The actual operation is setting the filetimestamp since the
+  # FlashAir doesn't have and independent date/time source of its own.
+  #
+  notification "Connecting" "Setting file timestamp: ${x3g_name}"
   curl -v \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
  
-  #notification "Uploading" "Sending file data..."
+  notification "Uploading" "Sending file data..."
   curl -v \
     -F "userid=1" \
     -F "filecomment=This is a 3D file" \
@@ -175,7 +197,3 @@ function main {
 
 main $* &>/tmp/flashair_uploader_log &
 echo "Loader started in in background..."
-
-#main $*
-
-
