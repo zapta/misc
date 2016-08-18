@@ -55,7 +55,7 @@ corner_size = 4;
 bump_size = 5;
 
 // Small values to maintain manifold.
-eps1 = 0.001;
+eps1 = 0.01;
 eps2 = 2*eps1;
 
 
@@ -69,7 +69,8 @@ module bump() {
 }
 
 module hanger() {
-  translate([0, -hanger_width/2, 0]) difference() {
+  translate([0, -hanger_width/2, 0]) 
+  difference() {
     cube([hanger_thickness,  hanger_width, hanger_height]);
     
     translate([hanger_wall, -eps1, -eps1]) 
