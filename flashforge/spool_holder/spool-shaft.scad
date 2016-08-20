@@ -16,7 +16,7 @@ inner_tab_height = 15;
 slot_thickness = 8;
 
 // The external height of the hanger.
-hanger_height = 45;
+hanger_height = 46;
 
 // Rod tilt angle. User to compensate for the clearance in the 
 // hanging slot. Tweak to have the rod roughly leveled.
@@ -37,13 +37,13 @@ hanger_wall1 = 6;
 hanger_wall2 = 6;
 
 // Thickness of the hanger's outer (longer) wall.
-hanger_wall3 = 6;
+hanger_wall3 = 7;
 
 
 spacer_lengths = [ 5, 10, 10, 10, 10 ];
 spacer_id = 6.6;
 spacer_od = 11;
-spacer_chamfer = 0.8;
+spacer_chamfer = 1.2;
 
 // The thickness of the stopper at the end of the rod.
 stopper_thickness = 4;
@@ -149,19 +149,23 @@ module small_parts() {
 module base() {
   difference() {
     union() {
-      rotate([0, -rod_tilt_angle, 0]) translate([0, 0, -13]) union() {
+      rotate([0, -rod_tilt_angle, 0]) translate([0, 0, -15]) union() {
         bump();
         hanger();
       }
       translate([2+eps1, 0, -3]) rotate([0, -90, 0]) 
+      scale([1, 0.9, 1])
+      union() {
           cylinder(d=20, h=12);
+          cylinder(d1=23, d2=20, h=4);
+      }
     }
 
     // Shaft drill hole
     translate([10, 0, 0]) rotate([0, -90, 0]) 
         cylinder(d=6+0.5, h=30);
     
-    // Nut cavity
+    // Nut cavity hole
     translate([hanger_wall3+4, 0, 0]) rotate([0, -90, 0]) 
         cylinder(d=nut_cavity_diameter, h=nut_cavity_depth+4, $fn=6);
   }
