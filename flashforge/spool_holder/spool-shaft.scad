@@ -22,9 +22,9 @@ hanger_height = 46;
 // hanging slot. Tweak to have the rod roughly leveled.
 rod_tilt_angle = 3;
 
-nut_cavity_depth = 6.6;
+nut_cavity_depth = 5;
 
-nut_cavity_diameter = 13;
+nut_cavity_diameter = 12.5;
 
 // Raise the end of the rod by this angle. Use to compensate for 
 // free play in the hanger slot.
@@ -40,18 +40,25 @@ hanger_wall2 = 6;
 hanger_wall3 = 7;
 
 
-spacer_lengths = [ 5, 10, 10, 10, 10 ];
-spacer_id = 6.6;
+// Spacer lengths. As many many spacers as you need.
+spacer_lengths = [ 9, 9, 9, 9, 9 ];
+
+// The spacers drill diameter.
+spacer_id = 6.5;
+
+// The spacers outer diameter.
 spacer_od = 11;
-spacer_chamfer = 1.2;
+
+// The spacers end chamfer
+spacer_chamfer = 0.6;
 
 // The thickness of the stopper at the end of the rod.
 stopper_thickness = 4;
 
 /* [Hidden] */
 
-// Faces per cylinder.
-$fn=120;
+// Circles resolution.
+$fn=64;  
 
 hanger_thickness = slot_thickness + hanger_wall1 + hanger_wall3;
 
@@ -175,7 +182,10 @@ module base() {
 
 // Base in the printing orientation. Direction was selected to improve
 // strength by having the 3D fibers in the correct direction.
+intersection() {
+  //translate([-10, -5, 10]) #cube([20, 20, 25]);
 translate([0, 0, hanger_width/2]) rotate([-90, 0, 90]) base();
+}
 
 translate([-40, -30, 0]) small_parts();
 
