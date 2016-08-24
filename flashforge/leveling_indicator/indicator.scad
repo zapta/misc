@@ -1,14 +1,27 @@
+// Dial indicator holder for leveling Flashforge Creator Pro and similar
+// 3D printers.
+//
+// The indicator is held in place by two M3 threaded metal heat inserts and screws.
+// Inserts, screws and dial indicators are available on eBay from multiple sources.
+// Insert the threaded inserts using a hot soldering iron, push it in slightly and 
+// let the heat do the work.
 
-
+// Smoothness of the rounded surfaces. 
 $fn = 180;
 
-total_width	= 25; //56;			// Width of the holder
+// Total width of the part. Should be wide enough to allow collar
+// diameter with metal threaded inserts.
+total_width	= 25; 
 
-indicator_hole_diameter	= 9.6+0.3;	
+// Inner diameter of the indicaotr holder collar. Tweak to have
+// zero insertion force fit.
+indicator_hole_diameter	= 8.7;	
 
-magnet_diameter = 6.3+0.3-0.05;			// Diameter of the magnet
+// Diameter of the magnet hole. Tweak for a very very snug fit.
+magnet_holes_diameter = 6.55;			
 
-magnet_length	= 6.3;//1;	// Height of the magnet
+// Depth of the magnet hole, measured at the centerline of the rod slot. 
+magnet_holes_depth	= 6.3;
 
 // Margin on both side of each rod slot.
 rod_margin	= 5; 
@@ -16,35 +29,44 @@ rod_margin	= 5;
 // The thickness of the base plate.
 base_height	 = 8;			
 
-// Outer diameter of the indicator holder collar.
+// Height of the indicator holder collar, beyong the base plate.
 collar_height = 10;
+
+// Outer diameter of the collar.
+collar_outer_diameter	= 23;
+
+// Thickness of the collar support wall.
+collar_support_thickness = 5;	
+
+// The angle between the two threaded insert holes in the collar.
+screw_angle = 100;  // angle between srews			
 
 // Total height of the part.
 total_height = base_height + collar_height;
 
 // The diameter of the rod slots. Includes margin for fitting.
-rod_slot_diameter	= 8 + 0.3 ;	
+rod_slot_diameter	= 8.5;	
 
-// Distance bentwee the centerlines of the rods.
-rod_centerline_space = 70;
+// Distance bentwee the centerlines of the rods. Tweak such that the 
+// part fits nicely on top of the rods, even without magnets to force it
+// in.
+rod_centerline_space = 70.35;
 
-// The thickness of the indicator holder collar wall. Should be thick enough
-// to fit the threaded insert.
-indicator_hole_wall = 7;
-
-// The angle between the two threaded insert holes in the collar.
-screw_angle = 100;  // angle between srews
-
-// Outer diameter of the collar.
-collar_outer_diameter	= indicator_hole_diameter + 2 * indicator_hole_wall; 
-
-// Thickness of the collar support wall.
-collar_support_thickness = 5;				
-
+// Total part length.
 total_length 	= rod_centerline_space + rod_slot_diameter + 2*rod_margin;
 
-indicator_hole_offset = 10;
+// Offset of the indicator hole center from the center of the part. It is 
+// offset slightly toward the front of the printer (away from the betl) so
+// it doesn't go off the rear edge of the bed, hitting the small PCB 
+// of the Flashforge Creator Pro. It's OK to set this to zero if
+// you like.
+indicator_hole_offset = 8;
 
+// Threaded insert hole diameter multiplier. Allows to tweak the diameter.
+threaded_insert_diameter_multiplier = 1.0;
+
+// A small positive distance to maintain the maniforl consistency of the 
+// generated model.
 eps1 = 0.02;
 eps2 = 2*eps1;
 
@@ -56,32 +78,37 @@ module xy_centerd_cube(dx, dy, dz) {
 // Hole for a M3 metal insert, mcmaster part number 94180a333.
 // h is the total depth for the screw hole. Already includes an
 // extra eps1 at the opening side.
+//
+// TODO: move some of the const to customizeable parameters at the begining
+// of the file.
 module m3_threaded_insert(h) {
   // Adding tweaks for compensate for my printer's tolerace.
-  A = 4.7 + 0.3;
-  B = 5.23 + 0.4;
+  A = threaded_insert_diameter_multiplier*(4.7 + 0.3);
+  B = threaded_insert_diameter_multiplier*(5.23 + 0.4);
   L = 6.4;
   D = 4.0;
   translate([0, 0, -eps1]) {
     // NOTE: diameter are compensated to actual print results.
     // May vary among printers.
     cylinder(d1=B, d2=A, h=eps1+L*2/3, $f2=32);
-    cylinder(d=A, h=eps1+L, $f2=32);
-    translate([0, 0, L-eps1]) cylinder(d=D, h=h+eps1-L, $f2=32);
+    cylinder(d=A, h=eps1+L, $fn=32);
+    translate([0, 0, L-eps1]) cylinder(d=D, h=h+eps1-L, $fn=32);
   }
 }
 
+// Produces a rod cut hole at a given offset from the center.
 module rod_cut(x) {
   translate([x, 0, collar_height]) rotate([90, 0, 0]) translate([0, 0, -(total_width/2+eps1)])
     cylinder(d=rod_slot_diameter, h=total_width+eps2);
 }
 
+// Produces a magnet hole at a given offset from the center.
 module magnet_cut(x) {
-  translate([x, 0, collar_height - rod_slot_diameter/2-magnet_length])
-    cylinder(d=magnet_diameter, h=total_height);
+  translate([x, 0, collar_height - rod_slot_diameter/2-magnet_holes_depth])
+    cylinder(d=magnet_holes_diameter, h=total_height);
 }
 
-// Generates the U-shape body.
+// Produces the U-shape body.
 module u_shape_body() {
   difference() {
     translate([0, 0, -base_height]) 
@@ -123,6 +150,7 @@ module main()  {
   }
 }
 
-translate([0, 0, base_height]) main();
+// Produces the part at the printing position and orientation.
+translate([-indicator_hole_offset, 0, base_height]) main();
 
 
