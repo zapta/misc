@@ -3,8 +3,18 @@
 // TODO: simplify. The current script is convoluted for historic reasons
 // (adding the insets and end pieces)
 
-eps1 = 0.01;
+// +0 to hide from thingiverse customizer.
+eps1 = 0.01 + 0;
 eps2 = 2*eps1;
+
+// Number of cube rows to print.
+rows = 4;
+
+// Number of cube columns to print
+columns = 5;
+
+// How many of the pieces are end pieces.
+end_pieces = 4;
 
 // Cube size.
 cube_size = 15;
@@ -14,15 +24,6 @@ slot_width = 3;
 
 // Roughly the string diameter when streched.
 slot_overlap =2;
-
-// Number of cube rows to print.
-rows = 2;
-
-// Number of cube columns to print
-columns = 3;
-
-// How many of the pieces are end pieces.
-end_pieces = 2;
 
 // Space between cubes in the matrix. 
 printing_space = 5;
@@ -87,17 +88,13 @@ module inset_large_base(layer_insets) {
   }
 }
 
-module inset_bases(is_end_piece) {
+module inset_bases() {
   inset_small_base(bottom_insets);
   mirror([0, 1, 0]) inset_small_base(bottom_insets);
   rotate([0, 0, 90]) {
     mirror([0, 0, 1]) union() {
-      if (is_end_piece) {
-        inset_large_base(top_insets);
-      } else {
-        inset_small_base(top_insets);
-        mirror([0, 1, 0]) inset_small_base(top_insets);
-      }
+      inset_small_base(top_insets);
+      mirror([0, 1, 0]) inset_small_base(top_insets);
     }
   }
 }
@@ -133,20 +130,19 @@ module one_piece(is_end_piece) {
   difference() {
     union() {
       cube_body();   
-      inset_bases(is_end_piece);
+      inset_bases();
     }
 
     // Bottom slot.
     translate([-cube_size/2 - eps1, -slot_width/2,  - cube_size/2-eps1]) 
         cube([cube_size+eps2, slot_width, slot_depth+eps1]);
-   
+    
+    translate([-slot_width/2, -cube_size/2 - eps1, -slot_overlap/2]) 
+        cube([slot_width, cube_size+eps2, slot_depth+eps1]);
+
     if (is_end_piece) {
       end_piece_knot_cavity();
-    } else {
-      // Top slot
-      translate([-slot_width/2, -cube_size/2 - eps1, -slot_overlap/2]) 
-        cube([slot_width, cube_size+eps2, slot_depth+eps1]);
-    }
+    } 
   }
 }
 
@@ -162,6 +158,3 @@ module main() {
 
 
 main();
-
-//end_piece_knot_cavity();
-
