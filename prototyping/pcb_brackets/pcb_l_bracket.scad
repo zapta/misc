@@ -5,8 +5,6 @@
 // 
 // Circle roundness. Higher is smoother but slower to compile.
 
-/* [global] */
-
 // Parts to print.
 num_parts = 2;  // [1:Single, 2:Pair]
 
