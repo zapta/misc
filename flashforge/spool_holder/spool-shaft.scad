@@ -15,8 +15,9 @@ inner_tab_height = 15;
 // The width of the hanger slot. Should fit printer's wall thickness.
 slot_thickness = 8;
 
-// The external height of the hanger.
-hanger_height = 46;
+// The external height of the hanger. Longer provides 
+// lower center of gravity.
+hanger_height = 65;  // was 46
 
 // Rod tilt angle. User to compensate for the clearance in the 
 // hanging slot. Tweak to have the rod roughly leveled.
@@ -31,13 +32,13 @@ nut_cavity_diameter = 12.5;
 rod_pitch_angle = 1.0;
 
 // Thickness of the hanger's inner (shorter) wall.
-hanger_wall1 = 6;
+hanger_wall1 = 3;
 
 // Thickness of the hanger's top wall.
-hanger_wall2 = 6;
+hanger_wall2 = 5;
 
 // Thickness of the hanger's outer (longer) wall.
-hanger_wall3 = 7;
+hanger_wall3 = 6;
 
 
 // Spacer lengths. As many many spacers as you need.
@@ -64,7 +65,7 @@ hanger_thickness = slot_thickness + hanger_wall1 + hanger_wall3;
 
 // Adding to the internal tab a bump with diagonal edges for easier 
 // alighment into the printer hole.
-bump_size = 5;
+bump_size = 6;
 
 // Small values to maintain manifold.
 eps1 = 0.01;
@@ -80,22 +81,55 @@ module bump() {
   }
 }
 
+// A cube with rounded two edges at the top;
+module hanger_notch(x, y, z, r) {
+  hull() {
+    translate([r, 0, z-r]) rotate([-90, 0, 0]) cylinder(r=r, h=y);
+    translate([x-r, 0, z-r]) rotate([-90, 0, 0]) cylinder(r=r, h=y);
+    cube([x, y, eps1]);
+  }
+}
+
+// This adds weight at the bottom due to the additional
+// shell layers.
+module hander_weights() {
+  y_margin = 2;
+  x_margin = 1;
+  dy = hanger_width - 2*y_margin;
+  dx = hanger_wall3 - 2*x_margin;
+  for (i = [0:4]) {
+    translate([x_margin, y_margin, 2+i*3]) 
+        cube([dx, dy, 0.2]);
+  }
+  
+  // A thin hole to connect the weight slots to the external
+  // surface. Otherwise Simplify3D can't split this object correctly.
+  translate([hanger_wall3/2, hanger_width/2, -eps1]) cylinder(d=eps1, h=15);
+}
+
 // The core hanger. Without the rod mount body and the insertion 
 // bump.
 module hanger() {
-  translate([0, -hanger_width/2, 0]) 
+ // translate([0, -hanger_width/2, 0]) 
   difference() {
     cube([hanger_thickness,  hanger_width, hanger_height]);
     
     translate([hanger_wall3, -eps1, -eps1]) 
-        cube([slot_thickness, hanger_width+eps2, 
-              hanger_height-hanger_wall2+eps1]);
+       hanger_notch(slot_thickness, hanger_width+eps2, 
+              hanger_height-hanger_wall2+eps1, 1.5);
     
     translate([hanger_wall3 + slot_thickness - eps1, -eps1, -eps1]) 
           cube([hanger_wall1+eps2, hanger_width+eps2, 
                 hanger_height-inner_tab_height+eps1]);
+    
+    // If using weights, can shorten the hanger's long arm.
+    // Make sure that this indeed causes the slicer to generate
+    // more material at the bottom.
+    //#hander_weights();
   }
 }
+
+//hanger();
 
 // The end stopper part.
 module end_stopper() {
@@ -156,9 +190,9 @@ module small_parts() {
 module base() {
   difference() {
     union() {
-      rotate([0, -rod_tilt_angle, 0]) translate([0, 0, -15]) union() {
+      rotate([0, -rod_tilt_angle, 0]) translate([0, 0, -hanger_height+20]) union() {
         bump();
-        hanger();
+        translate([0, -hanger_width/2, 0])  hanger();
       }
       translate([2+eps1, 0, -3]) rotate([0, -90, 0]) 
       scale([1, 0.9, 1])
@@ -177,15 +211,19 @@ module base() {
         cylinder(d=nut_cavity_diameter, h=nut_cavity_depth+4, $fn=6);
   }
 }
-
 //base();
+
+//hanger();
+//hander_weights();
+
+
 
 // Base in the printing orientation. Direction was selected to improve
 // strength by having the 3D fibers in the correct direction.
 intersection() {
-  //translate([-10, -5, 10]) #cube([20, 20, 25]);
+//translate([0, -5, 10]) cube([50, 20, 25]);
 translate([0, 0, hanger_width/2]) rotate([-90, 0, 90]) base();
 }
-
+//
 translate([-40, -30, 0]) small_parts();
 
