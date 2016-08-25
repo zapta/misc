@@ -12,8 +12,6 @@
 # NOTE: working directory is established by the caller. If need a specific
 # directory, make sure to set it here.
 
-# TODO: assert on curl results.
-# TODO: force curl timeout.
 # TODO: include file name/size in the notification
 # TODO: include upload time in completion notification.
 # TODO: include useful info in error notifications (e.g. log file).
@@ -51,6 +49,15 @@ function notification {
   fi
 }
 
+# Call just after involing a command. 
+# arg1: command name/description.
+function check_last_cmd() {
+  status="$?"
+  if [ "$status" -ne "0" ]; then
+    notification "FAILED" "$1"
+    exit 1
+  fi
+}
 
 # Return the current date/time as a FAT32 timestamp (a string with
 # 8 hex characters)
@@ -87,16 +94,20 @@ function main {
   #
   notification "Connecting" "Setting file timestamp: ${x3g_name}"
   curl -v \
+    --connect-timeout 5 \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
+
+  check_last_cmd "Connecting"
  
   notification "Uploading" "Sending file data..."
   curl -v \
+    --connect-timeout 5 \
     -F "userid=1" \
     -F "filecomment=This is a 3D file" \
     -F "image=@${x3g_path}" \
     ${flashair_ip}/upload.cgi
-  
-  echo "Status: $?"
+
+  check_last_cmd "Uploading"
   
   notification "DONE" "File uploaded to Flashair: ${size} ${x3g_name}"
 }
