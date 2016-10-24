@@ -2,6 +2,8 @@
 
 # Delete all x3g files on the flashair.
 
+# TODO: add an interactive mode with user ack for each file deletion.
+
 # Network address of the Flashair SD card. Customize as needed.
 flashair_ip="192.168.0.8"
 
