@@ -6846,7 +6846,6 @@ Inifineon</description>
 <text x="73.66" y="170.18" size="2.54" layer="97">POWER IN</text>
 <text x="223.52" y="162.56" size="2.54" layer="97">POWER OUT</text>
 <text x="73.66" y="111.76" size="2.54" layer="97">5V RGULATOR</text>
-<text x="111.76" y="101.6" size="2.54" layer="97">TODO: VERIFY FOOTPRINTS</text>
 <text x="287.02" y="139.7" size="1.778" layer="97">A0</text>
 <text x="287.02" y="137.16" size="1.778" layer="97">D15</text>
 <text x="287.02" y="88.9" size="1.778" layer="97">D10</text>
