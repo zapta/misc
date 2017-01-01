@@ -121,8 +121,8 @@
 <text x="5.842" y="41.91" size="1.016" layer="21" font="vector" ratio="10" rot="SR270">VIN</text>
 <text x="5.969" y="35.433" size="1.016" layer="21" font="vector" ratio="10" rot="SR270">GND</text>
 <text x="34.036" y="33.147" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">GND</text>
-<text x="34.036" y="38.862" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">N_ON</text>
-<text x="34.036" y="26.416" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">N_OFF</text>
+<text x="34.036" y="39.878" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">NC</text>
+<text x="34.036" y="27.051" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">NO</text>
 <text x="29.083" y="44.18" size="1.016" layer="21" font="vector" ratio="10" rot="SR180">12VDC BAT CUTOFF REV 1</text>
 <text x="33.147" y="7.366" size="1.016" layer="21" font="vector" ratio="10" rot="SR90">ICSP</text>
 <text x="18.415" y="1.397" size="1.016" layer="21" font="vector" ratio="10" rot="SR0">SERIAL</text>
