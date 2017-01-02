@@ -3,16 +3,16 @@
 
 
 // Tray external width.
-width = 60;
+width = 75;
 
 // Tray external length.
-length = 100;
+length = 75;
 
 // Tray external height.
-height = 13;
+height = 15;
 
 // Tray corner radius
-corner_radius = 5;
+corner_radius = 10;
 
 // Thickness of wall around the tray
 wall_thickness = 2;
@@ -21,10 +21,10 @@ wall_thickness = 2;
 base_thickness = 2;
 
 // Spout width at the tray end.
-spout_base_width = 35;
+spout_base_width = 30;
 
 // Spout width at the outer end.
-spout_tip_width = 25;
+spout_tip_width = 20;
 
 // Spout end height as a fraction of the tray wall height.
 spout_tip_height_fraction = 0.7;
@@ -33,7 +33,7 @@ spout_tip_height_fraction = 0.7;
 spout_tip_base_thickness = 0.8;
 
 // Controls spout length. Tweak to get desired spout length. 
-spout_length_control = 20;
+spout_length_control = 15;
 
 // 0 for right handed, 1 for left handed.
 left_hand = 0;  
@@ -118,4 +118,5 @@ module main() {
 
 
 
+rotate([0, 0, 180])  // for thingieverse
 main();
