@@ -366,13 +366,13 @@ module parts_for_printing() {
 //cover_wire_hole(22.5, 1);
 
 
-parts_assembled();
+//parts_assembled();
 
 
 
 //wire_slot();
 
-//parts_for_printing();
+parts_for_printing();
 
 //intersection() {
 //   cover();
