@@ -15,3 +15,8 @@ other battery monitoring/cutoff operations.
 
 The board is compatible with the Arduino IDE (it acts as an Arduino Mini Pro 5V 16Mhz).
 
+The 3d subdirectory here includes a model for a 3d printable snap-on enclosure. You
+can find there both the OpenSCAD source file and the gnerated STL file. The PCB 
+is attached to the base of the encolsure using a double side 3M adhesive tape 
+such as this one https://www.amazon.com/dp/B00OI6E0L2 .
+
