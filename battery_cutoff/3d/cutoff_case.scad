@@ -149,9 +149,11 @@ module rounded_box(l, w, h, r, r1=0, r2=0) {
 }
 
 module base_wire_slot(eagle_x,eagle_y, mirror_x) {
-  width=4;
+  width=3;
   length=20;
   height=20;
+
+  pcb_sink(eagle_x, eagle_y, 5);
 
   translate([eagle_x-pcb_length/2, eagle_y-pcb_width/2, base_step_height+width/2])   mirror([mirror_x, 0, 0]) hull() {
     sphere(d=width);
@@ -161,50 +163,11 @@ module base_wire_slot(eagle_x,eagle_y, mirror_x) {
   }
 }
 
-// A hole in the cover for a connector on the USB side.
-// eagle_y: center y coordinate in eagle.
-// vert_offset: offset of hole vertical center from PCB surface.
-//module usb_conn_hole(width, height, eagle_y, vert_offset) {
-//    horiz_offset = eagle_y - pcb_width/2;
-//    translate([-cover_length/2 - cover_thickness, 
-//               -width/2 + horiz_offset, 
-//               pcb_surface_height - base_step_height - height/2 + vert_offset]) 
-//        cube([3*cover_thickness, 
-//              width, 
-//              height]);
-//}
-
-//module usb_conn_holes() {
-//  width = 12.5;
-//  height = 8;
-//  vert_offset = 1.2; //-2.8;
-//  
-//  usb_conn_hole(width, height, 37, vert_offset);
-//  usb_conn_hole(width, height, 20, vert_offset);
-//  usb_conn_hole(width, height,  8, vert_offset);
-//}
-
-//module ir_conn_hole() {
-//  eagle_y = 35;
-//  vert_offset = 2.5;
-//  diameter = 8;
-// 
-//  horiz_offset = eagle_y - pcb_width/2;
-//  echo("horiz offset", horiz_offset);
-//  
-//  translate([cover_length/2 - cover_thickness/2, 
-//               horiz_offset, 
-//               pcb_surface_height - base_step_height  + vert_offset]) 
-//        rotate([0, 90, 0]) 
-//           cylinder(d=diameter, h=3*cover_thickness, center=true);       
-//}
-
 module led_hole() {
   // Slopt, for easy LED insertion
   expansion = 0.7;
   // Since we flash the board edge with connector on the base edge, the entire board
   // including the LED is slighly offseted.
-  //correction_offset = -0.8;
   // '15' is the nominal led center distance from the PCB center.
   translate([9.21, 1.63, cover_height - cover_thickness])
   union() {
@@ -243,15 +206,8 @@ module release_notches() {
   cube([release_notch_width, cover_width + eps2, release_notch_height+eps1]);
 }
 
-// Engraved text on the top of the cover.
-//module cover_text(x, y, angle, msg) {
-//  depth = 1;
-//  size = 3;
-//   translate([x, y, cover_height-depth]) linear_extrude(height = depth+eps1) rotate([0, 0, angle]) text(msg, halign="center",valign="center", size=size, font="Helvetica:style=Bold");
-//}
-
 module cover_wire_hole(eagle_y, mirror_x) {
-  w=4;
+  w=3;
   l = 10;
   mirror([mirror_x, 0, 0])
   translate([(cover_length-l)/2, eagle_y-pcb_width/2, 0]) 
@@ -274,26 +230,14 @@ module cover() {
          cover_height-cover_thickness+eps1, 
          cover_corner_radius - cover_thickness, 
          0, 4);
-    //usb_conn_holes();
-    //ir_conn_hole();
-    //phone_conn_hole();
     led_hole();
     release_notches();
       
     cover_wire_hole(40.64, 0);
     cover_wire_hole(34.29, 0);
     cover_wire_hole(27.94, 0);
-    
     cover_wire_hole(40.64, 1);
     cover_wire_hole(34.29, 1);
-    
-    // text
-    // Tweak the dimension to match the holes.
-//    cover_text(-18.5, -14, -90, "TV");
-//    cover_text(-18.5, -2, -90, "AV");
-//    cover_text(-18.5, 14.6, -90, "PWR");  
-//    cover_text(18.5, 10.7, 90, "IR");
-
   }
   cover_snap_fit_bumps();
 }
@@ -303,7 +247,7 @@ module cover() {
 module pcb_sink(eagle_x, eagle_y, d) { 
   x =  eagle_x - pcb_length/2;
   y =  eagle_y - pcb_width/2;
-  depth = 2;
+  depth = 1.5;
   translate([x, y, base_height - depth]) cylinder(d=d, h=depth+eps1);
 }
 
@@ -324,14 +268,30 @@ module base() {
     base_wire_slot(36.83, 40.64, 0);
     base_wire_slot(36.83, 34.29, 0);
     base_wire_slot(36.83, 27.94, 0);
-    
     base_wire_slot(3.175, 40.64, 1);
     base_wire_slot(3.175, 34.29, 1);
     
-    // Clearance for phone jack mount tabs.
-//    pcb_sink(30, 30, 5);
-//    pcb_sink(30, 40, 5);  
-//    pcb_sink(35, 35, 5);
+    // Relay pins
+    pcb_sink(17.84, 35.23, 4);
+    pcb_sink(23.24, 40.93, 4);
+    pcb_sink(27.78, 38.22, 4);
+    pcb_sink(27.77, 32.22, 4);
+    pcb_sink(23.24, 30.22, 4);
+    
+    // Serial port header (1x6)
+    hull() {
+       pcb_sink(3.84, 2.55, 3);
+       pcb_sink(3.84+2.54*5, 2.55, 3);
+    }
+    
+    // ICSP port header (2x3).
+    hull() {
+      pcb_sink(35.02, 3.73, 3);
+      pcb_sink(35.02 +2.54, 3.73, 3);
+      pcb_sink(35.02, 3.73+2*2.54, 3);
+      pcb_sink(35.02+2.54, 3.73+2*2.54, 3);
+    }
+    
   }
 }
 
@@ -361,31 +321,8 @@ module parts_for_printing() {
 
 //cover();
 
-
-
-//cover_wire_hole(22.5, 1);
-
-
 //parts_assembled();
-
-
-
-//wire_slot();
 
 parts_for_printing();
 
-//intersection() {
-//   cover();
-//   translate([-85, -35, -eps1]) cube([70, 70, 40]); 
-//}
-
-//intersection() {
-//  parts_for_printing();
-//  translate([43, -7, -eps1]) cube([30, 30, 50]);
-//}
-
-//difference() {
-//  parts_assembled();
-//  translate([0, -50, -eps1]) cube([100, 100, 100]);
-//}
 
