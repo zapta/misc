@@ -10,6 +10,8 @@
 // even after turning the ingnition off.
 //
 
+// TODO: remove buzzer code. Not used in final circuit.
+
 #include "timer.h"
 
 // Units are ADC steps. 
@@ -17,13 +19,14 @@ static const int kDiffNegativeThreshold = -80;
 static const int kDiffPositiveThreshold = 40;
 
 static const int kAnalogPin = A0;    
-static const int kLedPin = 13;      
-static const int kBuzzerPin = 10;
+static const int kLedPin = 13;  //should be 15;      
+static const int kBuzzerPin = 11;
+static const int kRelayPin = 10;
 
 
 static const int kBootTimeMillis = 750;
 static const int kWaitTimeMillis = 4000;
-static const int kActiveTimeMillis = 2000;
+static const int kActiveTimeMillis = 5000;  // should be 1000
 
 // NOTE: 'fp' suffix indicates 'fixed point'. The integer value
 // is scaled by x 2^16.
@@ -50,7 +53,10 @@ static State state = STATE_BOOT;
 static Timer state_timer;
 
 // Handle detectors state machines.
-void detector_loop() {
+void control_loop() {
+  // Update relay control pin.
+  digitalWrite(kRelayPin, state == STATE_ACTIVE);
+
   
   switch (state) {
     case STATE_BOOT:
@@ -95,6 +101,7 @@ void detector_loop() {
 void setup() {
   Serial.begin(115200);
   pinMode(kLedPin, OUTPUT);
+  pinMode(kRelayPin, OUTPUT);
 
 }
 
@@ -157,8 +164,8 @@ void loop() {
   // Sample VBat and apply filters.
   sample_loop();
   
-  // Handle detection FSM.
-  detector_loop();
+  // Handle detection and relay control finite state machine.
+  control_loop();
 
   // LED control and status report.
   led_loop();
