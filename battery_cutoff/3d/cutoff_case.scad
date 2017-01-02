@@ -11,10 +11,10 @@ eps2 = eps1 + eps1;
 pcb_corner_radius = 2.5;
 
 // PCB length. (on x axis)
-pcb_length = 40;
+pcb_x_length = 40;
 
 // PCB width. (on y axis)
-pcb_width = 45;
+pcb_y_length = 45;
 
 // PCB thickness, without the components.
 pcb_thickness = 1.6;
@@ -42,11 +42,17 @@ base_corner_radius = pcb_corner_radius + pcb_to_base_margin;
 
 // The length of the thick part of the base, without the side step.
 // This is the length of the area that supports the PCB.
-base_length = pcb_length + 2*pcb_to_base_margin;
+base_length = pcb_x_length + 2*pcb_to_base_margin;
 
 // The widthof the thick part of the base, without the side step.
 // This is the width of the area that supports the PCB.
-base_width = pcb_width + 2*pcb_to_base_margin;
+base_width = pcb_y_length + 2*pcb_to_base_margin;
+
+// Width of the base tunnels for input and output wires.
+base_wire_slot_width = 3;
+
+// Width of the holes in the covers for input and output wires.
+cover_wire_hole_width = 3;
 
 // Cover top and side wall thickness.
 cover_thickness = 2;
@@ -83,8 +89,10 @@ pcb_surface_height = base_height + sticky_tape_thickness + pcb_thickness;
 echo("pcb_surface_height", pcb_surface_height);
 
 snap_fit_height = 2;
-snap_fit_length = 28;
 snap_fit_depth = 0.7;
+// Along the x dimension. Longer and closer to corners results in tightr fit.
+snap_fit_length = 28;
+
 
 module snap_fit(d, h, l) {
   d1 = d;
@@ -149,18 +157,20 @@ module rounded_box(l, w, h, r, r1=0, r2=0) {
 }
 
 module base_wire_slot(eagle_x,eagle_y, mirror_x) {
-  width=3;
-  length=20;
-  height=20;
-
+  w=base_wire_slot_width;
+  l=20;
+  h=20;
+ 
   pcb_sink(eagle_x, eagle_y, 5);
 
-  translate([eagle_x-pcb_length/2, eagle_y-pcb_width/2, base_step_height+width/2])   mirror([mirror_x, 0, 0]) hull() {
-    sphere(d=width);
-    translate([0, 0, height]) cylinder(d=width, h=eps1);
-    translate([length, 0, 0]) rotate([0, 90, 0]) cylinder(d=width, h=eps1);
-    translate([length, -width/2, height]) cube([1, width, 1]);
-  }
+  translate([eagle_x-pcb_x_length/2, eagle_y-pcb_y_length/2, base_step_height+w/2])   
+    mirror([mirror_x, 0, 0]) 
+    hull() {
+      sphere(d=w);
+      translate([0, 0, h]) cylinder(d=w, h=eps1);
+      translate([l, 0, 0]) rotate([0, 90, 0]) cylinder(d=w, h=eps1);
+      translate([l, -w/2, h]) cube([1, w, 1]);
+    }
 }
 
 module led_hole() {
@@ -207,10 +217,10 @@ module release_notches() {
 }
 
 module cover_wire_hole(eagle_y, mirror_x) {
-  w=3;
+  w = cover_wire_hole_width;
   l = 10;
   mirror([mirror_x, 0, 0])
-  translate([(cover_length-l)/2, eagle_y-pcb_width/2, 0]) 
+  translate([(cover_length-l)/2, eagle_y-pcb_y_length/2, 0]) 
     hull() {
       translate([0, 0, w/2]) 
           rotate([0, 90, 0]) cylinder(d=w, h=l);
@@ -245,8 +255,8 @@ module cover() {
 // Cavities in the base for PCB features. 
 // Input coordiantes are in eagle x,y.
 module pcb_sink(eagle_x, eagle_y, d) { 
-  x =  eagle_x - pcb_length/2;
-  y =  eagle_y - pcb_width/2;
+  x =  eagle_x - pcb_x_length/2;
+  y =  eagle_y - pcb_y_length/2;
   depth = 1.5;
   translate([x, y, base_height - depth]) cylinder(d=d, h=depth+eps1);
 }
@@ -299,7 +309,7 @@ module base() {
 // No need to print this.
 module pcb() {
   color([0.6, 0.6, 0.6, 0.9]) 
-    rounded_box(pcb_length, pcb_width, pcb_thickness, pcb_corner_radius, 0.2, 0);
+    rounded_box(pcb_x_length, pcb_y_length, pcb_thickness, pcb_corner_radius, 0.2, 0);
 }
 
 // Combine the parts in assembled position, with eps spacing.
