@@ -190,7 +190,7 @@ module led_hole() {
   }
 }
 
-module base_snap_fit_holes() {
+module base_snap_fit_slots() {
   module sf(a) {
     dz = base_step_height + (base_height - base_step_height)/2;
     dy =  base_width/2+eps1;   
@@ -273,7 +273,7 @@ module base() {
         base_corner_radius + extra, 0.5, 0.2);
     }
     
-    base_snap_fit_holes();
+    base_snap_fit_slots();
     
     base_wire_slot(36.83, 40.64, 0);
     base_wire_slot(36.83, 34.29, 0);
@@ -324,7 +324,7 @@ module parts_for_printing() {
   space = 8;
   base();
   translate([cover_length+space, 0, cover_height]) 
-       rotate([180, 0, 0])  cover(); 
+       rotate([180, 0, 180])  cover(); 
 }
 
 //base();
