@@ -16,7 +16,7 @@ tmp_prefix="/tmp/flashair_delete"
 function check_last_cmd() {
   status="$?"
   if [ "$status" -ne "0" ]; then
-    notification "FAILED" "$1"
+    echo "FAILED: $1"
     exit 1
   fi
 }

@@ -20,8 +20,11 @@
 # TODO: include instructions for setting up the Flashair card.
 
 # Change banner time. This is persistent and affects all banners.
+# TODO: does this require system reboot to take affect? If so, mention in comments.
 # TODO: is there a way to extend the banner time just for this script?
 defaults write com.apple.notificationcenterui bannerTime 60 
+
+notifier="/Applications/terminal-notifier-1.6.3/terminal-notifier.app/Contents/MacOS/terminal-notifier"
 
 # Network address of the Flashair SD card. Customize as needed.
 flashair_ip="192.168.0.8"
@@ -45,7 +48,7 @@ function notification {
   if [ "$last_notification" != "$1#$2" ]
   then
     last_notification="$1#$2"
-    /usr/local/bin/terminal-notifier -group 'x3g_uploader' -title 'Flashair Uploader' -subtitle "$1" -message "$2"
+    ${notifier} -group 'x3g_uploader' -title 'Flashair Uploader' -subtitle "$1" -message "$2"
   fi
 }
 
