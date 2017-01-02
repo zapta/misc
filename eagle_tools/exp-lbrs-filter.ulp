@@ -310,7 +310,11 @@ void CreateLBRdescription(string project_name) {
 
 void CreateHeader(UL_LIBRARY LBR) {
   LBR.layers(L) {
-    sprintf(h, "Layer %d %s;\n", L.number, L.name); cmd += h;
+    // Eliminating copper layers other than 2 and 3. The free Eagle version doesn't
+    // like them.
+    if (L.number == 1 || L.number == 16) {
+      sprintf(h, "Layer %d %s;\n", L.number, L.name); cmd += h;
+    }
   }
   sprintf(h, "Set Wire_bend 2;\nSet Select_factor 0;\nSet Undo_log off;\n"); cmd += h;
   sprintf(h, "Grid mic 1;\n"); cmd += h;
