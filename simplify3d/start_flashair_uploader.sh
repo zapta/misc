@@ -89,6 +89,11 @@ function main {
 
   local fat32_timestamp=$(fat32_timestamp)
 
+  # Start a short timer to make sure the Connecting message is displayed
+  # for at least this minimal time.
+  sleep 1.5 &
+  timer_job_id="$!"
+
   # This notification should be replaced quickly with the Uploading
   # notification below. If not, it indicates that the Flashair card
   # is not available. Hence the 'Connecting' title.
@@ -102,13 +107,18 @@ function main {
 
   check_last_cmd "Connecting"
  
-  notification "Uploading" "Sending file data..."
+  # Wait if needed to have the Connecting message displayed long enough
+  # for the user to notice.
+  wait $timer_job_id
+
+  notification "Connected" "Uploading file data..."
   curl -v \
     --connect-timeout 5 \
     -F "userid=1" \
     -F "filecomment=This is a 3D file" \
     -F "image=@${x3g_path}" \
     ${flashair_ip}/upload.cgi
+
 
   check_last_cmd "Uploading"
   
