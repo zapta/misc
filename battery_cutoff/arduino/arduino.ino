@@ -10,23 +10,28 @@
 // even after turning the ingnition off.
 //
 
-// TODO: remove buzzer code. Not used in final circuit.
-
+// A local library that make it easy to measure elapsed time based on 
+// Arduino's millos() function.
 #include "timer.h"
 
 // Units are ADC steps. 
 static const int kDiffNegativeThreshold = -80;
 static const int kDiffPositiveThreshold = 40;
 
-static const int kAnalogPin = A0;    
-static const int kLedPin = 13;  //should be 15;      
-static const int kBuzzerPin = 11;
-static const int kRelayPin = 10;
+// Analog input pin to sense battery voltage. Fed via a 3:1 voltage divider.
+static const int kAnalogPin = A0;   
+// Status led output pin. Active high. 
+static const int kLedPin = 10;   
+// Relay control output pin. Active high.  
+static const int kRelayPin = 15;
 
 
+// Forced no action period on power up.
 static const int kBootTimeMillis = 750;
+// Max allowed time between cranking voltage drop and charging voltage bump. 
 static const int kWaitTimeMillis = 4000;
-static const int kActiveTimeMillis = 5000;  // should be 1000
+// Time to activate the relay once cranking detected.
+static const int kActiveTimeMillis = 2000;  
 
 // NOTE: 'fp' suffix indicates 'fixed point'. The integer value
 // is scaled by x 2^16.
@@ -78,7 +83,6 @@ void control_loop() {
       } else if (diff > kDiffPositiveThreshold) {
         state = STATE_ACTIVE;
         state_timer.restart();
-        tone(kBuzzerPin, 1000, 4000);
       } else if (state_timer.timeMillis() > kWaitTimeMillis) {
         state = STATE_IDLE;
       }
@@ -87,13 +91,11 @@ void control_loop() {
     case STATE_ACTIVE:
       if (state_timer.timeMillis() > kActiveTimeMillis) {
         state = STATE_IDLE;
-        noTone(kBuzzerPin);
       }
       break;
 
     default:
       state = STATE_IDLE;
-      noTone(kBuzzerPin);
       break;
   }
 }

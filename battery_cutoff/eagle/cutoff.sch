@@ -1128,7 +1128,7 @@ Source: http://www.mew-europe.com/.. en_ds_61207_0000.pdf</description>
 </class>
 </classes>
 <parts>
-<part name="R5" library="cutoff" deviceset="R-US_" device="R0402" value="1K"/>
+<part name="R5" library="cutoff" deviceset="R-US_" device="R0402" value="330"/>
 <part name="GND6" library="cutoff" deviceset="GND" device=""/>
 <part name="C2" library="cutoff" deviceset="C-US" device="C0603K" value="0.1uF"/>
 <part name="C3" library="cutoff" deviceset="C-US" device="C0603K" value="0.1uF"/>

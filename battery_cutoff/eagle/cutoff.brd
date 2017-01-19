@@ -736,7 +736,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="8.255" y="8.255" size="1.016" layer="25" font="vector" ratio="10"/>
 <attribute name="VALUE" x="6.985" y="6.985" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R5" library="cutoff" package="R0402" value="1K" x="33.57" y="20.805" smashed="yes" rot="R270">
+<element name="R5" library="cutoff" package="R0402" value="330" x="33.57" y="20.805" smashed="yes" rot="R270">
 <attribute name="NAME" x="35.518" y="20.089" size="1.016" layer="25" font="vector" ratio="10" rot="R90"/>
 <attribute name="VALUE" x="31.665" y="21.44" size="1.27" layer="27" rot="R270"/>
 </element>
