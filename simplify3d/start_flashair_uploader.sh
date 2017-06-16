@@ -57,7 +57,7 @@ function notification {
 function check_last_cmd() {
   status="$?"
   if [ "$status" -ne "0" ]; then
-    notification "FAILED" "$1"
+    notification "FAILED" "While $1"
     exit 1
   fi
 }
@@ -100,18 +100,21 @@ function main {
   # The actual operation is setting the filetimestamp since the
   # FlashAir doesn't have and independent date/time source of its own.
   #
-  notification "Connecting" "Setting file timestamp: ${x3g_name}"
+  notification "CONNECTING" "File: ${x3g_name}"
   curl -v \
     --connect-timeout 5 \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
 
-  check_last_cmd "Connecting"
+  check_last_cmd "connecting"
  
   # Wait if needed to have the Connecting message displayed long enough
   # for the user to notice.
   wait $timer_job_id
 
-  notification "Connected" "Uploading file data..."
+  size=`du -h  $x3g_path | cut -f1`
+  check_last_cmd "getting size"
+
+  notification "UPLOADING" "File: ${x3g_name}  ${size}"
   curl -v \
     --connect-timeout 5 \
     -F "userid=1" \
@@ -120,9 +123,9 @@ function main {
     ${flashair_ip}/upload.cgi
 
 
-  check_last_cmd "Uploading"
+  check_last_cmd "uploading"
   
-  notification "DONE" "File uploaded to Flashair: ${size} ${x3g_name}"
+  notification "DONE" "File: ${x3g_name}  ${size}"
 }
 
 main $* &>/tmp/flashair_uploader_log &
