@@ -94,6 +94,7 @@ distribution <- function(m, k){
   return(x)
 }
 
+#png('rplot.png', width = 800, height = 600)
 X11(width=12, height=7)
 
 plot(0, 0, 
@@ -125,7 +126,7 @@ for (i in 1:length(plots)) {
   k <- as.numeric(p[2])
   col <- color_pallet[i]
 
-  legends <- c(legends, sprintf("K=%.2f M=%d", k, as.integer(m)))
+  legends <- c(legends, sprintf(" K=%.2f   M=%d", k, as.integer(m)))
   colors <- c(colors, col)
 
   if (is_relative) {
