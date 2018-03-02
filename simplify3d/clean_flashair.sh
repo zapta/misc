@@ -3,7 +3,7 @@
 # Delete all x3g files on the flashair.
 
 # Network address of the Flashair SD card. Customize as needed.
-flashair_ip="192.168.0.8"
+flashair_ip="10.0.0.8"
 
 # Set to -v to have curl verbose output, -s for silent
 curl_verbosity="-s"

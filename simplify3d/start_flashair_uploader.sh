@@ -4,7 +4,7 @@
 # Add this line in the Simplify3D "Additional terminal commands for post processing" field.
 # <path to this file> [output_filepath]
 #
-# Doesn't not worth with Simplify3D versions prior to 3.1.0. Those versions require
+# Doesn't not work with Simplify3D versions prior to 3.1.0. Those versions require
 # the older version of this script which accept the gcode file path as the command
 # line flag and wait for the completion of the x3g generation. These problems were
 # fixed in Simplify3D 3.1.0.
@@ -12,22 +12,20 @@
 # NOTE: working directory is established by the caller. If need a specific
 # directory, make sure to set it here.
 
-# TODO: include file name/size in the notification
 # TODO: include upload time in completion notification.
 # TODO: include useful info in error notifications (e.g. log file).
 # TODO: tie notification clicks to log file
-# TODO: replace literals with consts
 # TODO: include instructions for setting up the Flashair card.
 
-# Change banner time. This is persistent and affects all banners.
-# TODO: does this require system reboot to take affect? If so, mention in comments.
-# TODO: is there a way to extend the banner time just for this script?
-defaults write com.apple.notificationcenterui bannerTime 60 
-
+# NOTE
+# To have the notifications stay longer, in the system preference, set Notifications
+# to use Alert style for terminal-notifier.
+#
 notifier="/Applications/terminal-notifier-1.6.3/terminal-notifier.app/Contents/MacOS/terminal-notifier"
 
 # Network address of the Flashair SD card. Customize as needed.
-flashair_ip="192.168.0.8"
+#flashair_ip="192.168.0.8"
+flashair_ip="10.0.0.8"
 
 # Called upon script starts. Accepts command line args.
 function init {
@@ -37,6 +35,9 @@ function init {
   
   echo "x3g_path: [${x3g_path}]"
   echo "x3g_name: [${x3g_name}]"
+
+  x3g_size=`du -h  $x3g_path | cut -f1`
+  check_last_cmd "getting size"
 }
 
 
@@ -100,7 +101,7 @@ function main {
   # The actual operation is setting the filetimestamp since the
   # FlashAir doesn't have and independent date/time source of its own.
   #
-  notification "CONNECTING" "File: ${x3g_name}"
+  notification "CONNECTING" "File: ${x3g_name}  ${x3g_size}"
   curl -v \
     --connect-timeout 5 \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
@@ -111,10 +112,7 @@ function main {
   # for the user to notice.
   wait $timer_job_id
 
-  size=`du -h  $x3g_path | cut -f1`
-  check_last_cmd "getting size"
-
-  notification "UPLOADING" "File: ${x3g_name}  ${size}"
+  notification "UPLOADING" "File: ${x3g_name}  ${x3g_size}"
   curl -v \
     --connect-timeout 5 \
     -F "userid=1" \
@@ -125,7 +123,7 @@ function main {
 
   check_last_cmd "uploading"
   
-  notification "DONE" "File: ${x3g_name}  ${size}"
+  notification "DONE" "File: ${x3g_name}  ${x3g_size}"
 }
 
 main $* &>/tmp/flashair_uploader_log &
