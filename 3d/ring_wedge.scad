@@ -28,17 +28,20 @@ screw_hole_spacing = 105.7;
 // Diameter of screw holes.
 screw_hole_diameter = 5;
 
-// Size of the wires hole.
-wire_hole_size = 26;
+// Horizontal size of the wires hole.
+wire_hole_width = 26;  
 
-// Offset between centers of wire hole and base.
+// Vertical size of the wires hole.
+wire_hole_height = 35;  
+
+// Offset between the center of wire hole and base.
 wire_hole_offset = 10;
 
 // Radius of the wire hole corners
 wire_hole_corner_radius = 4;
 
 // Text vertical offset from the center.
-text_offset = 25;
+text_offset = 35;
 
 // Text font size.
 text_size = 7;
@@ -85,7 +88,7 @@ module screw_hole() {
 }
 
 module wires_hole() {
-  translate([wire_hole_offset, 0, -eps1]) rounded_block(wire_hole_size, wire_hole_size, length, wire_hole_corner_radius);
+  translate([wire_hole_offset, 0, -eps1]) rounded_block(wire_hole_height, wire_hole_width, length, wire_hole_corner_radius);
 }
 
 module label() {
