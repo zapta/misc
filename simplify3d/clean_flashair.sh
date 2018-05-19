@@ -7,6 +7,7 @@ flashair_ip="10.0.0.8"
 
 # Set to -v to have curl verbose output, -s for silent
 curl_verbosity="-s"
+#curl_verbosity="-v"
 
 # Temp files prefix
 tmp_prefix="/tmp/flashair_delete"
@@ -65,14 +66,14 @@ function main() {
   for fname in "${arr[@]}"
   do
     echo
-    echo -e -n "Delete \033[1;34m${fname}\033[0m "
-    read -n1 -r -p "[y/N] " response
+    echo -e -n "Delete/keep \033[1;34m${fname}\033[0m "
+    read -n1 -r -p "[d/K] " response
     echo
-    if [[ $response =~ ^([yY])$ ]]
+    if [[ $response =~ ^([dD])$ ]]
     then
       delete_file $fname
     else
-      echo "User said no"
+      echo "User said keep"
     fi
   done
 

@@ -24,22 +24,11 @@
 notifier="/Applications/terminal-notifier-1.6.3/terminal-notifier.app/Contents/MacOS/terminal-notifier"
 
 # Network address of the Flashair SD card. Customize as needed.
-#flashair_ip="192.168.0.8"
 flashair_ip="10.0.0.8"
 
-# Called upon script starts. Accepts command line args.
-function init {
-  # Process command line args.
-  x3g_path="$1"
-  x3g_name=$(basename "${x3g_path}")
-  
-  echo "x3g_path: [${x3g_path}]"
-  echo "x3g_name: [${x3g_name}]"
-
-  x3g_size=`du -h  $x3g_path | cut -f1`
-  check_last_cmd "getting size"
-}
-
+# This allows to access args properly in a function, even if they
+# contains the space character.
+args=("$@")
 
 # Max OSX specific display popup notification. 
 # Required installation of terminal-notifier.
@@ -61,6 +50,23 @@ function check_last_cmd() {
     notification "FAILED" "While $1"
     exit 1
   fi
+}
+
+# Process args
+function init() {
+  x3g_path=${args[0]}
+  echo "x3g_path: [${x3g_path}]"
+
+  x3g_name=$(basename "${x3g_path}")
+  echo "x3g_name: [${x3g_name}]"
+
+  if ! [[ $x3g_name =~ ^[[:space:]A-Za-z0-9_-]+[.]x3g$ ]]; then
+    notification "INVALID FILE NAME" "'$x3g_name'"
+    exit 1
+  fi
+
+  x3g_size=`du -h  $x3g_path | cut -f1`
+  check_last_cmd "getting size"
 }
 
 # Return the current date/time as a FAT32 timestamp (a string with
@@ -86,7 +92,7 @@ function fat32_timestamp {
 }
 
 function main {
-  init $*
+  init
 
   local fat32_timestamp=$(fat32_timestamp)
 
