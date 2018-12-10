@@ -2293,4 +2293,54 @@ Wire Wire Line
 	5150 4300 5150 4500
 Wire Wire Line
 	5550 4300 5550 4500
+Text Notes 4000 6600 0    50   ~ 0
+Idle
+Text Notes 4000 6700 0    50   ~ 0
+Forward
+Text Notes 4000 6800 0    50   ~ 0
+Stop Forward
+Text Notes 4000 6900 0    50   ~ 0
+Reverse
+Text Notes 4000 7000 0    50   ~ 0
+Stop Reverse
+Wire Notes Line
+	4600 6400 4600 7000
+Wire Notes Line
+	4800 6400 4800 7000
+Wire Notes Line
+	5000 6400 5000 7000
+Wire Notes Line
+	5200 6400 5200 7000
+Wire Notes Line
+	5400 6400 5400 7000
+Text Notes 4650 6500 0    50   ~ 0
+Y2
+Text Notes 4850 6500 0    50   ~ 0
+Y1
+Text Notes 5050 6500 0    50   ~ 0
+X2
+Text Notes 5250 6500 0    50   ~ 0
+X1
+Text Notes 4650 6700 0    50   ~ 0
+X
+Text Notes 5250 6700 0    50   ~ 0
+X
+Wire Notes Line
+	3900 6400 3900 7000
+Wire Notes Line
+	3900 7000 5400 7000
+Wire Notes Line
+	3900 6900 5400 6900
+Wire Notes Line
+	3900 6800 5400 6800
+Wire Notes Line
+	3900 6700 5400 6700
+Wire Notes Line
+	3900 6600 5400 6600
+Wire Notes Line
+	3900 6500 5400 6500
+Text Notes 4000 6500 0    50   ~ 0
+MODE
+Wire Notes Line
+	3900 6400 5400 6400
 $EndSCHEMATC
