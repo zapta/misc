@@ -1,22 +1,34 @@
+// Soap dispenser Arduino firmware.
+
+// ATtiny48 Arduin support from
 // https://github.com/SpenceKonde/ATTinyCore/blob/master/avr/extras/ATtiny_x8.md
 
+// Arduino IDE 1.8.5 configuraiton (Tools menu)
+// --------------------------------------------
+// Board: ATtiny48/88
+// Chip: Attiny48
+// Clock: 1 MHZ (internal)
+// Save EEPROM: EEPROM retained
+// LTO: Enabled
+// BOD Level: B.O.D Enabled (2.7V)
+
 // LED pins
-#define RED_LED_NEG 9  
-#define YELLOW_LED_NEG 10  
+#define RED_LED_NEG 9
+#define YELLOW_LED_NEG 10
 
 // Motor control outputs
-#define X1 2  
-#define X2 1   
+#define X1 2
+#define X2 1
 #define Y1 3
 #define Y2 15
 
 // Input signals
-#define DOOR_OPENED 24 
+#define DOOR_OPENED 24
 #define PROXIMITY 25
-#define PARKING 26  
+#define PARKING 26
 
 // the setup function runs once when you press reset or power the board
-void setup() {  
+void setup() {
   // Initialize motor drivers outputs as in state.
   // Outupts start by default in LOW state.
   pinMode(X1, OUTPUT);
@@ -25,8 +37,8 @@ void setup() {
   pinMode(Y2, OUTPUT);
 
   // Initialize LED outputs in off state.
-  digitalWrite(RED_LED_NEG, HIGH);  
-  digitalWrite(YELLOW_LED_NEG, HIGH);  
+  digitalWrite(RED_LED_NEG, HIGH);
+  digitalWrite(YELLOW_LED_NEG, HIGH);
   pinMode(RED_LED_NEG, OUTPUT);
   pinMode(YELLOW_LED_NEG, OUTPUT);
 
@@ -36,18 +48,16 @@ void setup() {
   pinMode(PARKING, INPUT);
 }
 
-boolean state = LOW;
+boolean blink_state = LOW;
 
 void loop() {
-  for(;;) {
-    if (digitalRead(PROXIMITY)) {
-      digitalWrite(RED_LED_NEG, HIGH);   
-      digitalWrite(YELLOW_LED_NEG, LOW); 
-    } else {
-      state = !state;
-      digitalWrite(RED_LED_NEG, state);   
-      digitalWrite(YELLOW_LED_NEG, HIGH); 
-    }
-    delay(100);                      
-  }                       
+  if (digitalRead(PROXIMITY)) {
+    digitalWrite(RED_LED_NEG, HIGH);
+    digitalWrite(YELLOW_LED_NEG, LOW);
+  } else {
+    blink_state = !blink_state;
+    digitalWrite(RED_LED_NEG, blink_state);
+    digitalWrite(YELLOW_LED_NEG, HIGH);
+  }
+  delay(100);
 }
