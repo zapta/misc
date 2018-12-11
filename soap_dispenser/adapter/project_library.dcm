@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP pogo_pin
+D test point (alternative shape)
+K test point tp
+F ~
+$ENDCMP
+#
+#End Doc Library
