@@ -1,3 +1,8 @@
+#include <avr/sleep.h>
+//#include <avr/interrupt.h>
+//#include <avr/pgmspace.h>
+#include <Arduino.h>
+
 // Soap dispenser Arduino firmware.
 
 // ATtiny48 Arduin support from
@@ -23,12 +28,13 @@
 // TODO: improve error indication on LEDs (e.g. for a timeout
 // during a dispensing cycle).
 
+
 class Timer {
   public:
     Timer() {
-      start_time_millis = millis();  
+      start_time_millis = millis();
     }
-    
+
     inline void reset() {
       start_time_millis = millis();
     }
@@ -191,9 +197,7 @@ static inline void setup() {
 
 //=================== Main =========================
 
-
-void run_one_cycle() {
-
+void dispense_once() {
   static Timer action_timer;
 
   // Start motor forward
@@ -211,7 +215,6 @@ void run_one_cycle() {
 
   // Wait past the parking switch bounce..
   delay(10);
-
 
   // Wait for entering back the PARKING state, after one revolution.
   // With timeout.
@@ -233,33 +236,57 @@ void run_one_cycle() {
   motor::off();
 }
 
-static Timer blink_timer;
-static boolean blink_state = false;
+static volatile boolean proximity_active = false;
+
+// Interrupt handler for any changes in the 4 sense inputs.
+// This also wakes up the CPU if in sleep mode.
+ISR(PCINT3_vect)
+{
+  if (digitalRead(sensors::PROXIMITY_PIN)) {
+    proximity_active = true;
+  }
+}
 
 
 void setup() {
   motor::setup();
   led::setup();
   sensors::setup();
+
+  PCMSK3 |= (1 << PCINT26);
+  PCICR |= (1 << PCIE3);
+
+  // This prevents spurious activation on power up.
+  // TODO: what causes this activation?
+  led::green();
+  delay(2000);
+  led::off();
+  proximity_active = false;
 }
 
+// Base on this article
+// http://www.engblaze.com/hush-little-microprocessor-avr-and-arduino-sleep-mode-basics/
+void sleep_now() {
+  // Choose our preferred sleep mode:
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  // Set sleep enable (SE) bit:
+  sleep_enable();
+  // Put the device to sleep:
+  sleep_mode();
+  // Upon waking up, sketch continues from this point.
+  sleep_disable();
+}
+
+Timer proxmity_timer;
 void loop() {
-  // If proximity sensor is activiated run one cycle.
-  if (sensors::is_proximity_trigger()) {
+  sleep_now();
+
+  if (proximity_active) {
+    //blink_state = !blink_state;
     led::green();
-    run_one_cycle();
-    return;
-  }
-
-  if (blink_timer.elapsed_millis() < 500) {
-    return;
-  }
-
-  blink_timer.reset();
-  blink_state = !blink_state;
-  if (blink_state) {
-    diag::had_error() ? led::red() : led::green();
-  } else {
+    dispense_once();
     led::off();
+    proximity_active = false;
   }
 }
+

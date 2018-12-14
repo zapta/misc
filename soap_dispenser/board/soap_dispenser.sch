@@ -2012,12 +2012,8 @@ Text GLabel 9000 5600 3    50   Output ~ 0
 SCK
 Text GLabel 8900 5600 3    50   Output ~ 0
 MISO
-Wire Wire Line
-	8600 5300 8600 5600
 Text GLabel 8800 5600 3    50   Output ~ 0
 MOSI
-Text GLabel 8600 5600 3    50   Input ~ 0
-DOOR_OPENED
 Wire Wire Line
 	8900 5300 8900 5600
 Wire Wire Line
@@ -2540,10 +2536,6 @@ Text GLabel 2900 4050 2    50   Input ~ 0
 VSENSE
 Wire Wire Line
 	2550 4050 2900 4050
-Text GLabel 8700 5600 3    50   Input ~ 0
-VSENSE
-Wire Wire Line
-	8700 5300 8700 5600
 $Comp
 L Connector:TestPoint TP7
 U 1 1 5C146D93
