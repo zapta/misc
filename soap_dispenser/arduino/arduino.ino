@@ -12,6 +12,8 @@
 // LTO: Enabled
 // BOD Level: B.O.D Enabled (2.7V)
 
+// TODO: implement sleep mode.
+
 // TODO: add current sensing functionality. Rotate the motor
 // in reverse back to parking position and indicate error on LED.
 
@@ -21,41 +23,62 @@
 // TODO: improve error indication on LEDs (e.g. for a timeout
 // during a dispensing cycle).
 
+//=================== Diagnostics ===================
+
+namespace diag {
+
+static boolean _had_errors = false;
+
+static inline void set_error() {
+  _had_errors = true;
+}
+
+static inline void clear_error() {
+  _had_errors = false;
+}
+
+static inline boolean had_error() {
+  return _had_errors;
+}
+
+}  // namespace diag;
+
 
 //=================== Motor =========================
 
 namespace sensors {
 
-static const byte DOOR_OPENED_IN = 24;
-static const byte PROXIMITY_IN   = 25;
-static const byte PARKING_IN     = 26;
+// Input pins. Active high unless specificed otherwise.
+static const byte DOOR_OPENED_PIN = 24;
+static const byte PROXIMITY_PIN   = 25;
+static const byte PARKING_PIN     = 26;
 
 inline boolean is_door_opened() {
-  return digitalRead(DOOR_OPENED_IN);
+  return digitalRead(DOOR_OPENED_PIN);
 }
 
 inline boolean is_door_closed() {
-  return !digitalRead(DOOR_OPENED_IN);
+  return !digitalRead(DOOR_OPENED_PIN);
 }
 
 inline boolean is_in_parking() {
-  return digitalRead(PARKING_IN);
+  return digitalRead(PARKING_PIN);
 }
 
-inline boolean is_proximity_on() {
-  return digitalRead(PROXIMITY_IN);
-}
+static boolean old_proximity_state;
 
-inline boolean is_proximity_off() {
-  return !digitalRead(PROXIMITY_IN);
+inline boolean is_proximity_trigger() {
+  boolean temp = old_proximity_state;
+  old_proximity_state = digitalRead(PROXIMITY_PIN);
+  return old_proximity_state && !temp;
 }
 
 inline void setup() {
   // Initialize inputs. We use external pullups when needed and don't
   // waste energey on internal pullups.
-  pinMode(DOOR_OPENED_IN, INPUT);
-  pinMode(PROXIMITY_IN, INPUT);
-  pinMode(PARKING_IN, INPUT);
+  pinMode(DOOR_OPENED_PIN, INPUT);
+  pinMode(PROXIMITY_PIN, INPUT);
+  pinMode(PARKING_PIN, INPUT);
 }
 }  // namespace sensors
 
@@ -115,38 +138,35 @@ static inline void setup() {
 
 //=================== LED =========================
 
-// LED control Arduino digital outputs. Active low.
-//#define YELLOW_LED_PIN 10
-//#define RED_LED_PIN     9
-
 namespace led {
-static const byte YELLOW_LED_PIN = 10;
-static const byte RED_LED_PIN    =  9;
+// Both pins are active low.
+static const byte RED_LED_PIN   =  9;
+static const byte GREEN_LED_PIN = 10;
 
 static void off() {
   digitalWrite(RED_LED_PIN, HIGH);
-  digitalWrite(YELLOW_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, HIGH);
 }
 
 static void red() {
   digitalWrite(RED_LED_PIN, LOW);
-  digitalWrite(YELLOW_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, HIGH);
 }
 
 static void yellow() {
-  digitalWrite(RED_LED_PIN, HIGH);
-  digitalWrite(YELLOW_LED_PIN, LOW);
+  digitalWrite(RED_LED_PIN, LOW);
+  digitalWrite(GREEN_LED_PIN, LOW);
 }
 
 static void green() {
-  digitalWrite(RED_LED_PIN, LOW);
-  digitalWrite(YELLOW_LED_PIN, LOW);
+  digitalWrite(RED_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, LOW);
 }
 
 static inline void setup() {
   led::off();
   pinMode(RED_LED_PIN, OUTPUT);
-  pinMode(YELLOW_LED_PIN, OUTPUT);
+  pinMode(GREEN_LED_PIN, OUTPUT);
 }
 }  // namespace led
 
@@ -180,12 +200,14 @@ void run_one_cycle() {
   while (sensors::is_in_parking()) {
     if (timer::elapsed_millis() > 1000) {
       motor::off();
+      diag::set_error();
       return;
     }
   }
 
   // Wait past the parking switch bounce..
   delay(10);
+
 
   // Wait for entering back the PARKING state, after one revolution.
   // With timeout.
@@ -194,6 +216,7 @@ void run_one_cycle() {
   while (!sensors::is_in_parking()) {
     if (timer::elapsed_millis() > 1000) {
       motor::off();
+      diag::set_error();
       return;
     }
   }
@@ -214,15 +237,20 @@ void setup() {
 }
 
 void loop() {
-  boolean blink_state = false;
+  static boolean blink_state = false;
 
-  //if (sensors::is_proximity_on) {
-  if (sensors::is_door_closed()) {
-    led::red();
+  // If proximity sensor is activiated run one cycle.
+  if (sensors::is_proximity_trigger()) {
+    led::green();
     run_one_cycle();
     return;
   }
 
   blink_state = !blink_state;
-  blink_state ? led::red() : led::off();
+  if (blink_state) {
+    diag::had_error() ? led::red() : led::green();
+  } else {
+    led::off();
+  }
+  delay(500);
 }
