@@ -23,6 +23,25 @@
 // TODO: improve error indication on LEDs (e.g. for a timeout
 // during a dispensing cycle).
 
+class Timer {
+  public:
+    Timer() {
+      start_time_millis = millis();  
+    }
+    
+    inline void reset() {
+      start_time_millis = millis();
+    }
+
+    inline uint32_t elapsed_millis()  {
+      return millis() - start_time_millis;
+    }
+
+  private:
+    uint32_t start_time_millis;
+};
+
+
 //=================== Diagnostics ===================
 
 namespace diag {
@@ -170,35 +189,20 @@ static inline void setup() {
 }
 }  // namespace led
 
-
-//=================== Timer ========================
-
-namespace timer {
-
-static uint32_t start_time_millis;
-
-inline void reset() {
-  start_time_millis = millis();
-}
-
-inline uint32_t elapsed_millis()  {
-  return millis() - start_time_millis;
-}
-}  // namespace timer
-
-
 //=================== Main =========================
 
 
 void run_one_cycle() {
 
+  static Timer action_timer;
+
   // Start motor forward
   motor::forward();
 
   // Wait for exit from PARKING state, with timeout.
-  timer::reset();
+  action_timer.reset();
   while (sensors::is_in_parking()) {
-    if (timer::elapsed_millis() > 1000) {
+    if (action_timer.elapsed_millis() > 1000) {
       motor::off();
       diag::set_error();
       return;
@@ -212,9 +216,9 @@ void run_one_cycle() {
   // Wait for entering back the PARKING state, after one revolution.
   // With timeout.
   // TODO: add debouncing on the parking switch.
-  timer::reset;
+  action_timer.reset();
   while (!sensors::is_in_parking()) {
-    if (timer::elapsed_millis() > 1000) {
+    if (action_timer.elapsed_millis() > 1000) {
       motor::off();
       diag::set_error();
       return;
@@ -229,16 +233,17 @@ void run_one_cycle() {
   motor::off();
 }
 
+static Timer blink_timer;
+static boolean blink_state = false;
+
+
 void setup() {
-  timer::reset();
   motor::setup();
   led::setup();
   sensors::setup();
 }
 
 void loop() {
-  static boolean blink_state = false;
-
   // If proximity sensor is activiated run one cycle.
   if (sensors::is_proximity_trigger()) {
     led::green();
@@ -246,11 +251,15 @@ void loop() {
     return;
   }
 
+  if (blink_timer.elapsed_millis() < 500) {
+    return;
+  }
+
+  blink_timer.reset();
   blink_state = !blink_state;
   if (blink_state) {
     diag::had_error() ? led::red() : led::green();
   } else {
     led::off();
   }
-  delay(500);
 }
