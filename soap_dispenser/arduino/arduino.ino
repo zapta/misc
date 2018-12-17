@@ -1,7 +1,7 @@
 #include <avr/sleep.h>
 #include <Arduino.h>
 
-// Arduino Firmware for GOJO LTX-7 Soap Dispenser 
+// Arduino Firmware for GOJO LTX-7 Soap Dispenser
 
 // ATtiny48 Arduino core from
 // https://github.com/SpenceKonde/ATTinyCore/blob/master/avr/extras/ATtiny_x8.md
@@ -24,6 +24,8 @@
 // TODO: improve error indication on LEDs (e.g. for a timeout
 // during a dispensing cycle).
 
+// Number of motor's cycles per activation. 
+#define STROKES_PER_ACTIVATION 2
 
 class Timer {
   public:
@@ -123,8 +125,8 @@ static const byte Y1_PIN  =  3; // PD3
 static const byte Y2_PIN  = 15; // PB7
 
 // A short delay to let power mosefet time to change state
-// from on to off. We inset it before turning any mosfet on to 
-// avoid direct path from +6V to ground. 
+// from on to off. We inset it before turning any mosfet on to
+// avoid direct path from +6V to ground.
 static inline void mosfet_delay() {
   delayMicroseconds(50);
 }
@@ -206,38 +208,50 @@ static inline void setup() {
 
 //=================== Main =========================
 
-// Performs a single dispensing cycle. 
-void dispense_once() {
+// Performs STROKES_PER_ACTIVATION consecutive strokes.
+void dispense() {
   static Timer timer;
 
-  // Start motor forward
+  // Not likely but may be useful during debugging.
+  if (STROKES_PER_ACTIVATION < 0) {
+    return;
+  }
+
+  // Start motor forward.
   motor::forward();
 
-  // Wait for exit from PARKING state, with timeout.
-  timer.reset();
-  while (sensors::is_in_parking()) {
-    if (timer.elapsed_millis() > 1000) {
-      motor::off();
-      diag::set_error();
-      return;
+  for (int i = 0; i < STROKES_PER_ACTIVATION; i++) {
+    // Let the parking switch stabalize from previous loop (debouncing).
+    delay(10);
+
+    // Wait for exit from PARKING state, with sanity check timeout.
+    timer.reset();
+    while (sensors::is_in_parking()) {
+      if (timer.elapsed_millis() > 1000) {
+        motor::off();
+        diag::set_error();
+        return;
+      }
+    }
+
+    // Wait for the parking switch to stablize in the non parking
+    // state (debouncing).
+    delay(10);
+
+    // Wait for entering back the PARKING region, after one
+    // full revolution. With sanity check timeout.
+    timer.reset();
+    while (!sensors::is_in_parking()) {
+      if (timer.elapsed_millis() > 1000) {
+        motor::off();
+        diag::set_error();
+        return;
+      }
     }
   }
 
-  // Wait to debounce the parking switch.
-  delay(10);
-
-  // Wait for entering back the PARKING region, after one 
-  // full revolution. With timeout.
-  timer.reset();
-  while (!sensors::is_in_parking()) {
-    if (timer.elapsed_millis() > 1000) {
-      motor::off();
-      diag::set_error();
-      return;
-    }
-  }
-
-  // Short motor to accelerate stopping.
+  // Short the motor to reduce stopping time. Otherwise it continues
+  // quite a lot from inertia.
   motor::brake();
   delay(50);
 
@@ -279,14 +293,14 @@ void loop() {
   if (sensors::proximity_event) {
     if (sensors::is_door_closed()) {
       led::green();
-      dispense_once();
+      dispense();
       led::off();
     } else {
       led::red();
       delay(400);
       led::off();
     }
-    // Clear any pending event. 
+    // Clear any pending event.
     sensors::proximity_event = false;
   }
 }
