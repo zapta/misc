@@ -42,3 +42,32 @@ https://github.com/zapta/misc/tree/master/soap_dispenser/arduino
 really necessary and it's faster to just hack one from a small prototyping PCB. 
 https://github.com/zapta/misc/tree/master/soap_dispenser/adapter
 
+
+![](web/IMG-1018.JPG)
+The soap dispencer electronic board. The ICSP programming signals are at the 8 pad row at the top of the board.
+
+<br>
+![](web/IMG-1022.JPG)
+To remove the mechanism (the black unit in the picture), press down the two tabs above 
+it, push the mechanism up a little bit to release it and then pull it toward you.
+
+<br>
+![](web/IMG-1016.JPG)
+To access the electronic board you first need to release the motor fork that activate the 
+pump. Press in at the two points marked with an arror and seperate the motore fork 
+from the carriage that moves up and down.
+
+<br>
+![](web/IMG-1014.JPG)
+Then, remove the screw (1), desolder the red (2) and black (3) wires from the battery tabs, 
+press and release the tab (4) and pull up the motor and the white assmebly (5). the 
+unit with the motor and electronic board will come out.
+
+<br>
+![](web/IMG-1040.JPG)
+To program the unit from the Arduino IDE you need to connect the programmer signals 
+to the raw of 8 pads at the top (only 6 pins are used). Check the schematic here for 
+exact pads to use. I chose to solder a 90 degrees 8 pin header which provide easy 
+access to the programing pad and has enough clearance when reassmebling the soap
+dispenser for eazy future modfications.
+
