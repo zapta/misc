@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<profile name="FlashForge Creator Pro" version="2019-01-06 19:03:56" app="S3D-Software 4.1.1">
+<profile name="FlashForge Creator Pro" version="2019-01-24 08:52:12" app="S3D-Software 4.1.1">
   <baseProfile></baseProfile>
   <printMaterial>PETG</printMaterial>
   <printQuality>Medium</printQuality>
@@ -7,18 +7,18 @@
   <extruder name="Right Extruder">
     <toolheadNumber>0</toolheadNumber>
     <diameter>0.4</diameter>
-    <autoWidth>1</autoWidth>
-    <width>0.48</width>
-    <extrusionMultiplier>1</extrusionMultiplier>
+    <autoWidth>0</autoWidth>
+    <width>0.4</width>
+    <extrusionMultiplier>0.95</extrusionMultiplier>
     <useRetract>1</useRetract>
-    <retractionDistance>3</retractionDistance>
+    <retractionDistance>2</retractionDistance>
     <extraRestartDistance>0</extraRestartDistance>
     <retractionZLift>0</retractionZLift>
-    <retractionSpeed>3000</retractionSpeed>
+    <retractionSpeed>2700</retractionSpeed>
     <useCoasting>0</useCoasting>
     <coastingDistance>1</coastingDistance>
     <useWipe>1</useWipe>
-    <wipeDistance>1</wipeDistance>
+    <wipeDistance>2</wipeDistance>
   </extruder>
   <primaryExtruder>0</primaryExtruder>
   <layerHeight>0.2</layerHeight>
@@ -62,7 +62,7 @@
   <infillExtruder>0</infillExtruder>
   <internalInfillPattern>Rectilinear</internalInfillPattern>
   <externalInfillPattern>Rectilinear</externalInfillPattern>
-  <infillPercentage>20</infillPercentage>
+  <infillPercentage>25</infillPercentage>
   <outlineOverlapPercentage>20</outlineOverlapPercentage>
   <infillExtrusionWidthPercentage>100</infillExtrusionWidthPercentage>
   <minInfillLength>2</minInfillLength>
@@ -72,17 +72,17 @@
   <externalInfillAngles>-45,45</externalInfillAngles>
   <generateSupport>1</generateSupport>
   <supportExtruder>0</supportExtruder>
-  <supportInfillPercentage>30</supportInfillPercentage>
-  <supportExtraInflation>1</supportExtraInflation>
+  <supportInfillPercentage>15</supportInfillPercentage>
+  <supportExtraInflation>0</supportExtraInflation>
   <supportBaseLayers>2</supportBaseLayers>
   <denseSupportExtruder>0</denseSupportExtruder>
   <denseSupportLayers>1</denseSupportLayers>
-  <denseSupportInfillPercentage>50</denseSupportInfillPercentage>
+  <denseSupportInfillPercentage>40</denseSupportInfillPercentage>
   <supportLayerInterval>1</supportLayerInterval>
   <supportHorizontalPartOffset>0.5</supportHorizontalPartOffset>
   <supportUpperSeparationLayers>1</supportUpperSeparationLayers>
   <supportLowerSeparationLayers>0</supportLowerSeparationLayers>
-  <supportType>1</supportType>
+  <supportType>0</supportType>
   <supportGridSpacing>1</supportGridSpacing>
   <maxOverhangAngle>45</maxOverhangAngle>
   <supportAngles>0</supportAngles>
@@ -151,11 +151,11 @@
   <celebration>1</celebration>
   <celebrationSong>Looney Toons</celebrationSong>
   <postProcessing>/projects/misc/repo/simplify3d/start_flashair_uploader.sh &quot;[output_filepath]&quot;</postProcessing>
-  <defaultSpeed>2400</defaultSpeed>
+  <defaultSpeed>2700</defaultSpeed>
   <outlineUnderspeed>0.6</outlineUnderspeed>
   <solidInfillUnderspeed>0.8</solidInfillUnderspeed>
   <supportUnderspeed>0.8</supportUnderspeed>
-  <rapidXYspeed>3600</rapidXYspeed>
+  <rapidXYspeed>3000</rapidXYspeed>
   <rapidZspeed>1200</rapidZspeed>
   <minBridgingArea>30</minBridgingArea>
   <bridgingExtraInflation>0</bridgingExtraInflation>
@@ -180,7 +180,7 @@
   <useRetractionMinTravel>0</useRetractionMinTravel>
   <retractionMinTravel>3</retractionMinTravel>
   <retractWhileWiping>0</retractWhileWiping>
-  <onlyWipeOutlines>1</onlyWipeOutlines>
+  <onlyWipeOutlines>0</onlyWipeOutlines>
   <avoidCrossingOutline>0</avoidCrossingOutline>
   <maxMovementDetourFactor>999</maxMovementDetourFactor>
   <toolChangeRetractionDistance>12</toolChangeRetractionDistance>
@@ -200,7 +200,7 @@
       <diameter>0.4</diameter>
       <autoWidth>1</autoWidth>
       <width>0.48</width>
-      <extrusionMultiplier>1</extrusionMultiplier>
+      <extrusionMultiplier>0.95</extrusionMultiplier>
       <useRetract>1</useRetract>
       <retractionDistance>1</retractionDistance>
       <extraRestartDistance>0</extraRestartDistance>
@@ -214,12 +214,16 @@
     <temperatureController name="Right Extruder">
       <temperatureNumber>0</temperatureNumber>
       <isHeatedBed>0</isHeatedBed>
+      <relayBetweenLayers>0</relayBetweenLayers>
+      <relayBetweenLoops>0</relayBetweenLoops>
       <stabilizeAtStartup>0</stabilizeAtStartup>
-      <setpoint layer="1" temperature="200"/>
+      <setpoint layer="1" temperature="220"/>
     </temperatureController>
     <temperatureController name="Heated Build Platform">
       <temperatureNumber>0</temperatureNumber>
       <isHeatedBed>1</isHeatedBed>
+      <relayBetweenLayers>0</relayBetweenLayers>
+      <relayBetweenLoops>0</relayBetweenLoops>
       <stabilizeAtStartup>0</stabilizeAtStartup>
       <setpoint layer="1" temperature="60"/>
     </temperatureController>
@@ -241,8 +245,8 @@
     <topSolidLayers>4</topSolidLayers>
     <bottomSolidLayers>4</bottomSolidLayers>
     <skirtLayers>2</skirtLayers>
-    <infillPercentage>20</infillPercentage>
-    <supportInfillPercentage>30</supportInfillPercentage>
+    <infillPercentage>25</infillPercentage>
+    <supportInfillPercentage>15</supportInfillPercentage>
   </autoConfigureQuality>
   <autoConfigureQuality name="High">
     <layerHeight>0.1</layerHeight>
@@ -297,18 +301,18 @@
     <extruder name="Right Extruder">
       <toolheadNumber>0</toolheadNumber>
       <diameter>0.4</diameter>
-      <autoWidth>1</autoWidth>
-      <width>0.48</width>
-      <extrusionMultiplier>1</extrusionMultiplier>
+      <autoWidth>0</autoWidth>
+      <width>0.4</width>
+      <extrusionMultiplier>0.95</extrusionMultiplier>
       <useRetract>1</useRetract>
-      <retractionDistance>3</retractionDistance>
+      <retractionDistance>2</retractionDistance>
       <extraRestartDistance>0</extraRestartDistance>
       <retractionZLift>0</retractionZLift>
-      <retractionSpeed>3000</retractionSpeed>
+      <retractionSpeed>2700</retractionSpeed>
       <useCoasting>0</useCoasting>
       <coastingDistance>1</coastingDistance>
       <useWipe>1</useWipe>
-      <wipeDistance>1</wipeDistance>
+      <wipeDistance>2</wipeDistance>
     </extruder>
     <temperatureController name="Right Extruder">
       <temperatureNumber>0</temperatureNumber>
