@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Delete all x3g files on the flashair.
 
@@ -44,7 +44,7 @@ function delete_file() {
 
   curl ${curl_verbosity} \
     --connect-timeout 5 \
-    "${flashair_ip}/upload.cgi?DEL=/${fname}"
+    "${flashair_ip}/upload.cgi?DEL=/${fname// /%20}"
   check_last_cmd "Deleting ${fname}"
 
   echo
@@ -71,7 +71,7 @@ function main() {
     echo
     if [[ $response =~ ^([dD])$ ]]
     then
-      delete_file $fname
+      delete_file "$fname"
     else
       echo "User said keep"
     fi

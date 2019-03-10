@@ -1,4 +1,6 @@
-#!/bin/bash 
+#!/bin/bash
+
+# DEBUG: debug log is written to /tmp/flashair_curl_out.txt
 
 # Usage
 # Add this line in the Simplify3D "Additional terminal commands for post processing" field.
@@ -33,6 +35,8 @@ args=("$@")
 # Max OSX specific display popup notification. 
 # Required installation of terminal-notifier.
 function notification {
+  echo
+  echo --- notification
   echo $1
   echo $2
   if [ "$last_notification" != "$1#$2" ]
@@ -40,6 +44,7 @@ function notification {
     last_notification="$1#$2"
     ${notifier} -group 'x3g_uploader' -title 'Flashair Uploader' -subtitle "$1" -message "$2"
   fi
+  echo --- notification end
 }
 
 # Call just after involing a command. 
@@ -54,18 +59,18 @@ function check_last_cmd() {
 
 # Process args
 function init() {
-  x3g_path=${args[0]}
+  x3g_path="${args[0]}"
   echo "x3g_path: [${x3g_path}]"
 
   x3g_name=$(basename "${x3g_path}")
   echo "x3g_name: [${x3g_name}]"
 
-  if ! [[ $x3g_name =~ ^[[:space:]A-Za-z0-9_-]+[.]x3g$ ]]; then
+  if ! [[ "$x3g_name" =~ ^[[:space:]A-Za-z0-9_.-]+[.]x3g$ ]]; then
     notification "INVALID FILE NAME" "'$x3g_name'"
     exit 1
   fi
 
-  x3g_size=`du -h  $x3g_path | cut -f1`
+  x3g_size=`du -h  "$x3g_path" | cut -f1`
   check_last_cmd "getting size"
 }
 
@@ -107,7 +112,7 @@ function main {
   # The actual operation is setting the filetimestamp since the
   # FlashAir doesn't have and independent date/time source of its own.
   #
-  notification "CONNECTING" "File: ${x3g_name}  ${x3g_size}"
+  notification "TRYING TO CONNECT" "${x3g_name}  [${x3g_size}]"
   curl -v \
     --connect-timeout 5 \
     ${flashair_ip}/upload.cgi?FTIME=0x${fat32_timestamp}
@@ -118,18 +123,19 @@ function main {
   # for the user to notice.
   wait $timer_job_id
 
-  notification "UPLOADING" "File: ${x3g_name}  ${x3g_size}"
-  curl -v \
-    --connect-timeout 5 \
-    -F "userid=1" \
-    -F "filecomment=This is a 3D file" \
-    -F "image=@${x3g_path}" \
-    ${flashair_ip}/upload.cgi
+  notification "CONNECTED and UPLOADING" "${x3g_name} [${x3g_size}]"
 
+  echo; echo
 
+  rm -f /tmp/flashair_curl_out.txt
+
+  curl -i -X POST  -o /tmp/flashair_curl_out.txt -H "Content-Type: multipart/form-data" -F "data=@${x3g_path}" ${flashair_ip}/upload.cgi
+  check_last_cmd "uploading"
+
+  grep Success /tmp/flashair_curl_out.txt
   check_last_cmd "uploading"
   
-  notification "DONE" "File: ${x3g_name}  ${x3g_size}"
+  notification "DONE" "${x3g_name}  [${x3g_size}]"
 }
 
 main $* &>/tmp/flashair_uploader_log &
