@@ -36,7 +36,8 @@ M208 X0 Y1 Z0 S1                             ; Set axis minima
 M208 X295 Y306 Z290 S0                       ; Set axis maxima
 
 ; Endstops
-M574 X2 Y2 S1                                ; Set active high endstops
+M574 X2 Y2 S3                                ; Set stall based end detection for X,Y
+
 
 ; Z-Probe
 M574 Z1 S2                                   ; Set endstops controlled by probe
@@ -59,6 +60,9 @@ M106 P1 S1 I0 F500 H1 T45                    ; Set fan 1 value, PWM signal inver
 M563 P0 D0 H1                                ; Define tool 0
 G10 P0 X0 Y0 Z0                              ; Set tool 0 axis offsets
 G10 P0 R0 S0                                 ; Set initial tool 0 active and standby temperatures to 0C
+
+; Adjustment screws for Leveling Asistant
+M671 X21:263:263:21 Y32:32:271:271 P0.7 
 
 ; Automatic saving after power loss is not enabled
 
