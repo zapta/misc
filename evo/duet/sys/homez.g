@@ -7,7 +7,7 @@ G91                                  ; relative positioning
 G1 Z5 F6000 S2                       ; lift Z relative to current position
 
 G90                                  ; absolute positioning
-G1 X-10.5 Y-1.9000000000000004 F6000 ; go to first probe point
+G1 X20 Y20 F6000 ; go to first probe point
 
 ;M558 A1 F400 ; Set single probing at faster feed rate
 M558 A1 F800 ; Set single probing at faster feed rate

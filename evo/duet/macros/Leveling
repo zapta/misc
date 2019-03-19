@@ -1,14 +1,21 @@
 ; bed.g
 ; called to perform automatic bed compensation via G32
 ;
+;;M671 X5:246:246:5 Y26:26:268:268 P0.7 
+
 ; Points are screw points +/- y10 (toward the bed's center).
 G28 ; home
 ;M401 ; deploy Z probe
 M98 Pdeployprobe.g  ; deploy mechanical Z probe
-G30 P0 X21 Y42 Z-99999 ; probe near an adjusting screw
-G30 P1 X263 Y42 Z-99999 ; probe near an adjusting screw
-G30 P2 X263 Y261 Z-99999 ; probe near an adjusting screw
-G30 P3 X21 Y261 Z-99999 S4 ; probe near an adjusting screw and report adjustments needed for 4 screws in config.h
+
+G30 P0 X26 Y36 Z-99999 ; probe near an adjusting screw
+
+G30 P1 X266 Y36 Z-99999 ; probe near an adjusting screw
+
+G30 P2 X266 Y256 Z-99999 ; probe near an adjusting screw
+
+G30 P3 X26 Y256 Z-99999 S4 ; probe near an adjusting screw and report adjustments needed for 4 screws in config.h
+
 ;M402 ; retract probe
 M98 Pretractprobe.g ; retract mechanical Z probe
 
