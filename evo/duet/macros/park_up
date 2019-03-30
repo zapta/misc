@@ -1,0 +1,5 @@
+; Park the head and leve the bed high.
+
+G90               ; absolute positioning
+G1 X5 Y0 Z30      ; move to upper parking position.
+ 

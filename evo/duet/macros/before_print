@@ -1,0 +1,13 @@
+;
+G28 ; home all axes
+
+G1 X0 Y-10 F1000.0 ; go outside print area
+G1 Z0.3 F1000      ; move Z to first layer level (should be 0.18)
+
+G92 E0.0   ; reset extruder
+G1 E10.0 F300.0 ; purge in air
+
+G92 E0.0   ; reset extruder
+G1 Y20.0 E10 F250 ; purge on bed
+
+G29 S1 ; load mesh heightmap
