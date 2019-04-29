@@ -1,7 +1,7 @@
 ; bed.g
 ; called to perform automatic bed compensation via G32
 
-G28                 ; home to be in a known state
+G28                 ; home to be in a known state (.e.g. nozzle away from bed)
 M190 S60            ; heat bed and wait until ready
 G28                 ; home again with a hot bed
 

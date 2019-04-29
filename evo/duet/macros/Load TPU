@@ -1,0 +1,30 @@
+; Load filament
+
+;G1 E400 F3600
+;M84 P3 E0:1		; turn extruder motors off so the user can feed by hand
+
+;M291 P"Please wait while the nozzle is being heated up" R"Loading PETG" T5 ; Display message
+
+T0   ; Select tool E0
+G10 S230 ; Set current tool temperature to 230C
+
+M116 ; Wait for the temperatures to be reached
+
+M291 P"Feeding filament..." R"Loading filament" T5 ; Display new message
+
+G1 E20 F600 ; Feed 20mm of filament at 600mm/min
+
+G1 E680 F2000 ; Feed of filament at 2000mm/min
+
+G1 E70 F300 ; Feed 20mm of filament at 300mm/min
+
+G4 P1000 ; Wait one second
+
+G1 E-10 F800 ; Retract 10mm of filament at 1800mm/min
+
+M400 ; Wait for moves to complete
+
+M292 ; Hide the message
+;G10 P0 S0  ; Set extruder target temp to 0
+G10 P0S-273.15 R-273.15  ; heater off
+

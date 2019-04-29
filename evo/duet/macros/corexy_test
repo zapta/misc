@@ -1,4 +1,0 @@
-; Temp, delete me
-
-M84 Y        ; unenergize more Y (X-Y)
-G1 X10 S2    ; move (x+y) motor only, leaving (x-y) non energized (?)

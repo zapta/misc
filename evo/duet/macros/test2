@@ -1,9 +1,0 @@
-; Movement test
-
-M566 X1200.00 Y1200.00 Z300.00 E120.00         ; Set maximum instantaneous speed changes (mm/min)
-
-G1 X50  Y150  F20000
-
-G1 X250 F4000
-G1 X50  F4000
-

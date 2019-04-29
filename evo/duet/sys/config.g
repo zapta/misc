@@ -19,22 +19,22 @@ M586 P1 S1                                   ; Enable FTP
 M586 P2 S1                                   ; Enable Telnet
 
 ; Drives
-M569 P0 S1                                   ; Drive 0 goes forwards
-M569 P1 S1                                   ; Drive 1 goes forwards
-M569 P2 S1                                   ; Drive 2 goes forwards
-M569 P3 S1                                   ; Drive 3 goes forwards
-M350 X16 Y16 Z16 E16 I1                      ; Configure microstepping with interpolation
-M92 X80.00 Y80.00 Z400.00 E411.8             ; Set microsteps per mm
-M566 X900.00 Y900.00 Z300.00 E120.00         ; Set maximum instantaneous speed changes (mm/min)
-M203 X12000.00 Y12000.00 Z3000.00 E1200.00   ; Set maximum speeds (mm/min)
-M201 X500.00 Y500.00 Z20.00 E250.00          ; Set accelerations (mm/s^2)
-M906 X1000.00 Y1000.00 Z1000.00 E1000.00 I30 ; Set motor currents (mA) and motor idle factor in per cent
-M84 S30                                      ; Set idle timeout (secs)
+M569 P0 S1                                    ; Drive 0 goes forwards
+M569 P1 S1                                    ; Drive 1 goes forwards
+M569 P2 S1                                    ; Drive 2 goes forwards
+M569 P3 S1                                    ; Drive 3 goes forwards
+M350 X16 Y16 Z16 E16 I1                       ; Configure microstepping with interpolation
+M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
+M566 X900.00 Y900.00 Z300.00 E120.00          ; Set jerk speed (maximum instantaneous speed changes (mm/min))
+M203 X12000.00 Y12000.00 Z3000.00 E3000.00    ; Set maximum speeds (mm/min)
+M201 X500.00 Y500.00 Z20.00 E250.00           ; Set accelerations (mm/s^2)
+M906 X1000.00 Y1000.00 Z1000.00 E1000.00 I30  ; Set motor currents (mA) and motor idle factor in per cent
+M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
 ; Setting a negative Z limit to allow room for babystepping. 
-M208 X-5 Y-15 Z-1 S1                         ; Set axis minima (home at min X,Y)
-M208 X300 Y300 Z290 S0                       ; Set axis maxima
+M208 X-5 Y-15 Z-3 S1                         ; Set axis minima (home at min X,Y)
+M208 X300 Y300 Z285 S0                       ; Set axis maxima
 
 ; Endstops
 M574 X1 Y1 S3                                ; X min, Y min, stall style endstops
@@ -46,8 +46,9 @@ M307 H3 A-1 C-1 D-1                          ; Disable heater on PWM channel for
 M558 P9 H3 F120 T6000                        ; Set Z probe type to bltouch and the dive height + speeds
 ; See http://www.sublimelayers.com/2017/05/fdffsd.html
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
-; (head up -> lower Z number here)
-G31 P500 X20.5 Y12.9 Z1.00                   ; Set Z probe trigger value, offset and trigger height
+; (to raise head -> lower Z number here)
+; (to lower head -> raise Z number here)
+G31 P500 X20.5 Y12.9 Z1.250                  ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
@@ -66,29 +67,33 @@ G10 P0 R0 S0                                 ; Set initial tool 0 active and sta
 
 ; Leveling
 M671 X26:266:266:26 Y29:29:269:269 P0.7      ; positions of adjustment screws
-M557 X20:276 Y20:276 S32                     ; Define mesh grid
+M557 X20:276 Y20:276 S64                     ; Define mesh grid (was S32)
 
 ; Bed temp PID autotune
-; To autotube send [M303 H0 P1.0 S60]. Check progress with [M303]. when stage 4 done, 
+; To autotune send [M303 H0 P1.0 S60]. Check progress with [M303]. when stage 4 done, 
 ; send [M307 H0] and enter results below.
 ;
-; Heater 0 model: gain 64.1, time constant 277.0, dead time 3.2, max PWM 1.00, calibration voltage 24.2, mode PID, inverted no, frequency default
+; Heater 0 model: gain 64.1, time constant 277.0, dead time 3.2, 
+;    max PWM 1.00, calibration voltage 24.2, mode PID, inverted no, frequency default
 ; Computed PID parameters for setpoint change: P239.7, I8.026, D540.3
 ; Computed PID parameters for load change: P23
 ; 
 M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 
 ; Hotend temp PID autotune
-; To autotube send [M303 H1 P1.0 S230]. Check progress with [M303]. when stage 4 done, 
+; To autotune send [M303 H1 P1.0 S230]. Check progress with [M303]. when stage 4 done, 
 ; send [M307 H1] and enter results below.
 ;
-; Heater 1 model: gain 644.5, time constant 206.5, dead time 4.5, max PWM 1.00, calibration voltage 24.1, mode PID, inverted no, frequency default
-; Computed PID parameters for setpoint change: P12.6, I0.412, D40.0
-; Computed PID parameters for load change: P12
+; Heater 1 model: gain 598.7, time constant 243.6, dead time 4.5, 
+;     max PWM 1.00, calibration voltage 24.1, mode PID, inverted no, frequency default
+; Computed PID parameters for setpoint change: P16.2, I0.491, D50.8
+; Computed PID parameters for load change: P16. 
 ;
-M307 H1 A644.5 C206.5 D4.5 V24.1 B0
+M307 H1 A598.7 C243.6 D4.5 V24.1B0
 
 ; Automatic saving after power loss is not enabled
 
 ; Custom settings are not configured
+
+T0   ; select extruder
 
