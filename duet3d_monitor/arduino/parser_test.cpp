@@ -1,14 +1,12 @@
 // TalTest.cpp : This file contains the 'main' function. Program execution
 // begins and ends there.
 //
+#if 0
 
 #include <stdio.h>
 #include <string.h>
 #include "monitor.h"
 
-
-
-// const char* data = "{\"aaa\":\"xyz\"}";
 const char* data1 =
     "{"
     "\"status\":\"I\","
@@ -52,7 +50,7 @@ const char* data2 =
 const char* data3 =
     "{"
     "\"status\":\"P\","  // printing
-    "\"heaters\":[10.0,15.0]," 
+    "\"heaters\":[10.0,15.0],"
     "\"active\":[0.0,0.0],"
     "\"standby\":[0.0,0.0],"
     "\"hstat\":[0,2],"
@@ -71,7 +69,7 @@ const char* data3 =
 
 const char* data4 =
     "{"
-    "\"status\":\"I\"," 
+    "\"status\":\"I\","
     "\"heaters\":[10.0,x15.0],"  // invalid float
     "\"active\":[0.0,0.0],"
     "\"standby\":[0.0,0.0],"
@@ -92,7 +90,7 @@ const char* data4 =
 const char* data5 =
     "{::"  // invalid json structure
     "\"status\":\"I\","
-    "\"heaters\":[10.0,15.0]," 
+    "\"heaters\":[10.0,15.0],"
     "\"active\":[0.0,0.0],"
     "\"standby\":[0.0,0.0],"
     "\"hstat\":[0,2],"
@@ -129,5 +127,4 @@ int main() {
            events & monitor::REPORTED_INACTIVE ? "yes" : "no");
   }
 }
-
-
+#endif

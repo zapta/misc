@@ -1,15 +1,15 @@
+// PanelDue serial communication message parser.
+//
+// A slimmed down version of
+// https://github.com/dc42/PanelDueFirmware/blob/master/src/Hardware/SerialIo.cpp
 
 #include "parser.h"
 #include <stdio.h>
-#include "Vector.hpp"
-#include "stdint.h"
+#include "simple_string.hpp"
 
 namespace parser {
 
-
-
-const size_t MaxArrayNesting = 4;
-
+const int MAX_ARRAY_NESTING = 4;
 
 // Enumeration to represent the json parsing state.
 // We don't allow nested objects or nested arrays, so we don't need a state
@@ -40,17 +40,17 @@ inline JsonState JsError() {
   return jsError;
 }
 
-// fieldId is the name of the field being received. A '^' character indicates
+// fieldId is the path of a value being received. A '^' character indicates
 // the position of an array index, and a ':' character indicates a field
 // separator.
-static String<50> fieldId;
+static String<50>  fieldId;
 static String<300> fieldVal;  // long enough for about 6 lines of message
 
-static size_t arrayDepth = 0;
-static size_t arrayIndices[MaxArrayNesting];
+static int arrayDepth = 0;
+static int arrayIndices[MAX_ARRAY_NESTING];
 
 static void RemoveLastId() {
-  size_t index = fieldId.size();
+  int index = fieldId.size();
   while (index != 0 && fieldId[index - 1] != '^' && fieldId[index - 1] != ':') {
     --index;
   }
@@ -68,8 +68,8 @@ static bool InArray() {
 }
 
 static void ProcessField() {
-  parser_watcher::ProcessReceivedValue(fieldId.c_str(), fieldVal.c_str(), arrayDepth,
-                       arrayIndices);
+  parser_watcher::ProcessReceivedValue(fieldId.c_str(), fieldVal.c_str(),
+                                       arrayDepth, arrayIndices);
   fieldVal.clear();
 }
 
@@ -85,11 +85,10 @@ static void EndArray() {
 // Look for combining characters in the string value and convert them if
 // possible
 static void ConvertUnicode() {
-	// Not needed for our simple application.
+  // Not needed for our simple application.
 }
 
 void ProcessNextChar(char c) {
-
   if (c == '\n') {
     state = jsBegin;  // abandon current parse (if any) and start again
     return;
@@ -116,7 +115,7 @@ void ProcessNextChar(char c) {
         case '}':  // empty object, or extra comma at end of field list
           RemoveLastId();
           if (fieldId.size() == 0) {
-			  // TODO: should we report this to the monitor as an error?
+            // TODO: should we report this to the monitor as an error?
             parser_watcher::EndReceivedMessage();
             state = jsBegin;
           } else {
@@ -125,7 +124,6 @@ void ProcessNextChar(char c) {
           }
           break;
         default:
-          //parser_watcher::ProcessError();
           state = JsError();
           break;
       }
@@ -138,13 +136,9 @@ void ProcessNextChar(char c) {
           break;
         default:
           if (c < ' ') {
-           // parser_watcher::ProcessError();
-
             state = JsError();
           } else if (c != ':' && c != '^') {
             if (!fieldId.add(c)) {
-              //parser_watcher::ProcessError();
-
               state = JsError();
             }
           }
@@ -160,8 +154,6 @@ void ProcessNextChar(char c) {
         case ' ':
           break;
         default:
-          //parser_watcher::ProcessError();
-
           state = JsError();
           break;
       }
@@ -176,12 +168,10 @@ void ProcessNextChar(char c) {
           state = jsStringVal;
           break;
         case '[':
-          if (arrayDepth < MaxArrayNesting && fieldId.add('^')) {
+          if (arrayDepth < MAX_ARRAY_NESTING && fieldId.add('^')) {
             arrayIndices[arrayDepth] = 0;  // start an array
             ++arrayDepth;
           } else {
-            //parser_watcher::ProcessError();
-
             state = JsError();
           }
           break;
@@ -190,18 +180,16 @@ void ProcessNextChar(char c) {
             EndArray();  // empty array
             state = jsEndVal;
           } else {
-            //parser_watcher::ProcessError();
-
             state = JsError();  // ']' received without a matching '[' first
           }
           break;
         case '-':
           fieldVal.clear();
-		  // TODO: an report error to the watcher
+          // TODO: an report error to the watcher
           state = (fieldVal.add(c)) ? jsNegIntVal : JsError();
           break;
         case '{':  // start of a nested object
-			// TODO: report an error to the watcher
+                   // TODO: report an error to the watcher
           state = (fieldId.add(':')) ? jsExpectId : JsError();
           break;
         default:
@@ -211,8 +199,6 @@ void ProcessNextChar(char c) {
             state = jsIntVal;
             break;
           } else {
-            //parser_watcher::ProcessError();
-
             state = JsError();
           }
       }
@@ -230,8 +216,6 @@ void ProcessNextChar(char c) {
           break;
         default:
           if (c < ' ') {
-            //parser_watcher::ProcessError();
-
             state = JsError();
           } else {
             fieldVal.add(c);  // ignore any error so that long string parameters
@@ -248,8 +232,6 @@ void ProcessNextChar(char c) {
           case '\\':
           case '/':
             if (!fieldVal.add(c)) {
-             // parser_watcher::ProcessError();
-
               state = JsError();
             }
             break;
@@ -257,7 +239,7 @@ void ProcessNextChar(char c) {
           case 't':
             if (!fieldVal.add(' '))  // replace newline and tab by space
             {
-             // parser_watcher::ProcessError();
+              // parser_watcher::ProcessError();
 
               state = JsError();
             }
@@ -273,7 +255,7 @@ void ProcessNextChar(char c) {
       break;
 
     case jsNegIntVal:  // had '-' so expecting a integer value
-		// TODO: report an error to the watcher
+                       // TODO: report an error to the watcher
       state = (c >= '0' && c <= '9' && fieldVal.add(c)) ? jsIntVal : JsError();
       break;
 

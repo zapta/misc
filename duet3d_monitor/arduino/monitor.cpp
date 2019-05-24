@@ -1,6 +1,7 @@
+// Duet state monitor. Parses the sniffed PanelDue serial communication
+// and extracts the Duet state.
 
 #include "monitor.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "parser.h"
@@ -12,10 +13,7 @@ static bool in_message;
 // Bit masks of pending events.
 static int pending_events = 0;
 
-inline void SetEvent(monitor::Event event) {
-  //printf("Setting event: [%d]\n", event);
-  pending_events |= event;
-}
+inline void SetEvent(monitor::Event event) { pending_events |= event; }
 
 // Valid while in_message is true. Represents data captured so far.
 namespace captured_data {
@@ -34,27 +32,10 @@ static void reset() {
 
 namespace parser_watcher {
 
-//static void DumpReceivedValue(const char id[], const char val[],
-//                              const size_t arrayDepth, const size_t indices[]) {
-//  printf("*** Field: [%s] = [%s] [", id, val);
-//  for (size_t i = 0; i < arrayDepth; i++) {
-//    if (i > 0) {
-//      printf(",");
-//    }
-//    printf("%d", indices[i]);
-//  }
-//  printf("]\n");
-//
-//  if (strcmp(id, "status") == 0 && strlen(val) == 1) {
-//    printf("##### status -> [%c]\n", val[0]);
-//  }
-//}
-
 // Json parser encounted a field or array value.
 extern void ProcessReceivedValue(const char id[], const char val[],
-                                 const size_t arrayDepth, const size_t indices[]) {
-  //DumpReceivedValue(id, val, arrayDepth, indices);
-
+                                 const int arrayDepth,
+                                 const int indices[]) {
   if (!in_message) {
     return;
   }
@@ -65,9 +46,9 @@ extern void ProcessReceivedValue(const char id[], const char val[],
     if (strlen(val) == 1) {
       captured_data::status_code = val[0];
     } else {
-	  // Error. Unexpected 'status' value length.
+      // Error. Unexpected 'status' value length.
       SetEvent(monitor::HAD_ERRORS);
-      in_message = false; 
+      in_message = false;
     }
     return;
   }
@@ -77,7 +58,7 @@ extern void ProcessReceivedValue(const char id[], const char val[],
   // It can be for example a directory listing message that starts with a 'dir'
   // field.
   if (captured_data::field_count == 1) {
-	  // This is not an error, just a packet we don't care about.
+    // This is not an error, just a packet we don't care about.
     in_message = false;
   }
 
@@ -86,7 +67,7 @@ extern void ProcessReceivedValue(const char id[], const char val[],
     char* end_ptr;
     const float temp = strtof(val, &end_ptr);
     if (*end_ptr) {
-		// Value format error. 
+      // Value format error.
       SetEvent(monitor::HAD_ERRORS);
       in_message = false;
     }
@@ -99,28 +80,19 @@ extern void ProcessReceivedValue(const char id[], const char val[],
 }  // namespace parser_watcher
 
 // Parser exited an array.
-extern void ProcessArrayEnd(const char id[],
-                            const size_t arrayDepth,  const size_t indices[]) {
- // printf("*** Array End\n");
-}
+extern void ProcessArrayEnd(const char id[], const int arrayDepth,
+                            const int indices[]) {}
 
 // Received a begining of a json message. This may or may not be a status
 // report message.
 extern void StartReceivedMessage() {
-  //printf("*** Message Start\n");
   captured_data::reset();
   in_message = true;
 }
 
 // Recieved an end of a json message.
 void EndReceivedMessage() {
-  //printf("*** Message End\n");
   if (in_message) {
-
-    //printf("###### EOM  status=[%c], heaters=[%d], max_temp=[%f]\n",
-    //       captured_data::status_code, captured_data::heaters_count,
-    //       captured_data::max_heater_temp);
-
     // Error if message doesn't pass sanity check.
     if (!captured_data::status_code || captured_data::field_count < 10 ||
         captured_data::heaters_count < 1) {

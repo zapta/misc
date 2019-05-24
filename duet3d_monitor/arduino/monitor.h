@@ -1,3 +1,6 @@
+// Duet state monitor. Parses the sniffed PanelDue serial communication
+// and extracts the Duet state.
+
 #ifndef MONITOR_H
 #define MONITOR_H
 
@@ -12,7 +15,7 @@ enum Event {
 extern void ProcessNextChar(char c);
 
 // Return a bit mask of events since last call to this function.
-extern int ConsumePendingEvents(); 
+extern int ConsumePendingEvents();
 
 }  // namespace monitor
 
