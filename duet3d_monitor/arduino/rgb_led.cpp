@@ -12,9 +12,10 @@ static bool blink_signal;
 
 static const Color OFF_COLOR = make_color(0, 0, 0);
 
-static Color current_color = make_color(0, 0, 100);
+static Color current_color = OFF_COLOR;
 
-static bool current_blink = false;
+// 0 means no blink. Forced to be >= 0.
+static int current_blink_millis = 0;
 
 // Single LED
 static Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
@@ -27,7 +28,7 @@ void setup() {
 }
 
 void loop() {
-  if (current_blink && blink_timer.timeMillis() > 300) {
+  if (current_blink_millis && blink_timer.timeMillis() > current_blink_millis) {
     blink_timer.restart();
     blink_signal = !blink_signal;
     pixels.setPixelColor(0, blink_signal ? OFF_COLOR : current_color);
@@ -39,11 +40,15 @@ Color make_color(uint8_t r, uint8_t g, uint8_t b) {
   return  pixels.Color(r, g, b);
 }
 
-void set(Color color, bool blink) {
-  if (color == current_color && blink == current_blink) {
+void set(Color color, int blink_millis) {
+  // Force blink_millis >= 0
+  if (blink_millis < 0) {
+    blink_millis = 0;
+  }
+  if (color == current_color && blink_millis == current_blink_millis) {
     return;
   }
-  current_blink = blink;
+  current_blink_millis = blink_millis;
   current_color = color;
   // TODO: impove transitions when blinking.
   blink_timer.restart();

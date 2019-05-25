@@ -13,7 +13,7 @@ typedef uint32_t Color;
 extern void setup();
 extern void loop();
 extern Color make_color(uint8_t r, uint8_t g, uint8_t b);
-extern void set(Color, bool blink);
+extern void set(Color, int blink_millis);
 
 }  // namespace rgb_led
 
