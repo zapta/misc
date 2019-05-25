@@ -5,7 +5,7 @@
 
 #include "parser.h"
 #include <stdio.h>
-#include "simple_string.hpp"
+#include "simple_string.h"
 
 namespace parser {
 
