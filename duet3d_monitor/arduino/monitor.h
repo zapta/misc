@@ -6,10 +6,10 @@
 
 namespace monitor {
 enum Event {
-  HAD_ERRORS = 1 << 0,
-  HAD_TRAFFIC = 1 << 2,
-  REPORTED_ACTIVE = 1 << 3,
-  REPORTED_INACTIVE = 1 << 4
+  HAD_ERRORS = 1 << 0, // 1
+  HAD_TRAFFIC = 1 << 1, // 2
+  REPORTED_ACTIVE = 1 << 2,  // 4
+  REPORTED_INACTIVE = 1 << 3,  // 8
 };
 
 extern void ProcessNextChar(char c);
