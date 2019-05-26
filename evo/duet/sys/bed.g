@@ -7,6 +7,7 @@ G28                 ; home again with a hot bed
 
 M561                ; clear any bed transform
 M98 Pdeployprobe.g  ; deploy mechanical Z probe
+; NOTE: the probing parameters and speed are from the M558 command in config.g
 G29                 ; probe the bed and enable compensation
 M98 Pretractprobe.g ; retract mechanical Z probe
 

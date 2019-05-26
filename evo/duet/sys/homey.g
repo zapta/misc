@@ -3,6 +3,8 @@
 ; called to home the Y axis
 ;
 
+M117 Started Home Y
+
 G91               ; relative positioning
 G1 Z5 F6000 S2    ; lift Z relative to current position
 
@@ -14,3 +16,5 @@ M913 X100 Y100 	  ; XY motors to 100% current
 G1 Z-5 F6000 S2   ; lower Z back, relative
 G90               ; absolute positioning
 ;M98 P"/macros/park_up"
+
+M117 Ended Home Y

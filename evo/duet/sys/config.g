@@ -25,10 +25,10 @@ M569 P2 S1                                    ; Drive 2 goes forwards
 M569 P3 S1                                    ; Drive 3 goes forwards
 M350 X16 Y16 Z16 E16 I1                       ; Configure microstepping with interpolation
 M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
-M566 X900.00 Y900.00 Z300.00 E120.00          ; Set jerk speed (maximum instantaneous speed changes (mm/min))
-M203 X12000.00 Y12000.00 Z3000.00 E3000.00    ; Set maximum speeds (mm/min)
-M201 X500.00 Y500.00 Z20.00 E250.00           ; Set accelerations (mm/s^2)
-M906 X1000.00 Y1000.00 Z1000.00 E1000.00 I30  ; Set motor currents (mA) and motor idle factor in per cent
+M566 X600 Y600 Z100 E600                      ; Set jerk speed (maximum instantaneous speed changes (mm/min))
+M203 X12000 Y12000 Z3000 E10000              ; Set maximum speeds (mm/min)
+M201 X600 Y600 Z30 E600                       ; Set accelerations (mm/s^2)
+M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
@@ -39,16 +39,21 @@ M208 X300 Y300 Z285 S0                       ; Set axis maxima
 ; Endstops
 M574 X1 Y1 S3                                ; X min, Y min, stall style endstops
 
+; Stall detection. Higher S value -> less sensitive
+M915 X Y S3 F0 R0
+
 
 ; Z-Probe
 M574 Z1 S2                                   ; Set endstops controlled by probe
 M307 H3 A-1 C-1 D-1                          ; Disable heater on PWM channel for BLTouch
-M558 P9 H3 F120 T6000                        ; Set Z probe type to bltouch and the dive height + speeds
+; NOTE: the T value determines also the x/y movement speed of the 
+; leveling macro (which uses G30 commands)
+M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and the dive height + speeds
 ; See http://www.sublimelayers.com/2017/05/fdffsd.html
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
-; (to raise head -> lower Z number here)
-; (to lower head -> raise Z number here)
-G31 P500 X20.5 Y12.9 Z1.250                  ; Set Z probe trigger value, offset and trigger height
+; (to raise head -> lower Z value here)
+; (to lower head -> raise Z value here)
+G31 P500 X20.5 Y12.9 Z1.300                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
@@ -84,12 +89,12 @@ M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 ; To autotune send [M303 H1 P1.0 S230]. Check progress with [M303]. when stage 4 done, 
 ; send [M307 H1] and enter results below.
 ;
-; Heater 1 model: gain 598.7, time constant 243.6, dead time 4.5, 
+; Heater 1 model: gain 549.5, time constant 234.0, dead time 4.7, 
 ;     max PWM 1.00, calibration voltage 24.1, mode PID, inverted no, frequency default
-; Computed PID parameters for setpoint change: P16.2, I0.491, D50.8
-; Computed PID parameters for load change: P16. 
+; Computed PID parameters for setpoint change: P16.3, I0.495, D53.2
+; Computed PID parameters for load change: P16.
 ;
-M307 H1 A598.7 C243.6 D4.5 V24.1B0
+M307 H1 A549.5 C234.0 D4.7 V24.1 B0
 
 ; Automatic saving after power loss is not enabled
 
