@@ -9,13 +9,17 @@
 #define LED (13)
 static PassiveTimer led_timer;
 
-static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0, 0, 50);
-static const rgb_led::Color ERRORS_COLOR = rgb_led::make_color(25, 25, 0);
-static const rgb_led::Color ACTIVE_COLOR = rgb_led::make_color(50, 0, 0);
-static const rgb_led::Color INACTIVE_COLOR = rgb_led::make_color(0, 50, 0);
+// Max luminicity in the range [0-255].
+#define L 250
+
+static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0,   0,   L);  // Blue
+static const rgb_led::Color ERRORS_COLOR     = rgb_led::make_color(L/2, 0,   0);  // Red
+static const rgb_led::Color ACTIVE_COLOR     = rgb_led::make_color(L,   L,   L);  // White
+static const rgb_led::Color INACTIVE_COLOR   = rgb_led::make_color(0,   L,   0);  // Green
 
 
-
+// We use the arduino on board LED to indicate reception of status 
+// report messages. Each message triggers a short blip.
 static PassiveTimer traffic_timer;
 static bool traffic_timeout = false;
 
@@ -36,11 +40,11 @@ void setup() {
 
   // A quick RGB test pattern
   delay(300);
-  rgb_led::set(rgb_led::make_color(50, 0, 0), 0);
+  rgb_led::set(rgb_led::make_color(L, 0, 0), 0);
   delay(300);
-  rgb_led::set(rgb_led::make_color(0, 50, 0), 0);
+  rgb_led::set(rgb_led::make_color(0, L, 0), 0);
   delay(300);
-  rgb_led::set(rgb_led::make_color(0, 0, 50), 0);
+  rgb_led::set(rgb_led::make_color(0, 0, L), 0);
   delay(300);
   rgb_led::set(rgb_led::make_color(0, 0, 0), 0);
 }
@@ -49,7 +53,7 @@ void loop() {
   rgb_led::loop();
 
   // Turn off diagnostic led ping after timeout.
-  if (digitalRead(LED) && led_timer.timeMillis() > 100) {
+  if (digitalRead(LED) && led_timer.timeMillis() > 10) {
     digitalWrite(LED, LOW);
   }
 

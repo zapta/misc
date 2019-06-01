@@ -24,10 +24,19 @@ M569 P1 S1                                    ; Drive 1 goes forwards
 M569 P2 S1                                    ; Drive 2 goes forwards
 M569 P3 S1                                    ; Drive 3 goes forwards
 M350 X16 Y16 Z16 E16 I1                       ; Configure microstepping with interpolation
+
 M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
-M566 X600 Y600 Z100 E600                      ; Set jerk speed (maximum instantaneous speed changes (mm/min))
-M203 X12000 Y12000 Z3000 E10000              ; Set maximum speeds (mm/min)
-M201 X600 Y600 Z30 E600                       ; Set accelerations (mm/s^2)
+
+; Based on:
+; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
+M98 P"/sys/mode_normal.g"
+;;M566 X1200 Y1200 Z100 E3000                            	; Set maximum instantaneous speed changes (mm/min) (Jerk)
+;;M566 X600 Y600 Z100 E600
+;;M201 X6000 Y6000 Z30 E8000                         	; Set maximum accelerations (mm/s^2)
+;;M201 X600 Y600 Z30 E600 
+
+M203 X15000 Y15000 Z3000 E15000                        	; Set maximum speeds (mm/min)
+M204 P1000 T3000					; Set printing and travel accelerations
 M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
@@ -38,9 +47,7 @@ M208 X300 Y300 Z285 S0                       ; Set axis maxima
 
 ; Endstops
 M574 X1 Y1 S3                                ; X min, Y min, stall style endstops
-
-; Stall detection. Higher S value -> less sensitive
-M915 X Y S3 F0 R0
+M915 X Y S3 F0 R0                            ; Stall detection. Higher S value -> less sensitive
 
 
 ; Z-Probe
@@ -53,7 +60,7 @@ M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and t
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
-G31 P500 X20.5 Y12.9 Z1.300                   ; Set Z probe trigger value, offset and trigger height
+G31 P500 X20.5 Y12.9 Z1.400                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0

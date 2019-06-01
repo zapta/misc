@@ -2,8 +2,15 @@
 #include <Adafruit_NeoPixel.h>
 #include "passive_timer.h"
 
-#define PIN            12
+// On Teensy LC, Arduino pin 17 is at 5V levels and matches
+// the input requirements of the WS2812/B LEDs.
+#define PIN   17
 
+// Number of leds in the led strip. All leds are set to same
+// color. Note that larger number of leds may increase the
+// time period in which interrupts are disable and may interfere
+// with the reception of the serial data (?).
+#define NUM_LEDS  3
 
 namespace rgb_led {
 
@@ -18,12 +25,16 @@ static Color current_color = OFF_COLOR;
 static int current_blink_millis = 0;
 
 // Single LED
-static Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
+static Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
+
+inline raw_set(Color color) {
+  pixels.fill(color, 0, NUM_LEDS);
+  pixels.show();
+}
 
 void setup() {
   pixels.begin();
-  pixels.setPixelColor(0, current_color);
-  pixels.show();
+  raw_set(current_color);
   blink_timer.restart();
 }
 
@@ -53,8 +64,7 @@ void set(Color color, int blink_millis) {
   // TODO: impove transitions when blinking.
   blink_timer.restart();
   blink_signal = false;
-  pixels.setPixelColor(0, current_color);
-  pixels.show();
+  raw_set(current_color);
 }
 
 }  // namepsace rgb_led;

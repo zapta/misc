@@ -2,7 +2,7 @@
 ;
 ; called to home the Z axis
 
-M117 Started Home Z
+;M117 Started Home Z
 
 G91               ; relative positioning
 G1 Z5 F6000 S2    ; lift Z relative to current position
@@ -16,5 +16,5 @@ G30               ; Probe and home Z
 
 M98 P"/macros/park_up"
 
-M117 Ended Home Z
+;M117 Ended Home Z
 
