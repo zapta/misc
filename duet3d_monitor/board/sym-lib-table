@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name local)(type Legacy)(uri /projects/misc/repo/duet3d_monitor/board/local.lib)(options "")(descr ""))
+)
