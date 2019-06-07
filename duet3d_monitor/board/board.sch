@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:board-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -296,7 +295,7 @@ power supply
 Text Notes 3400 4900 0    50   ~ 0
 57600 baud 5V
 Text Notes 3850 2800 0    50   ~ 0
-Insulated DC/DC.\n
+Isolated DC/DC.\n
 Text Notes 7150 6850 0    50   ~ 0
 Duet3D status monitor.
 $Comp
@@ -350,4 +349,10 @@ Text Notes 6850 4000 0    50   ~ 0
 DATA
 Text Notes 6850 3900 0    50   ~ 0
 +5V
+Text Notes 2100 4700 0    50   ~ 0
+2 x 2.54mm KF2510 \n4pin male connectors
+Text Notes 6550 4400 0    50   ~ 0
+2.54mm KF2510 \n3pin male connector
+Text Notes 2250 2650 0    50   ~ 0
+0.2” terminal block
 $EndSCHEMATC
