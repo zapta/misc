@@ -1,9 +1,9 @@
-M117 Started Before Print
+;M117 Started Before Print
 
 T0  ; select extruder tool 0; just in case. Already doing it in config.g
 M116 P0   ; wait for extruder (tool 0) temp to stabalize
 
-M117 before_print extruder stabalized
+;M117 before_print extruder stabalized
 
 G28 ; home all axes
 G29 S1              ; load mesh heightmap
