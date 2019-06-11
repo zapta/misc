@@ -10,15 +10,17 @@
 static PassiveTimer led_timer;
 
 // Max luminicity in the range [0-255].
-#define L 250
+#define L 255
+#define L2 (L / 2)
+#define L3 (L / 3)
 
-static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0,   0,   L);  // Blue
-static const rgb_led::Color ERRORS_COLOR     = rgb_led::make_color(L/2, 0,   0);  // Red
-static const rgb_led::Color ACTIVE_COLOR     = rgb_led::make_color(L,   L,   L);  // White
-static const rgb_led::Color INACTIVE_COLOR   = rgb_led::make_color(0,   L,   0);  // Green
+static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0,   0,   L);  // Blue (blinks)
+static const rgb_led::Color ERRORS_COLOR     = rgb_led::make_color(L2,  L2,  0);  // yellow (blinks)
+static const rgb_led::Color ACTIVE_COLOR     = rgb_led::make_color(L,   0,   0);  // Red
+static const rgb_led::Color COOLING_COLOR    = rgb_led::make_color(L,   L3,  0);  // orange
+static const rgb_led::Color AT_REST_COLOR    = rgb_led::make_color(0,   L,   0);  // Green
 
-
-// We use the arduino on board LED to indicate reception of status 
+// We use the arduino on board LED to indicate reception of status
 // report messages. Each message triggers a short blip.
 static PassiveTimer traffic_timer;
 static bool traffic_timeout = false;
@@ -70,8 +72,8 @@ void loop() {
     Serial.println(events);
   }
 
-  // If a status message wass detected, ping onboard LED. For diagnostics
-  if (events & (monitor::REPORTED_ACTIVE | monitor::REPORTED_INACTIVE)) {
+  // If a status message wass detected, ping onboard LED. For diagnostics.
+  if (events & (monitor::REPORTED_ACTIVE | monitor::REPORTED_COOLING | monitor::REPORTED_AT_REST)) {
     digitalWrite(LED, HIGH);
     led_timer.restart();
   }
@@ -92,9 +94,11 @@ void loop() {
     rgb_led::set(NO_TRAFFIC_COLOR, 1000);
   } else if (events & monitor::HAD_ERRORS) {
     rgb_led::set(ERRORS_COLOR, 300);
-  } else if (events & monitor::REPORTED_INACTIVE) {
-    rgb_led::set(INACTIVE_COLOR, 0);
-  } else if  (events & monitor::REPORTED_ACTIVE) {
+  } else if (events & monitor::REPORTED_ACTIVE) {
     rgb_led::set(ACTIVE_COLOR, 0);
+  } else if  (events & monitor::REPORTED_COOLING) {
+    rgb_led::set(COOLING_COLOR, 0);
+  } else if  (events & monitor::REPORTED_AT_REST) {
+    rgb_led::set(AT_REST_COLOR, 0);
   }
 }

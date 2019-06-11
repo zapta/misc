@@ -13,7 +13,9 @@ static bool in_message;
 // Bit masks of pending events.
 static int pending_events = 0;
 
-inline void SetEvent(monitor::Event event) { pending_events |= event; }
+inline void SetEvent(monitor::Event event) {
+  pending_events |= event;
+}
 
 // Valid while in_message is true. Represents data captured so far.
 namespace captured_data {
@@ -97,10 +99,14 @@ void EndReceivedMessage() {
     if (!captured_data::status_code || captured_data::field_count < 10 ||
         captured_data::heaters_count < 1) {
       SetEvent(monitor::HAD_ERRORS);
-
-    } else if (captured_data::status_code == 'I' &&
-               captured_data::max_heater_temp < 70.0) {
-      SetEvent(monitor::REPORTED_INACTIVE);
+    } else if (captured_data::status_code == 'I') {
+      if (captured_data::max_heater_temp > 70.0) {
+        // TODO: is this correct? Should we consider also the max target temp in 
+        // case it's in IDLE but activly heating?
+        SetEvent(monitor::REPORTED_COOLING);
+      } else {
+        SetEvent(monitor::REPORTED_AT_REST);
+      }
     } else {
       SetEvent(monitor::REPORTED_ACTIVE);
     }
@@ -109,7 +115,9 @@ void EndReceivedMessage() {
 }
 
 // Traffic parser reported an error.
-void ProcessError() { SetEvent(monitor::HAD_ERRORS); }
+void ProcessError() {
+  SetEvent(monitor::HAD_ERRORS);
+}
 
 }  // namespace parser_watcher
 
