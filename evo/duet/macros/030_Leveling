@@ -3,8 +3,10 @@
 ;
 
 G91               ; relative positioning
+M400
 M913 Z25          ; Z motors to 25% current
 G1 Z5 F6000 S2    ; lift Z relative to current position
+M400
 M913 Z100         ; Z motors to 100% current
 G91               ; absolute positioning
 
@@ -17,10 +19,10 @@ M98 Pdeployprobe.g           ; deploy mechanical Z probe
 ; Probe exactly at leveling screws points.
 ; NOTE: the x/y move speed between points is determined
 ; by the T value of the M558 command in config.g
-G30 P0 X26  Y29  Z-99999     ; front / left
-G30 P1 X266 Y29  Z-99999     ; front / right
-G30 P2 X266 Y269 Z-99999     ; rear  / right
-G30 P3 X26  Y269 Z-99999 S4  ; readr / left + report
+G30 P3 X29  Y279 Z-99999     ; rear / left
+G30 P0 X29  Y39  Z-99999     ; front / left
+G30 P1 X269 Y39  Z-99999     ; front / right
+G30 P2 X269 Y279 Z-99999 S4  ; rear  / right + report
 
 M98 Pretractprobe.g          ; retract mechanical Z probe
 

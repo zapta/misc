@@ -9,19 +9,24 @@ G28 ; home all axes
 G29 S1              ; load mesh heightmap
 
 
-G1 X0 Y-15 F1000.0  ; go outside print area
+G1 X25 Y-5 F1000.0  ; go outside print area, away from the tab
 G1 Z0.6 F3000       ; move Z to purge level
+M400                ; wait for movements to complete
 
 G92 E0.0            ; reset extruder
 G1 E10.0 F300.0     ; purge in air
+M400                ; wait for movements to complete
+
+G1 X0 Y-5 F1000.0   ; move back to X0, possibly above the tab
+M400                ; wait for movements to complete
 
 G92 E0.0            ; reset extruder
-G1 Y10.0 E20 F600   ; purge on bed
+G1 Y30.0 E20 F600   ; purge on bed
 
 M83                 ; extruder relative positioning
 G1 E-4 F1800        ; retract 4mm at 1800mm/sec to avoid draging filament to part'sstarting point
 M82                 ; extruder abs positioning
 
-G1 Y150.0 Z0.2 F600  ; keep moving without extruding while lowering head
+G1 Y150.0 Z0.15 F600 ; keep moving without extruding while lowering head
 G1 Z4 F3000         ; move head up
 

@@ -30,10 +30,6 @@ M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
 ; Based on:
 ; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
 M98 P"/sys/mode_normal.g"
-;;M566 X1200 Y1200 Z100 E3000                            	; Set maximum instantaneous speed changes (mm/min) (Jerk)
-;;M566 X600 Y600 Z100 E600
-;;M201 X6000 Y6000 Z30 E8000                         	; Set maximum accelerations (mm/s^2)
-;;M201 X600 Y600 Z30 E600 
 
 M203 X15000 Y15000 Z3000 E15000                        	; Set maximum speeds (mm/min)
 M204 P1000 T3000					; Set printing and travel accelerations
@@ -42,8 +38,11 @@ M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
 ; Setting a negative Z limit to allow room for babystepping. 
-M208 X-5 Y-15 Z-3 S1                         ; Set axis minima (home at min X,Y)
-M208 X300 Y300 Z285 S0                       ; Set axis maxima
+;M208 X-5 Y-15 Z-3 S1                         ; Set axis minima (home at min X,Y)
+;M208 X300 Y300 Z285 S0                       ; Set axis maxima
+
+;M208 X-5:300 Y-15:300 Z-3:285                 ; XYZ min/max
+M208 X-2:300 Y-5:300 Z-3:285                 ; XYZ min/max
 
 ; Endstops
 M574 X1 Y1 S3                                ; X min, Y min, stall style endstops
@@ -55,12 +54,19 @@ M574 Z1 S2                                   ; Set endstops controlled by probe
 M307 H3 A-1 C-1 D-1                          ; Disable heater on PWM channel for BLTouch
 ; NOTE: the T value determines also the x/y movement speed of the 
 ; leveling macro (which uses G30 commands)
+;
+; TODO: add B1 parameter to turn off bed while probing to reduce magnetic field that
+; may affect BlTouch.
+;
+; TODO: see M588 param recomendation at https://duet3d.dozuki.com/Wiki/BLTouch_Troubleshooting
+;
 M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and the dive height + speeds
 ; See http://www.sublimelayers.com/2017/05/fdffsd.html
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
-G31 P500 X20.5 Y12.9 Z1.400                   ; Set Z probe trigger value, offset and trigger height
+;G31 P500 X20.5 Y12.9 Z1.400                   ; Set Z probe trigger value, offset and trigger height
+G31 P500 X23.5 Y22.9 Z1.500                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
@@ -78,8 +84,13 @@ G10 P0 X0 Y0 Z0                              ; Set tool 0 axis offsets
 G10 P0 R0 S0                                 ; Set initial tool 0 active and standby temperatures to 0C
 
 ; Leveling
-M671 X26:266:266:26 Y29:29:269:269 P0.7      ; positions of adjustment screws
-M557 X20:276 Y20:276 S64                     ; Define mesh grid (was S32)
+;M671 X26:266:266:26 Y29:29:269:269 P0.7      ; positions of adjustment screws
+;M671 X29:269:269:29 Y39:39:279:279 P0.7      ; positions of adjustment screws
+M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
+
+;M557 X23:279 Y30:286 S64                     ; Define mesh grid
+M557 X23:279 Y30:286 S32                     ; Define mesh grid
+;M557 X23:123 Y30:130 S20                     ; Define mesh grid
 
 ; Bed temp PID autotune
 ; To autotune send [M303 H0 P1.0 S60]. Check progress with [M303]. when stage 4 done, 

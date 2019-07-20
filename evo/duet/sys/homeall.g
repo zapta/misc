@@ -6,15 +6,13 @@
 G91               ; relative positioning
 M400
 M913 Z25          ; Z motors to 25% current
-G1 Z5 F2000 S2    ; lift Z relative to current position
+G1 Z5 F2000 S2    ; drop bed Z relative to current position
 M400
 M913 Z100         ; Z motors to 100% current
 M280 P3 S160 I1   ; Reset bltouch in case it didn't have vertical clearance for self test.
 
 ; Reduce accelleration for the stall detection to be more reliable.
 ; We restore it later via configstd.g
-;M566 X600 Y600 Z100 E600
-;M201 X600 Y600 Z30 E600
 
 M98 P"/sys/mode_stall.g"
 
@@ -42,11 +40,13 @@ M400
 G90               ; absolute positioning
 G1 X5 Y29 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
 M400
-M913 Z50          ; Z motors to 50% current, in case something goes wrong with bltouch
+M913 Z60          ; Z motors to 60% current, in case something goes wrong with bltouch
 ;M558 A1 F800      ; Set for probing at fast speed, single probe
+; 
+; TODO: see M558 recomanded config at https://duet3d.dozuki.com/Wiki/BLTouch_Troubleshooting
+;
 M558 A1 F1200      ; Set for probing at fast speed, single probe
 G30               ; Probe and home Z (pass 1)
-M400
 M400
 M913 Z100         ; Z motors to 100% current
 M558 A5 F100	  ; Set for probing at slow speed, allow multiple trys
