@@ -41,7 +41,6 @@ M84 S30                                       ; Set idle timeout (secs)
 ;M208 X-5 Y-15 Z-3 S1                         ; Set axis minima (home at min X,Y)
 ;M208 X300 Y300 Z285 S0                       ; Set axis maxima
 
-;M208 X-5:300 Y-15:300 Z-3:285                 ; XYZ min/max
 M208 X-2:300 Y-5:300 Z-3:285                 ; XYZ min/max
 
 ; Endstops
@@ -88,9 +87,7 @@ G10 P0 R0 S0                                 ; Set initial tool 0 active and sta
 ;M671 X29:269:269:29 Y39:39:279:279 P0.7      ; positions of adjustment screws
 M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
 
-;M557 X23:279 Y30:286 S64                     ; Define mesh grid
 M557 X23:279 Y30:286 S32                     ; Define mesh grid
-;M557 X23:123 Y30:130 S20                     ; Define mesh grid
 
 ; Bed temp PID autotune
 ; To autotune send [M303 H0 P1.0 S60]. Check progress with [M303]. when stage 4 done, 

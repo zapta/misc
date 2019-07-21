@@ -16,8 +16,7 @@ G1 E10 F300 ; extrude 10mm of filament at 300mm/min
 G1 E-20 F300 ; Retract 20mm of filament at 300mm/min
 
 ; Assuming bowden tube cut to 660mm
-G1 E-700 F2000 ; Retract filament fast at 3000mm/min
-;G1 E-665 F2000 ; Retract filament fast at 3000mm/min
+G1 E-700 F2000 ; Retract filament fast at 2000mm/min
 
 M400 ; Wait for the moves to finish
 
