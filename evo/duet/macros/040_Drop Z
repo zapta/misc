@@ -1,7 +1,7 @@
 
 G91               ; relative positioning
 M400
-M913 Z50          ; Z motors to 50% current
+M913 Z25          ; Z motors to 25% current
 G1 Z50 F1500 S2   ; drop Z by 50mm
 M400
 M913 Z100         ; Z motors to 100% current

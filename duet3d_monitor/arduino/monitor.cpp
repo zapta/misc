@@ -107,6 +107,8 @@ void EndReceivedMessage() {
       } else {
         SetEvent(monitor::REPORTED_AT_REST);
       }
+    } else if (captured_data::status_code == 'A') {
+      SetEvent(monitor::REPORTED_PAUSE);
     } else {
       SetEvent(monitor::REPORTED_ACTIVE);
     }

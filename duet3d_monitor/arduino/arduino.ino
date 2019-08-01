@@ -2,23 +2,25 @@
 #include "monitor.h"
 #include "passive_timer.h"
 #include "rgb_led.h"
+#include "beeper.h"
 
 #define HWSERIAL Serial1
 
 // Onboard Arduino led. Used for diagnostics.
 #define LED (13)
-//static PassiveTimer led_timer;
 
 // Max luminicity in the range [0-255].
 #define L 255
 #define L2 (L / 2)
 #define L3 (L / 3)
+#define L4 (L / 4)
 
-static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0,   0,   L);  // Blue (blinks)
-static const rgb_led::Color ERRORS_COLOR     = rgb_led::make_color(L2,  L2,  0);  // yellow (blinks)
-static const rgb_led::Color ACTIVE_COLOR     = rgb_led::make_color(L,   0,   0);  // Red
-static const rgb_led::Color COOLING_COLOR    = rgb_led::make_color(L,   L3,  0);  // orange
-static const rgb_led::Color AT_REST_COLOR    = rgb_led::make_color(0,   L,   0);  // Green
+static const rgb_led::Color NO_TRAFFIC_COLOR = rgb_led::make_color(0,   0,   L );  // Blue (blinks)
+static const rgb_led::Color ERRORS_COLOR     = rgb_led::make_color(L2,  L2,  0 );  // yellow (blinks)
+static const rgb_led::Color PAUSE_COLOR      = rgb_led::make_color(L,   0,   0);   // Red (blinks)
+static const rgb_led::Color ACTIVE_COLOR     = rgb_led::make_color(L,   0,   0 );  // Red
+static const rgb_led::Color COOLING_COLOR    = rgb_led::make_color(L,   L3,  0 );  // orange
+static const rgb_led::Color AT_REST_COLOR    = rgb_led::make_color(0,   L,   0 );  // Green
 
 // We use the arduino on board LED to indicate reception of status
 // report messages. Each message triggers a short blip.
@@ -33,10 +35,12 @@ enum TrafficState {
   ERROR
 };
 
+static bool beep_active = false;
 static TrafficState traffic_state = OK;
 
 void setup() {
   rgb_led::setup();
+  beeper::setup();
 
   pinMode(LED, OUTPUT);
   digitalWrite(LED, LOW);
@@ -59,10 +63,17 @@ void setup() {
   rgb_led::set(rgb_led::make_color(0, 0, L), 0);
   delay(300);
   rgb_led::set(rgb_led::make_color(0, 0, 0), 0);
+
+  //beeper::loop(true);
+  //delay(10000);
+  //beeper::loop(false);
+
+
 }
 
 void loop() {
   rgb_led::loop();
+  beeper::loop(beep_active);
 
   // Process pending serial chars.
   while (HWSERIAL.available() > 0) {
@@ -87,34 +98,46 @@ void loop() {
   // events as a proxy for the traffic.
   // We use a long timeout since the duet does not report while executing
   // commands such as homming or messing.
-  const bool got_report =   (events & (monitor::REPORTED_ACTIVE | monitor::REPORTED_COOLING | monitor::REPORTED_AT_REST));
+  const bool got_report =   (events & (monitor::REPORTED_ACTIVE | monitor::REPORTED_PAUSE | monitor::REPORTED_COOLING | monitor::REPORTED_AT_REST));
   if (got_report) {
     digitalWrite(LED, HIGH);
     traffic_state = OK;
     traffic_timer.restart();
+    // Update pause beeper state
+    // beep_active = events & monitor::REPORTED_PAUSE;
   } else if (traffic_state == OK && traffic_timer.timeMillis() > 2500) {
     // Missed a few report. Assume PanelDue started a blocking operation.
     traffic_state = BUSY;
+    //beep_active = false;
     traffic_timer.restart();
   } else if (traffic_state == BUSY && traffic_timer.timeMillis() > 600 * 1000) {
     // Missed reports for a long time. Maybe a connection or other communication error.
     traffic_state = ERROR;
+    //beep_active=false;
     // No need to restart timer. We don't care about it in this state.
   }
 
   // Update RGB led status if needed. Note that no-change settings are
   // efficently ignored by the RGB module.rgb_module.
+  bool new_beep_active = false;
   if (traffic_state == BUSY) {
     rgb_led::set(ACTIVE_COLOR, 0);  // same as Active below.
   } else if (traffic_state != OK) {
     rgb_led::set(NO_TRAFFIC_COLOR, 1000);  // error
   } else if (events & monitor::HAD_ERRORS) {
     rgb_led::set(ERRORS_COLOR, 300);
-  } else if (events & monitor::REPORTED_ACTIVE) {
-    rgb_led::set(ACTIVE_COLOR, 0);
+  } else if (events & monitor::REPORTED_PAUSE) {
+    new_beep_active = true;
+    rgb_led::set(PAUSE_COLOR, 500);  // same as active but blinking
+  } else if  (events & monitor::REPORTED_ACTIVE) {
+    rgb_led::set(ACTIVE_COLOR, 0); 
   } else if  (events & monitor::REPORTED_COOLING) {
     rgb_led::set(COOLING_COLOR, 0);
   } else if  (events & monitor::REPORTED_AT_REST) {
     rgb_led::set(AT_REST_COLOR, 0);
+  } else {
+    new_beep_active = beep_active;  // no beep change
   }
+
+  beep_active = new_beep_active;
 }

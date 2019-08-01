@@ -5,7 +5,7 @@
 
 G91               ; relative positioning
 M400
-M913 Z25          ; Z motors to 25% current
+M913 Z20          ; Z motors to 20% current
 G1 Z5 F2000 S2    ; drop bed Z relative to current position
 M400
 M913 Z100         ; Z motors to 100% current
@@ -18,7 +18,7 @@ M98 P"/sys/mode_stall.g"
 
 ; Home X
 M400
-M913 X35 Y35      ; XY motors to 35% current
+M913 X20 Y20      ; XY motors to 20% current
 G1 S1 X-320 F3600 ; move until motors hit X min and stall
 G1 X10 F6000      ; go back a few mm on X
 M400
@@ -26,7 +26,7 @@ M913 X100 Y100    ; XY motors to 100% current
 
 ; Home Y
 M400
-M913 X35 Y35      ; XY motors to 35% current
+M913 X20 Y20      ; XY motors to 20% current
 G1 S1 Y-320 F3600 ; move until motors hit Y min and stall
 G1 Y10 F6000      ; go back a few mm on Y
 M400

@@ -15,7 +15,7 @@ M291 P"Feeding filament..." R"Loading filament" T5 ; Display new message
 G1 E20 F600 ; Feed 20mm of filament at 600mm/min
 
 ; Assuming bowden tube cut to 660mm
-G1 E660 F2000 ; Feed of filament at 3000mm/min
+G1 E650 F2000 ; Feed of filament at 3000mm/min
 
 G1 E40 F100 ; Feed 120 of filament at 100/min
 G1 E80 F300 ; Feed 120 of filament at 300mm/min

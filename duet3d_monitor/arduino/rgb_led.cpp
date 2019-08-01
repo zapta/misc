@@ -42,7 +42,8 @@ void loop() {
   if (current_blink_millis && blink_timer.timeMillis() > current_blink_millis) {
     blink_timer.restart();
     blink_signal = !blink_signal;
-    pixels.setPixelColor(0, blink_signal ? OFF_COLOR : current_color);
+    raw_set(blink_signal ? OFF_COLOR : current_color);
+    //pixels.setPixelColor(0, blink_signal ? OFF_COLOR : current_color);
     pixels.show();
   }
 }

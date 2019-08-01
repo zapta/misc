@@ -16,9 +16,13 @@ G1 X20 Y280 F3000 ; move XY to parking position
 
 M400               ; wait motion stop
 M913 Z50           ; Z motors to 35% current
-G1 Z280 F500       ; move Z slowly to parking position
+;G1 Z280 F500       ; move Z slowly to parking position
+G1 Z280 F750       ; move Z slowly to parking position
 M400               ; wait motion stop
 M913 Z100          ; Z motors to 100% current
 
 M84 ; disable motors
+
+G10 P0 S0  ; Set extruder target temp to 0
+G10 P0S-273.15 R-273.15  ; heater off
 

@@ -33,7 +33,8 @@ M98 P"/sys/mode_normal.g"
 
 M203 X15000 Y15000 Z3000 E15000                        	; Set maximum speeds (mm/min)
 M204 P1000 T3000					; Set printing and travel accelerations
-M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
+;M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
+M906 X1500 Y1500 Z1500 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
@@ -110,6 +111,9 @@ M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 ; Computed PID parameters for load change: P16.
 ;
 M307 H1 A549.5 C234.0 D4.7 V24.1 B0
+
+; Set pressure advance factor, per results of pressure advance calibration script.
+M572 D0 S0.6 ; set K-factor
 
 ; Automatic saving after power loss is not enabled
 
