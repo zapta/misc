@@ -66,7 +66,8 @@ M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and t
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
 ;G31 P500 X20.5 Y12.9 Z1.400                   ; Set Z probe trigger value, offset and trigger height
-G31 P500 X23.5 Y22.9 Z1.500                   ; Set Z probe trigger value, offset and trigger height
+;G31 P500 X23.5 Y22.9 Z1.500                   ; Set Z probe trigger value, offset and trigger height
+G31 P500 X20.5 Y12.9 Z1.450                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
@@ -113,7 +114,8 @@ M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 M307 H1 A549.5 C234.0 D4.7 V24.1 B0
 
 ; Set pressure advance factor, per results of pressure advance calibration script.
-M572 D0 S0.6 ; set K-factor
+;M572 D0 S0.5 ; set K-factor (from calibration script)
+M572 D0 S0.3 ; set K-factor
 
 ; Automatic saving after power loss is not enabled
 

@@ -9,7 +9,7 @@ T0       ; Select tool E0
 G10 S245 ; Heat up the current tool to 245C
 M116 ; Wait for the temperatures to be reached
 
-M291 P"Retracting filament..." R"Unloading filament" T5 ; Display another message
+;M291 P"Retracting filament..." R"Unloading filament" T5 ; Display another message
 
 G1 E10 F300 ; extrude 10mm of filament at 300mm/min
 

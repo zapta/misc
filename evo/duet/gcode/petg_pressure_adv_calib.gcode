@@ -7,7 +7,7 @@
 ; Settings:
 ; Filament Diameter = 1.75
 ; Nozzle Diameter = 0.4
-; Nozzle Temperature = 210
+; Nozzle Temperature = 220
 ; Nozzle / Line Ratio = 1.1
 ; Bed Temperature = 60
 ; Slow Printing Speed = 1200
@@ -26,8 +26,8 @@
 
 T0
 M140 S60 ; set and wait for bed temp
-M104 S210 ; set nozzle temp and continue
-M109 S210 ; block waiting for nozzle temp
+M104 S220 ; set nozzle temp and continue
+M109 S220 ; block waiting for nozzle temp
 M190 S60
 
 G28 ; home all

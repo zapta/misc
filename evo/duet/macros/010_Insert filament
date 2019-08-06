@@ -10,7 +10,7 @@ G10 S245 ; Set current tool temperature to 245C
 
 M116 ; Wait for the temperatures to be reached
 
-M291 P"Feeding filament..." R"Loading filament" T5 ; Display new message
+;M291 P"Feeding filament..." R"Loading filament" T5 ; Display new message
 
 G1 E20 F600 ; Feed 20mm of filament at 600mm/min
 
