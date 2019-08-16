@@ -114,8 +114,9 @@ M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 M307 H1 A549.5 C234.0 D4.7 V24.1 B0
 
 ; Set pressure advance factor, per results of pressure advance calibration script.
-;M572 D0 S0.5 ; set K-factor (from calibration script)
-M572 D0 S0.3 ; set K-factor
+; Optimal value for PLA is 0.5. May be overriden in slicer gcode scripts.
+M572 D0 S0.5 ; set K-factor (from calibration script)
+;M572 D0 S0.3 ; set K-factor
 
 ; Automatic saving after power loss is not enabled
 
