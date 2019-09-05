@@ -1,10 +1,11 @@
-#!/usr/local/bin/python
+#!/usr/bin/python
 
 # Downloaded from a link at https://forum.duet3d.com/topic/6698/pressure-advance-calibration/1
 
 # extrusion parameters (mm)
 extrusion_width   = 0.4
-layer_height      = 0.2
+layer_height      = 0.08
+base_layer_height = 0.2
 filament_diameter = 1.75
 
 # print speeds (mm/s)
@@ -14,18 +15,18 @@ slow_speed        =   5
 fast_speed        =  70
 
 # calibration object dimensions (mm)
-layers        = 50
+layers        = 100
 object_width  = 90
 num_patterns  =  4
 pattern_width =  5
 
 # pressure advance gradient (s)
-pressure_advance_min = 0.0
-pressure_advance_max = 0.2
+pressure_advance_max = 2
+pressure_advance_min = 1
 
 # center of print bed (mm)
-offset_x = 0
-offset_y = 0
+offset_x = 150
+offset_y = 150
 
 layer0_z = layer_height
 
@@ -42,9 +43,6 @@ def extrusion_for_length(length):
 curr_x = offset_x
 curr_y = offset_y
 curr_z = layer0_z
-
-# goto z height
-print("G1 X%.3f Y%.3f Z%.3f F%.0f" % (curr_x, curr_y, curr_z, travel_speed * 60))
 
 def up():
     global curr_z
@@ -67,9 +65,24 @@ def goto(x,y):
     curr_y = y + offset_y
     print("G1 X%.3f Y%.3f" %(curr_x, curr_y))
 
+# main
+print("G21 ; set units to millimeters")
+print("G90 ; use absolute coordinates")
+print("M83 ; use relative distances for extrusion")
+print("")
+
+print("G1 X%.3f Y%.3f Z%.3f F%.0f ; go to starting point"
+    % (curr_x, curr_y, curr_z, travel_speed * 60))
+print("")
+
+print("; Base")
 line(-object_width/2,0,0)
 
+saved_layer_height = layer_height;
+layer_height = base_layer_height
+
 for l in range(2):
+    #print("xyz: ", l, " ", layer_height)
     for offset_i in range(5):
         offset = offset_i * extrusion_width
         line(object_width+offset,0,first_layer_speed)
@@ -78,6 +91,8 @@ for l in range(2):
         line(0,-extrusion_width-offset*2,first_layer_speed)
         line(offset,0,first_layer_speed)
         line(0,-extrusion_width,0)
+    if (l == 1):
+      layer_height = saved_layer_height
     up()
     goto(-object_width/2,0)
 
