@@ -224,26 +224,26 @@ For 12VDC input replace
 Text Notes 3850 3000 0    50   ~ 0
 with TBA 2-1211.
 Text Notes 7200 4050 0    50   ~ 0
-To WS2812/B strip.\n5 LEDS max.
-Text Notes 4750 5050 0    50   ~ 0
+To WS2812/B strip.\n5 LEDS max (60ma max per LED)
+Text Notes 3500 3250 0    50   ~ 0
 VERY IMPORTANT:
 Text Notes 1650 4250 0    50   ~ 0
 To PanelDue
-Text Notes 4750 5150 0    50   ~ 0
+Text Notes 3500 3350 0    50   ~ 0
 Cut the VIN/VUSB link trace at
-Text Notes 4750 5250 0    50   ~ 0
-at the bottom side of the Teensy LC.
-Text Notes 3050 1750 0    50   ~ 0
+Text Notes 3500 3450 0    50   ~ 0
+at the bottom side of the
+Text Notes 3000 1800 0    50   ~ 0
 Reversed voltage
-Text Notes 3050 1850 0    50   ~ 0
-\nprotection
+Text Notes 3000 1900 0    50   ~ 0
+\nprotection, 30V min
 Text Notes 1650 3500 0    50   ~ 0
 From Duet3D
 Text Notes 1900 2350 0    50   ~ 0
 From 24VDC
 Text Notes 1900 2450 0    50   ~ 0
 power supply
-Text Notes 3400 4900 0    50   ~ 0
+Text Notes 3250 4900 0    50   ~ 0
 57600 baud 5V
 Text Notes 3850 2800 0    50   ~ 0
 Isolated DC/DC.\n
@@ -311,7 +311,7 @@ L Diode:1N5817 D1
 U 1 1 5CFC7588
 P 3350 2250
 F 0 "D1" H 3350 2034 50  0000 C CNN
-F 1 "SB140-E3/54" H 3350 2125 50  0000 C CNN
+F 1 "1N5819" H 3350 2125 50  0000 C CNN
 F 2 "board:Diode" H 3350 2075 50  0001 C CNN
 F 3 "http://www.vishay.com/docs/88525/1n5817.pdf" H 3350 2250 50  0001 C CNN
 	1    3350 2250
@@ -398,4 +398,14 @@ Wire Wire Line
 	6550 3850 6450 3850
 Wire Wire Line
 	6450 3850 6450 4250
+Text Notes 5600 2600 0    50   ~ 0
+5V power OR.
+Text Notes 5600 2700 0    50   ~ 0
+Low forward voltage Schottky
+Text Notes 4000 4950 0    50   ~ 0
+Input protection
+Wire Bus Line
+	4800 3700 4500 3450
+Text Notes 3500 3550 0    50   ~ 0
+Teensy LC.
 $EndSCHEMATC

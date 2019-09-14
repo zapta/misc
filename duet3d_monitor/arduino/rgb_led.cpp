@@ -43,7 +43,6 @@ void loop() {
     blink_timer.restart();
     blink_signal = !blink_signal;
     raw_set(blink_signal ? OFF_COLOR : current_color);
-    //pixels.setPixelColor(0, blink_signal ? OFF_COLOR : current_color);
     pixels.show();
   }
 }

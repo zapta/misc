@@ -63,12 +63,6 @@ void setup() {
   rgb_led::set(rgb_led::make_color(0, 0, L), 0);
   delay(300);
   rgb_led::set(rgb_led::make_color(0, 0, 0), 0);
-
-  //beeper::loop(true);
-  //delay(10000);
-  //beeper::loop(false);
-
-
 }
 
 void loop() {
@@ -98,22 +92,22 @@ void loop() {
   // events as a proxy for the traffic.
   // We use a long timeout since the duet does not report while executing
   // commands such as homming or messing.
-  const bool got_report =   (events & (monitor::REPORTED_ACTIVE | monitor::REPORTED_PAUSE | monitor::REPORTED_COOLING | monitor::REPORTED_AT_REST));
+  const bool got_report = (events & 
+      (monitor::REPORTED_ACTIVE  |
+       monitor::REPORTED_PAUSE   | 
+       monitor::REPORTED_COOLING | 
+       monitor::REPORTED_AT_REST));
   if (got_report) {
     digitalWrite(LED, HIGH);
     traffic_state = OK;
     traffic_timer.restart();
-    // Update pause beeper state
-    // beep_active = events & monitor::REPORTED_PAUSE;
   } else if (traffic_state == OK && traffic_timer.timeMillis() > 2500) {
     // Missed a few report. Assume PanelDue started a blocking operation.
     traffic_state = BUSY;
-    //beep_active = false;
     traffic_timer.restart();
   } else if (traffic_state == BUSY && traffic_timer.timeMillis() > 600 * 1000) {
     // Missed reports for a long time. Maybe a connection or other communication error.
     traffic_state = ERROR;
-    //beep_active=false;
     // No need to restart timer. We don't care about it in this state.
   }
 

@@ -25,7 +25,7 @@
 // during a dispensing cycle).
 
 // Number of motor's cycles per activation. 
-#define STROKES_PER_ACTIVATION 2
+#define STROKES_PER_ACTIVATION 1
 
 class Timer {
   public:

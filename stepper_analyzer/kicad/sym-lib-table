@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name stepper_analyzer)(type Legacy)(uri /projects/misc/repo/stepper_analyzer/kicad/stepper_analyzer.lib)(options "")(descr ""))
+)
