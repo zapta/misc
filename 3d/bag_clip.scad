@@ -8,7 +8,7 @@
 /* [General] */
 
 // Effective (internal) length of the clip
-armLength = 80;
+armLength = 90;
 
 // Should not be less than two times latch arm hickness plus movement gap :)
 armThickness = 6;
@@ -16,17 +16,37 @@ armThickness = 6;
 // slot width scale.
 grove = 2;
 
-height = 14;
+height = 16;
 
 latchArmThickness = 2; // [1:0.1:3]
 
 // Simply just tollerance, must be positive for movement
-movementGap = 0.3; // [0.2:0.05:0.8]
+movementGap = 0.5; // [0.2:0.05:0.8]
 
 /* [Hidden] */
 $fa = 1;
 $fs = 0.5;
 
+inset_bottom() 
+main();
+
+module inset_bottom(w=0.4, h=0.2, bounding_size = 200, eps=0.01) {
+  if (w == 0 || h < 0) {
+    children();
+  } else {
+    // The top part of the children without the inset layer.
+    difference() {
+      children();
+      // TODO: use actual extended children projection instead
+      // of a clube with arbitrary large x,y values.
+      translate([0, 0, -9*h]) 
+          cube([bounding_size, bounding_size, 20*h], center=true);
+    }
+    // The inset layer.
+    linear_extrude(height=h+eps) offset(r = -w) projection(cut=true)
+      children();
+  }
+}
 
 /******************************************************************************
  *
@@ -35,14 +55,16 @@ $fs = 0.5;
  ******************************************************************************/
 
 
-freeArm();
+module main() {
+  freeArm();
 
-difference() {
-lockArm();
+  difference() {
+  lockArm();
 
-// Rotor text
-translate([60, 11.25, 6.8]) rotate([90, 0, 180]) linear_extrude(height = 0.8)
-   text("TEIKO", halign="center",valign="center", size=8, font="Helvetica:black");
+  // Rotor text
+  translate([60, 11.25, height/2 - 0.2]) rotate([90, 0, 180]) linear_extrude(height = 0.8)
+     text("TEIKO", halign="center",valign="center", size=8, font="Helvetica:black");
+  }
 }
 
 

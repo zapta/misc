@@ -1,5 +1,5 @@
 
-$fn=300;
+$fn=30;
 
 d = 30;
 r = d/2;
@@ -16,7 +16,7 @@ module inset_bottom(w=0.4, h=0.2, bounding_size = 200, eps=0.01) {
     difference() {
       children();
       // TODO: use actual extended children projection instead
-      // of a clube with arbitrary large x,y values.
+      // of a cube with arbitrary large x,y values.
       translate([0, 0, -9*h])
           cube([bounding_size, bounding_size, 20*h], center=true);
     }
@@ -43,17 +43,19 @@ module label(letter = "?") {
 module fb_base(x, y) {
   k=0.2;
   translate([0, -d*0.2, 0]) 
-hull() {
-translate([0, -18*k, 0]) cylinder(d=2, h=5);
+  hull() {
+    #translate([0, -18*k, 0]) cylinder(d=2, h=5);
 
-translate([-32*k, 0, 0]) cylinder(d=2, h=5);
-translate([32*k, 0, 0]) cylinder(d=2, h=5);
-       translate([x*k, y*k, 0]) cylinder(d=2, h=5);
-}
+    #translate([-32*k, 0, 0]) cylinder(d=2, h=5);
+    
+    #translate([32*k, 0, 0]) cylinder(d=2, h=5);
+    
+    #translate([x*k, y*k, 0]) cylinder(d=2, h=5);
+  }
 }
 
 module fb() {
-    fb_base(22, 60-6);
+  #fb_base(22, 60-6);
 
   translate([0, 0, depth/3]) 
     fb_base(0, 60);
@@ -72,14 +74,9 @@ module ring(r, w) {
 }
 
 module target() {
-  //ring(10, 2);
-  //ring(6, 2);
-  //cylinder(r=2, h=5);
-  
    //ring(10, 2);
-  ring(5, 2.5);
-  ring(10, 2.5);
-  //cylinder(r=2, h=5);
+  #ring(5, 2.5);
+  #ring(10, 2.5);
 }
 
 module main() {
@@ -101,8 +98,10 @@ module main() {
   }
 }
 
-inset_bottom()
-translate([0, 0, r])
+//inset_bottom()
+scale([3, 3, 3])
+translate([0, 0, r-0.01])
+rotate([90, 0, 0])
 main();
 
 //fb();

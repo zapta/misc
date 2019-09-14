@@ -1,20 +1,51 @@
-$fn=40;
 
-k = 0.5;
+$fn=0+40;
+
+// Diameter of magnet cavity. Make it slightly wider than your magnet.
+magnet_cavity_diameter = 9.5;
+
+// Height of magnet cavity. If you attach the magnet with a drop of super glue making it much longer than the magnet is ok.
+magnet_cavity_height = 25;
+
+// The thickness of the magnet cavity base. Higher values means less magnetic attraction.
+magnet_base_thickness = 0.6;
+
+// Vertical offset of the cat's body. Determine the shape of the base and easy of printing.
+cat_vertical_offset = -2.5;
+
+// Cat scale factor.
+cat_body_scale = 1;
+
+// 'false' for printing, 'true' for examining the model.
+cross_cut = false;
+
+// Normalized scale.
+k = 0.5 * cat_body_scale;
+
+// Larger than any dimension. 
+large = 0+200;
+
+module main() {
+  difference() {
+    union() {
+      intersection() {
+        scale(k) 
+          translate([-13, 0, cat_vertical_offset]) 
+          import("my_fat_cat.stl", convexity=3);
+
+        // Remove cat bottom below z=0
+        cylinder(d=large, h=large);
+      }
+    }
+
+    // Magnet cavity
+    translate([0, 0, magnet_base_thickness]) cylinder(d=magnet_cavity_diameter, h=magnet_cavity_height);  //0.6  9.5
+  }
+}
 
 difference() {
-  union() {
-    intersection() {
-      translate([0, 0, -1]) scale([k, k, k])  import("my_fat_cat.stl", convexity=3);
-
-      cylinder(d=100, h=50);
-    }
+  main();
+  if (cross_cut) {
+    translate([0, -large, -1]) cube([large, large, large]);
   }
-
-  // Magnet cavity
-  translate([6, 0, 0.6]) #cylinder(d=9.5, h=15);
-
-
-  // Release hole
-  //translate([3.9, 0, -0.1]) #cylinder(d=1, h=5);
 }

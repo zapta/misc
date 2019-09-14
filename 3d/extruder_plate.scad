@@ -92,7 +92,7 @@ points = [
       cylinder(d1=18+2*2, d2=14-eps1, h=2);
     }
     
-    translate([0, 0, clamp_height-4])  #solid_funnel(clamp_hole_diameter, clamp_hole_diameter+2.0, 4+eps1, 2, $fn/4);
+    translate([0, 0, clamp_height-4])  solid_funnel(clamp_hole_diameter, clamp_hole_diameter+2.0, 4+eps1, 2, $fn/4);
  
     // 180 deg cut
     translate([-15, 0, -eps1]) cube([30, 20, clamp_height+3]);

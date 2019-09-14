@@ -6,32 +6,18 @@
 // A good first layer should be flat but the individual filament strands
 // shoudl be visible.
 
-l = 34;  // side length
-w = 4;   // width
+
+l = 35;  // side length
+w = 5;   // width
 h = 1;   // height
 
 eps = 0+0.01;
 
-//module triangle(l, h)  {
-//  hull() {
-//    translate([0, l-eps, 0]) cube([eps, eps, h]);  
-//    translate([l-eps, 0, 0])cube([eps, eps, h]);  
-//    cube([eps, eps, h]);  
-//  }
-//}
 
-module square(l, h)  {
-  //hull() {
-    translate([0, l-eps, 0]) cube([eps, eps, h]);  
-    translate([l-eps, 0, 0])cube([eps, eps, h]);  
+module square(l, h)  { 
     translate([-l/2, -l/2, 0]) cube([l, l, h]);  
-  //}
 }
 
-//difference() {
-//  triangle(l, h);
-//  translate([w, w, -eps]) triangle(l-w-w-w*sqrt(2), h+2*eps); 
-//}
   
 difference() {
  square(l, h);

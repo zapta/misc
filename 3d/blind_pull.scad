@@ -8,31 +8,31 @@ eps=0 + 0.01;
 //---------- consts
 
 // Set to 1 for debugging, 0 for printing.
-cross_cut = 1;
+cross_cut = 0;
 
 // Resolution
 $fn=90;
 
 // Total part height.
-height = 30;
+height = 40;
 
 top_end_radius = 1;
-top_diameter = 7;
+top_diameter = 9;
 
 bottom_end_radius = 2;
-bottom_diameter = 18;
+bottom_diameter = 16;
 
 // Radius of side curvature.
-curve_radius =100;
+curve_radius =125;
 
 // Center hole for the cord or chain.
-hole_diameter = 3.5;
+hole_diameter = 3.7;
 hole_chamfer = 0.5;
 
 // Cavity at the bottom of the part.
-cavity_top_diameter = 8;
+cavity_top_diameter = 7;
 cavity_bottom_diameter = 10;
-cavity_depth = 17;
+cavity_depth = 16;
 
 // Slope of internal overhang.
 cavity_chamfer_slope = 0.8;
@@ -110,7 +110,7 @@ module profile() {
         translate([d2/2-r2, height-r2]) circle(r=r2);
         square([eps, height]);
       }
-      translate(solution[0]) circle(r=r3, $fn=3*$fn);
+      translate(solution[0]) circle(r=r3, $fn=10*$fn);
     }
     square(max(height, d1, d2));
   }
