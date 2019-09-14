@@ -27,7 +27,7 @@ M98 P"0:/macros/before_print"
 ;M572 D0 S0.0                                  ; pressure advance
 ;M572 D0 S0.6                                 ; pressure advance
 
-M566 X300 Y300 Z100 E3000    ; Set maximum instantaneous speed changes (mm/min) (Jerk)
+M566 X600 Y600 Z100 E3000    ; Set maximum instantaneous speed changes (mm/min) (Jerk)
 M201 X300 Y300 Z60 E9000     ; max accelleration
 
 ; Reset pressure advance for the base.

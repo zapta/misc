@@ -25,16 +25,22 @@ M569 P2 S1                                    ; Drive 2 goes forwards
 M569 P3 S1                                    ; Drive 3 goes forwards
 M350 X16 Y16 Z16 E16 I1                       ; Configure microstepping with interpolation
 
-M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
+;M92 X200.00 Y200.00 Z400.00 E415.0            ; Set micrsteps per mm
+M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
 
 ; Based on:
 ; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
 M98 P"/sys/mode_normal.g"
 
+;M566 X300 Y300 Z100 E3000    ; Set maximum instantaneous speed changes (mm/min) (jerk)
+;M201 X6000 Y6000 Z60  E9000    ; Set maximum accelerations (mm/s^2)
+
+
 M203 X15000 Y15000 Z3000 E15000                        	; Set maximum speeds (mm/min)
 M204 P1000 T3000					; Set printing and travel accelerations
 ;M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
-M906 X1500 Y1500 Z1500 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
+;M906 X1500 Y1500 Z1500 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
+M906 X1500 Y1500 Z1500 E750 I30             ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
@@ -48,6 +54,8 @@ M208 X-2:300 Y-5:300 Z-3:285                 ; XYZ min/max
 M574 X1 Y1 S3                                ; X min, Y min, stall style endstops
 M915 X Y S3 F0 R0                            ; Stall detection. Higher S value -> less sensitive
 
+; Disable Heater 2 (E1). Used for camera click
+M307 H2 A-1 C-1 D-1
 
 ; Z-Probe
 M574 Z1 S2                                   ; Set endstops controlled by probe
@@ -100,7 +108,13 @@ M557 X23:279 Y30:286 S32                     ; Define mesh grid
 ; Computed PID parameters for setpoint change: P239.7, I8.026, D540.3
 ; Computed PID parameters for load change: P23
 ; 
-M307 H0 A64.1 C277.0 D3.2 V24.2 B0
+;M307 H0 A64.1 C277.0 D3.2 V24.2 B0
+;
+; Heater 0 model: gain 237.3, time constant 1430.3, dead time 1.7, 
+;     max PWM 1.00, calibration voltage 24.2, mode PID, inverted no, frequency default
+; Computed PID parameters for setpoint change: P629.0, I12.718, D753.1
+; Computed PID parameters for load change:
+M307 H0 A237.3 C1430.3 D1.7 V24.2 B0
 
 ; Hotend temp PID autotune
 ; To autotune send [M303 H1 P1.0 S230]. Check progress with [M303]. when stage 4 done, 
@@ -113,10 +127,9 @@ M307 H0 A64.1 C277.0 D3.2 V24.2 B0
 ;
 M307 H1 A549.5 C234.0 D4.7 V24.1 B0
 
-; Set pressure advance factor, per results of pressure advance calibration script.
-; Optimal value for PLA is 0.5. May be overriden in slicer gcode scripts.
-M572 D0 S0.5 ; set K-factor (from calibration script)
-;M572 D0 S0.3 ; set K-factor
+; Calibration shows that 1.15 provides best uniformity across the selected
+; speed changes (for 0.2mm layer).
+M572 D0 S1.2 ; set pressure advance
 
 ; Automatic saving after power loss is not enabled
 

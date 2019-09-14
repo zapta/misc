@@ -5,7 +5,8 @@
 G91               ; relative positioning
 M400
 M913 Z25          ; Z motors to 25% current
-G1 Z5 F6000 S2    ; lift Z relative to current position
+;G1 Z5 F6000 S2    ; lift Z relative to current position
+G1 Z5 F2000 S2    ; lift Z relative to current position
 M400
 M913 Z100         ; Z motors to 100% current
 G91               ; absolute positioning

@@ -3,10 +3,13 @@
 ; called to home all axes
 ;M117 Started Home All
 
+; Make sure we don't have left over changes.
+M98 P"/sys/mode_normal.g"
+
 G91               ; relative positioning
 M400
 M913 Z20          ; Z motors to 20% current
-G1 Z5 F2000 S2    ; drop bed Z relative to current position
+G1 Z5 F1000 S2    ; drop bed Z relative to current position
 M400
 M913 Z100         ; Z motors to 100% current
 M280 P3 S160 I1   ; Reset bltouch in case it didn't have vertical clearance for self test.
@@ -45,13 +48,16 @@ M913 Z60          ; Z motors to 60% current, in case something goes wrong with b
 ; 
 ; TODO: see M558 recomanded config at https://duet3d.dozuki.com/Wiki/BLTouch_Troubleshooting
 ;
-M558 A1 F1200      ; Set for probing at fast speed, single probe
+;M558 A1 F1200      ; Set for probing at fast speed, single probe
+M558 A1 F800      ; Set for probing at fast speed, single probe
 G30               ; Probe and home Z (pass 1)
 M400
 M913 Z100         ; Z motors to 100% current
 M558 A5 F100	  ; Set for probing at slow speed, allow multiple trys
 G30               ; Probe and home Z
 
-M98 P"/macros/park_up"
+G1 X0 Y-5 F3000   ; Move X,Y to rest position
+G1 Z40 F700       ; Move Z   to rest position
 
+;M98 P"/macros/park_up"
 ;M117 Ended Home All

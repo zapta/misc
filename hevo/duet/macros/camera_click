@@ -1,0 +1,15 @@
+; One camera click
+
+G60 S1                ; Save location in registrer #1
+G1 X150 Y150 F9000    ; Move head to the right side
+
+M400                  ; Wait for movements to complete
+M42 P2 S1             ; Relay on (E1 heater on)
+G4 P10                ; Delay in ms
+M42 P2 S0             ; Relay off (E1 heater off)
+
+G1 R1 X0 Y0 Z0 F9000  ; Restore location from register #1
+M400                  ; Wait for movements to complete
+
+
+

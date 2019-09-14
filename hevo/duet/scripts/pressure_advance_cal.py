@@ -11,18 +11,21 @@ filament_diameter = 1.75
 # print speeds (mm/s)
 travel_speed      = 150
 first_layer_speed =  20
-slow_speed        =   5
-fast_speed        =  70
+
+#slow_speed        =   5
+#fast_speed        =  70
+slow_speed        =   15
+fast_speed        =   40
 
 # calibration object dimensions (mm)
-layers        = 100
+layers        = 250
 object_width  = 90
 num_patterns  =  4
 pattern_width =  5
 
 # pressure advance gradient (s)
-pressure_advance_max = 2
-pressure_advance_min = 1
+pressure_advance_max = 2.0
+pressure_advance_min = 0.0 
 
 # center of print bed (mm)
 offset_x = 150
