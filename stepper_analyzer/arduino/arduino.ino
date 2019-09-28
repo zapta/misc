@@ -22,6 +22,11 @@
 const uint16_t VAL1_OFFSET = 1902;
 const uint16_t VAL2_OFFSET = 1860;
 
+// 12 bit -> 4096 counts.
+// 3.3V full scale.
+// 0.2V per AMP (for +/- 5A sensor).
+const float COUNTS_PER_AMP = 0.2 * 4096 / 3.3;
+
 // Non energized limit, with hysteresis.
 const int NON_ENERGIZED1 = 100;
 const int NON_ENERGIZED2 = 120;
@@ -146,6 +151,8 @@ void loop() {
   }
   __enable_irq();
 
+  //digitalWriteFast(LED1, true);
+
   static char buffer[200];
   //tft.fillScreen(ST7735_BLACK);
 
@@ -156,39 +163,40 @@ void loop() {
   int y = 20;
   
   tft.setCursor(x0, y);
-  sprintf(buffer, "I1    %6d",  _isr_status.adc_val1);
+  sprintf(buffer, "A      %6.2f",  _isr_status.adc_val1  / COUNTS_PER_AMP);
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "I2    %6d",  _isr_status.adc_val2);
+  sprintf(buffer, "B      %6.2f",  _isr_status.adc_val2  / COUNTS_PER_AMP);
   tft.print(buffer);
   y += dy;
 
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "Errs  %6lu",  _isr_status.quadrature_errors);
+  sprintf(buffer, "ERRORS %6lu",  _isr_status.quadrature_errors);
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "Pwr      %s",  _isr_status.is_energized? " ON" : "OFF");
+  sprintf(buffer, "POWER     %s",  _isr_status.is_energized? " ON" : "OFF");
   tft.print(buffer);
   y += dy;
   
   tft.setCursor(x0, y);
-  sprintf(buffer, "#Pwr  %6lu",  _isr_status.non_energized_count);
+  sprintf(buffer, "IDLES  %6lu",  _isr_status.non_energized_count);
   tft.print(buffer);
   y += dy;
 
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
 
-  tft.setCursor(x0, y);
-  sprintf(buffer, "Steps %6d",  _isr_status.full_steps);
-  tft.print(buffer);
   y += dy;
-  Serial.println(buffer);
+  tft.setCursor(x0, y);
+  sprintf(buffer, "STEPS  %6d",  _isr_status.full_steps);
+  tft.print(buffer);
+  //Serial.println(buffer);
 
+ // digitalWriteFast(LED1, false);
 
   
 
@@ -207,9 +215,9 @@ void loop() {
 //            _isr_status.adc_val1, _isr_status.adc_val2, _isr_status.is_energized, _isr_status.non_energized_count,
 //            _isr_status.quadrant,  _isr_status.full_steps);
 //  } else {
-//    sprintf(buffer, "%d ", _isr_status.full_steps);
+    sprintf(buffer, "%d ", _isr_status.full_steps);
 //  }
-//  Serial.println(buffer);
+    Serial.println(buffer);
 
   // Print capture
 //  if (1) { 
@@ -230,14 +238,14 @@ void loop() {
 //  }
 
 
-  digitalWriteFast(LED2, _isr_status.quadrature_errors);
+  //digitalWriteFast(LED2, _isr_status.quadrature_errors);
 
 
 
   //last_isr_count = _isr_status.isr_count;
 
   adc->printError();  // Print adc errors, if any
-  digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
+  //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
   delay(100);
 }
 
@@ -299,7 +307,7 @@ void adc0_isr(void) {
   // Is the stepper motor energized? (with histeresis).
   const bool old_is_energized = isr_status.is_energized;
   const bool new_is_energized = (vtotal > (old_is_energized ? NON_ENERGIZED1 : NON_ENERGIZED2));
-  digitalWriteFast(LED1, new_is_energized);
+  //digitalWriteFast(LED1, new_is_energized);
   isr_status.is_energized = new_is_energized;
 
   // Handle the case of an unenergized motor. In unenergized state,

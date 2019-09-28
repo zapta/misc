@@ -1150,6 +1150,14 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
         // implemented this yet.
 
         startWrite();
+        // TODO: change to a single rect fill and consider also x,y sizes.
+        if (bg != color) {
+            for (int _y = 0; _y < 11; _y++) {
+                for (int _x=0; _x < 8; _x++) {
+                    writePixel(x+_x, y-_y, bg);
+                }
+            }
+        }
         for(yy=0; yy<h; yy++) {
             for(xx=0; xx<w; xx++) {
                 if(!(bit++ & 7)) {
@@ -1162,15 +1170,15 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
                         writeFillRect(x+(xo16+xx)*size_x, y+(yo16+yy)*size_y,
                           size_x, size_y, color);
                     }
-                // NOTE(zapta): added this else case to overwrite background. bg==color
-                // indicates leave background as is.
-                } else if (bg != color) {
-                    if(size_x == 1 && size_y == 1) {
-                        writePixel(x+xo+xx, y+yo+yy, bg);
-                    } else {
-                        writeFillRect(x+(xo16+xx)*size_x, y+(yo16+yy)*size_y,
-                          size_x, size_y, bg);
-                    }
+//                // NOTE(zapta): added this else case to overwrite background. bg==color
+//                // indicates leave background as is.
+//                } else if (bg != color) {
+//                    if(size_x == 1 && size_y == 1) {
+//                        writePixel(x+xo+xx, y+yo+yy, bg);
+//                    } else {
+//                        writeFillRect(x+(xo16+xx)*size_x, y+(yo16+yy)*size_y,
+//                          size_x, size_y, bg);
+//                    }
                 }
                 bits <<= 1;
             }
