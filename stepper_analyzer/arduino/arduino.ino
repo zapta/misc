@@ -70,12 +70,14 @@ void setup() {
   delay(100);
 }
 
+const int MAX_CAPTURE_SIZE = 5000;
+static int16_t capture[MAX_CAPTURE_SIZE][2];
+
 struct IsrStatus {
   public:
     IsrStatus() :
       isr_count(0), adc_val1(0), adc_val2(0),
-      is_energized(false), non_energized_count(0), quadrant(0), full_steps(0),
-      quadrature_errors(0) {}
+      is_energized(false), non_energized_count(0), quadrant(0), full_steps(0), quadrature_errors(0), capture_size(0) {}
     // Number of isr invocactions so far. Overlofw is normal.
     uint32_t isr_count;
     // Signed adc current readings. For a 200mv/A current sensor, units
@@ -91,12 +93,15 @@ struct IsrStatus {
     int full_steps;
     // Total invalid quadrant transitions. Normally 0.
     uint32_t quadrature_errors;
+    int capture_size;
 };
 
 // Updated by the ADC interrupt routing.
 static  IsrStatus isr_status;
 
+
 void loop() {
+  // Reset
   if (pushbutton.update() && pushbutton.fallingEdge()) {
     Serial.println("Reset");
     __disable_irq();
@@ -104,6 +109,7 @@ void loop() {
       isr_status.non_energized_count = 0;
       isr_status.full_steps = 0;
       isr_status.quadrature_errors = 0;
+      isr_status.capture_size = 0;
     }
     __enable_irq();
   }
@@ -113,31 +119,50 @@ void loop() {
   __disable_irq();
   {
     _isr_status = isr_status;
+    isr_status.isr_count = 0;
   }
   __enable_irq();
 
   // Print snapshot
-  static uint32_t last_isr_count = 0;
+  //static uint32_t last_isr_count = 0;
   static char buffer[200];
 
-  if (1) {
-    sprintf(buffer, "[%lu][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
-            _isr_status.isr_count - last_isr_count,
-            _isr_status.quadrature_errors,
-            _isr_status.adc_val1, _isr_status.adc_val2, _isr_status.is_energized, _isr_status.non_energized_count,
-            _isr_status.quadrant,  _isr_status.full_steps);
-  } else {
-    sprintf(buffer, "%d ", _isr_status.full_steps);
-  }
+//  if (1) {
+//    sprintf(buffer, "[%lu][%d][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
+//            _isr_status.isr_count,
+//            _isr_status.capture_size,
+//            _isr_status.quadrature_errors,
+//            _isr_status.adc_val1, _isr_status.adc_val2, _isr_status.is_energized, _isr_status.non_energized_count,
+//            _isr_status.quadrant,  _isr_status.full_steps);
+//  } else {
+//    sprintf(buffer, "%d ", _isr_status.full_steps);
+//  }
+//  Serial.println(buffer);
 
-  Serial.println(buffer);
+  // Print capture
+  if (1) { 
+    static boolean last_capture_full = false;
+    boolean new_capture_full = (_isr_status.capture_size == MAX_CAPTURE_SIZE);
+  
+    if (new_capture_full && !last_capture_full) {
+      // Marker
+      Serial.println("-1000 -1000");
+      Serial.println("0 0");
+      for (int i = 0; i < isr_status.capture_size; i++) {
+        Serial.print(capture[i][0]);
+        Serial.print(" ");
+        Serial.println(capture[i][1]);
+      }
+    }
+    last_capture_full = new_capture_full;
+  }
 
 
   digitalWriteFast(LED2, _isr_status.quadrature_errors);
 
 
 
-  last_isr_count = _isr_status.isr_count;
+  //last_isr_count = _isr_status.isr_count;
 
   adc->printError();  // Print adc errors, if any
   digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
@@ -159,6 +184,12 @@ void adc0_isr(void) {
   isr_status.isr_count++;
   isr_status.adc_val1 = v1;
   isr_status.adc_val2 = v2;
+
+  if (isr_status.capture_size < MAX_CAPTURE_SIZE) {
+    capture[isr_status.capture_size][0] = v1;
+    capture[isr_status.capture_size][1] = v2;
+    isr_status.capture_size++;
+  }
 
   // We number the quadrants such that 0, 1, 2, 3, ... is the
   // forward sequence.
