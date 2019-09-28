@@ -17,7 +17,7 @@
  ****************************************************/
 
 #include "ST7735_t3.h"
-#include "ST7789_t3.h"
+//#include "ST7789_t3.h"
 #include <limits.h>
 #include "pins_arduino.h"
 #include "wiring_private.h"
@@ -1779,4 +1779,3 @@ void ST7735_t3::waitUpdateAsyncComplete(void)
 #endif
 
 #endif
-

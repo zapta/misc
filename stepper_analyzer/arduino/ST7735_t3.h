@@ -21,7 +21,7 @@
 
 #include "Arduino.h"
 #include <SPI.h>
-#include <Adafruit_GFX.h>
+#include "Adafruit_GFX.h"
 
 #ifndef DISABLE_ST77XX_FRAMEBUFFER
 #if defined(__MK64FX512__) || defined(__MK66FX1M0__)

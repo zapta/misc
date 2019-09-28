@@ -5,6 +5,19 @@
 #include <ADC.h>
 #include <Bounce.h>
 
+//#include "Adafruit_GFX.h"    // Core graphics library
+#include "ST7735_t3.h" // Hardware-specific library
+//#include <ST7789_t3.h> // Hardware-specific library
+//#include <Fonts/FreeSans9pt7b.h>
+#include "my_fonts.h"
+//#include <SPI.h>
+
+#define TFT_SCLK 14  // SCLK can also use pin 14
+#define TFT_MOSI 11  // MOSI can also use pin 7
+#define TFT_CS   10  // CS & DC can use pins 2, 6, 9, 10, 15, 20, 21, 22, 23
+#define TFT_DC    9  //  but certain pairs must NOT be used: 2+10, 6+9, 20+23, 21+22
+#define TFT_RST   8  // RST can use any pin
+
 // ADC count for i=0 (1.5v of 3.3V full scale)
 const uint16_t VAL1_OFFSET = 1902;
 const uint16_t VAL2_OFFSET = 1860;
@@ -12,6 +25,8 @@ const uint16_t VAL2_OFFSET = 1860;
 // Non energized limit, with hysteresis.
 const int NON_ENERGIZED1 = 100;
 const int NON_ENERGIZED2 = 120;
+
+ST7735_t3 tft = ST7735_t3(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 const int adcPin1 = A9;
 const int adcPin2 = A3;
@@ -43,6 +58,14 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   pinMode(PUSH_BUTTON, INPUT_PULLUP);
+
+  // --- Display
+  tft.initR(INITR_BLACKTAB);
+  tft.fillScreen(ST7735_BLACK);
+  //tft.setFont(&Monospaced_plain_12);
+  tft.setTextWrap(false);
+  
+  // --- ADC
 
   pinMode(adcPin1, INPUT);
   pinMode(adcPin2, INPUT);
@@ -123,9 +146,58 @@ void loop() {
   }
   __enable_irq();
 
+  static char buffer[200];
+  //tft.fillScreen(ST7735_BLACK);
+
+  tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
+
+  const int x0 = 25;
+  const int dy = 20;
+  int y = 20;
+  
+  tft.setCursor(x0, y);
+  sprintf(buffer, "I1    %6d",  _isr_status.adc_val1);
+  tft.print(buffer);
+  y += dy;
+
+  tft.setCursor(x0, y);
+  sprintf(buffer, "I2    %6d",  _isr_status.adc_val2);
+  tft.print(buffer);
+  y += dy;
+
+
+  tft.setCursor(x0, y);
+  sprintf(buffer, "Errs  %6lu",  _isr_status.quadrature_errors);
+  tft.print(buffer);
+  y += dy;
+
+  tft.setCursor(x0, y);
+  sprintf(buffer, "Pwr      %s",  _isr_status.is_energized? " ON" : "OFF");
+  tft.print(buffer);
+  y += dy;
+  
+  tft.setCursor(x0, y);
+  sprintf(buffer, "#Pwr  %6lu",  _isr_status.non_energized_count);
+  tft.print(buffer);
+  y += dy;
+
+  tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
+
+  tft.setCursor(x0, y);
+  sprintf(buffer, "Steps %6d",  _isr_status.full_steps);
+  tft.print(buffer);
+  y += dy;
+  Serial.println(buffer);
+
+
+  
+
+  
+
+
   // Print snapshot
   //static uint32_t last_isr_count = 0;
-  static char buffer[200];
+  //static char buffer[200];
 
 //  if (1) {
 //    sprintf(buffer, "[%lu][%d][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
@@ -140,22 +212,22 @@ void loop() {
 //  Serial.println(buffer);
 
   // Print capture
-  if (1) { 
-    static boolean last_capture_full = false;
-    boolean new_capture_full = (_isr_status.capture_size == MAX_CAPTURE_SIZE);
-  
-    if (new_capture_full && !last_capture_full) {
-      // Marker
-      Serial.println("-1000 -1000");
-      Serial.println("0 0");
-      for (int i = 0; i < isr_status.capture_size; i++) {
-        Serial.print(capture[i][0]);
-        Serial.print(" ");
-        Serial.println(capture[i][1]);
-      }
-    }
-    last_capture_full = new_capture_full;
-  }
+//  if (1) { 
+//    static boolean last_capture_full = false;
+//    boolean new_capture_full = (_isr_status.capture_size == MAX_CAPTURE_SIZE);
+//  
+//    if (new_capture_full && !last_capture_full) {
+//      // Marker
+//      Serial.println("-1000 -1000");
+//      Serial.println("0 0");
+//      for (int i = 0; i < isr_status.capture_size; i++) {
+//        Serial.print(capture[i][0]);
+//        Serial.print(" ");
+//        Serial.println(capture[i][1]);
+//      }
+//    }
+//    last_capture_full = new_capture_full;
+//  }
 
 
   digitalWriteFast(LED2, _isr_status.quadrature_errors);
