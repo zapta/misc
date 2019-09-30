@@ -4,18 +4,15 @@
 #include <stdio.h>
 #include <ADC.h>
 #include <Bounce.h>
+#include <FrequencyTimer2.h>
 
-//#include "Adafruit_GFX.h"    // Core graphics library
-#include "ST7735_t3.h" // Hardware-specific library
-//#include <ST7789_t3.h> // Hardware-specific library
-//#include <Fonts/FreeSans9pt7b.h>
-#include "my_fonts.h"
-//#include <SPI.h>
 
-#define TFT_SCLK 14  // SCLK can also use pin 14
+#include <ST7735_t3.h> // Hardware-specific library
+
+#define TFT_SCLK 13  // SCLK (also LED_BUILTIN so don't use it) Can be 14 on T3.2
 #define TFT_MOSI 11  // MOSI can also use pin 7
 #define TFT_CS   10  // CS & DC can use pins 2, 6, 9, 10, 15, 20, 21, 22, 23
-#define TFT_DC    9  //  but certain pairs must NOT be used: 2+10, 6+9, 20+23, 21+22
+#define TFT_DC    9  //   but certain pairs must NOT be used: 2+10, 6+9, 20+23, 21+22
 #define TFT_RST   8  // RST can use any pin
 
 // ADC count for i=0 (1.5v of 3.3V full scale)
@@ -31,7 +28,7 @@ const float COUNTS_PER_AMP = 0.2 * 4096 / 3.3;
 const int NON_ENERGIZED1 = 100;
 const int NON_ENERGIZED2 = 120;
 
-ST7735_t3 tft = ST7735_t3(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+ST7735_t3 tft(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 const int adcPin1 = A9;
 const int adcPin2 = A3;
@@ -40,16 +37,31 @@ const int LED1 = 1;
 const int LED2 = 2;
 const int LED3 = 3;
 
-// Verify number
-const int PUSH_BUTTON = 5;
+const int PUSH_BUTTON1 = 18;
+const int PUSH_BUTTON2 = 19;
 
-Bounce pushbutton = Bounce(PUSH_BUTTON, 10);  // 10 ms debounce
+Bounce push_button1 = Bounce(PUSH_BUTTON1, 10);  // 10 ms debounce
+Bounce push_button2 = Bounce(PUSH_BUTTON2, 10);  // 10 ms debounce
 
 ADC *adc = new ADC();
 
 elapsedMicros time;
 
+//IntervalTimer adc_timing_timer;
+
+//volatile int timer_isr_count = 0;
+
+void adcTimingIsr() {
+    digitalWriteFast(LED3, true);
+
+  //timer_isr_count++;
+  adc->startSynchronizedSingleRead(adcPin1, adcPin2);
+    digitalWriteFast(LED3, false);
+
+}
+
 void setup() {
+  
   Serial.begin(9600);
 
   pinMode(LED1, OUTPUT);
@@ -60,14 +72,16 @@ void setup() {
   digitalWriteFast(LED2, 0);
   digitalWriteFast(LED3, 0);
 
-  pinMode(LED_BUILTIN, OUTPUT);
+  //adc_timing_timer(adc_timing_isr, 40);
 
-  pinMode(PUSH_BUTTON, INPUT_PULLUP);
+
+
+  pinMode(PUSH_BUTTON1, INPUT_PULLUP);
+  pinMode(PUSH_BUTTON2, INPUT_PULLUP);
 
   // --- Display
   tft.initR(INITR_BLACKTAB);
   tft.fillScreen(ST7735_BLACK);
-  //tft.setFont(&Monospaced_plain_12);
   tft.setTextWrap(false);
   
   // --- ADC
@@ -78,24 +92,32 @@ void setup() {
   adc->setReference(ADC_REFERENCE::REF_3V3, ADC_0);
   adc->setReference(ADC_REFERENCE::REF_3V3, ADC_1);
 
-  adc->setAveraging(8, ADC_0);
-  adc->setAveraging(8, ADC_1);
+  adc->setAveraging(4, ADC_0);
+  adc->setAveraging(4, ADC_1);
 
   adc->setResolution(12, ADC_0);
   adc->setResolution(12, ADC_1);
 
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_0);
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED, ADC_1);
+  adc->setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_0);
+  adc->setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_1);
 
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_0);
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED, ADC_1);
+  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_0);
+  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_1);
 
   // We use adc0_isr to read also adc1.
   adc->enableInterrupts(ADC_0);
+  //adc->enableInterrupts(ADC_1);
 
   // NOTE: this return a error status if pins are not supported.
-  adc->startSynchronizedContinuous(adcPin1, adcPin2);
-  delay(100);
+  //adc->startSynchronizedContinuous(adcPin1, adcPin2);
+  //delay(100);
+
+
+  // FREQUENCYTIMER2_PIN = 5 on Teensy 3.2. Do not use for anything else.
+  pinMode(FREQUENCYTIMER2_PIN, OUTPUT);
+  FrequencyTimer2::setPeriod(20);  // 20usec -> 50k samplings/sec.
+  FrequencyTimer2::setOnOverflow(adcTimingIsr);
+  FrequencyTimer2::enable();
 }
 
 const int MAX_CAPTURE_SIZE = 5000;
@@ -129,8 +151,21 @@ static  IsrStatus isr_status;
 
 
 void loop() {
+
+  const unsigned long period_ms = 100;
+  static unsigned long last_millis = millis();
+  unsigned long ms_left = period_ms - (millis() - last_millis);
+  if (ms_left > period_ms) { ms_left = period_ms; }  // in case of unsigned underflow
+  delay(ms_left);
+  last_millis += period_ms;
+
+  
+//  Serial.print("TIMER ISR COUNT: ");
+//  Serial.println(timer_isr_count);
+//  timer_isr_count=0;
+  
   // Reset
-  if (pushbutton.update() && pushbutton.fallingEdge()) {
+  if (push_button1.update() && push_button1.fallingEdge()) {
     Serial.println("Reset");
     __disable_irq();
     {
@@ -141,6 +176,8 @@ void loop() {
     }
     __enable_irq();
   }
+
+  //Serial.println(push_button1.read());
 
   // Take a snapshot of isr values and reset isr_count
   IsrStatus _isr_status;
@@ -205,19 +242,18 @@ void loop() {
 
   // Print snapshot
   //static uint32_t last_isr_count = 0;
-  //static char buffer[200];
 
-//  if (1) {
-//    sprintf(buffer, "[%lu][%d][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
-//            _isr_status.isr_count,
-//            _isr_status.capture_size,
-//            _isr_status.quadrature_errors,
-//            _isr_status.adc_val1, _isr_status.adc_val2, _isr_status.is_energized, _isr_status.non_energized_count,
-//            _isr_status.quadrant,  _isr_status.full_steps);
-//  } else {
+  if (1) {
+    sprintf(buffer, "[%lu][%d][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
+            _isr_status.isr_count, 
+            _isr_status.capture_size,
+            _isr_status.quadrature_errors,
+            _isr_status.adc_val1, _isr_status.adc_val2, _isr_status.is_energized, _isr_status.non_energized_count,
+            _isr_status.quadrant,  _isr_status.full_steps);
+  } else {
     sprintf(buffer, "%d ", _isr_status.full_steps);
-//  }
-    Serial.println(buffer);
+  }
+  Serial.println(buffer);
 
   // Print capture
 //  if (1) { 
@@ -245,8 +281,7 @@ void loop() {
   //last_isr_count = _isr_status.isr_count;
 
   adc->printError();  // Print adc errors, if any
-  //digitalWriteFast(LED_BUILTIN, !digitalReadFast(LED_BUILTIN));
-  delay(100);
+ 
 }
 
 void adc0_isr(void) {
