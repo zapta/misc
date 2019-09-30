@@ -28,36 +28,42 @@ const float COUNTS_PER_AMP = 0.2 * 4096 / 3.3;
 const int NON_ENERGIZED1 = 100;
 const int NON_ENERGIZED2 = 120;
 
-ST7735_t3 tft(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
+static ST7735_t3 tft(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
-const int adcPin1 = A9;
-const int adcPin2 = A3;
+static const int adcPin1 = A9;
+static const int adcPin2 = A3;
 
-const int LED1 = 1;
-const int LED2 = 2;
-const int LED3 = 3;
+static const int LED1 = 1;
+static const int LED2 = 2;
+static const int LED3 = 3;
 
-const int PUSH_BUTTON1 = 18;
-const int PUSH_BUTTON2 = 19;
+static const int PUSH_BUTTON1 = 18;
+static const int PUSH_BUTTON2 = 19;
 
-Bounce push_button1 = Bounce(PUSH_BUTTON1, 10);  // 10 ms debounce
-Bounce push_button2 = Bounce(PUSH_BUTTON2, 10);  // 10 ms debounce
+static Bounce push_button1 = Bounce(PUSH_BUTTON1, 10);  // 10 ms debounce
+static Bounce push_button2 = Bounce(PUSH_BUTTON2, 10);  // 10 ms debounce
 
-ADC *adc = new ADC();
+// Make it non heap. @@@@@ TODO
+//ADC *adc = new ADC();
+static ADC adc;
 
-elapsedMicros time;
+//elapsedMicros time;
 
-//IntervalTimer adc_timing_timer;
-
-//volatile int timer_isr_count = 0;
 
 void adcTimingIsr() {
     digitalWriteFast(LED3, true);
 
-  //timer_isr_count++;
-  adc->startSynchronizedSingleRead(adcPin1, adcPin2);
-    digitalWriteFast(LED3, false);
+  // Use static so we don't need to construct each time.
+  static ADC::Sync_result result;
 
+  result = adc.readSynchronizedSingle();
+
+  //timer_isr_count++;
+  adc.startSynchronizedSingleRead(adcPin1, adcPin2);
+
+  isr_process_adc_result(result);
+  
+  digitalWriteFast(LED3, false);
 }
 
 void setup() {
@@ -89,29 +95,26 @@ void setup() {
   pinMode(adcPin1, INPUT);
   pinMode(adcPin2, INPUT);
 
-  adc->setReference(ADC_REFERENCE::REF_3V3, ADC_0);
-  adc->setReference(ADC_REFERENCE::REF_3V3, ADC_1);
+  adc.setReference(ADC_REFERENCE::REF_3V3, ADC_0);
+  adc.setReference(ADC_REFERENCE::REF_3V3, ADC_1);
 
-  adc->setAveraging(4, ADC_0);
-  adc->setAveraging(4, ADC_1);
+  adc.setAveraging(4, ADC_0);
+  adc.setAveraging(4, ADC_1);
 
-  adc->setResolution(12, ADC_0);
-  adc->setResolution(12, ADC_1);
+  adc.setResolution(12, ADC_0);
+  adc.setResolution(12, ADC_1);
 
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_0);
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_1);
+  adc.setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_0);
+  adc.setConversionSpeed(ADC_CONVERSION_SPEED::HIGH_SPEED, ADC_1);
 
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_0);
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_1);
-
-  // We use adc0_isr to read also adc1.
-  adc->enableInterrupts(ADC_0);
-  //adc->enableInterrupts(ADC_1);
+  adc.setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_0);
+  adc.setSamplingSpeed(ADC_SAMPLING_SPEED::HIGH_SPEED, ADC_1);
 
   // NOTE: this return a error status if pins are not supported.
-  //adc->startSynchronizedContinuous(adcPin1, adcPin2);
-  //delay(100);
-
+  adc.startSynchronizedSingleRead(adcPin1, adcPin2);
+  // Make sure the first timer ISR will find an adc result. 4 millis
+  // is an overkill
+  delay(4);
 
   // FREQUENCYTIMER2_PIN = 5 on Teensy 3.2. Do not use for anything else.
   pinMode(FREQUENCYTIMER2_PIN, OUTPUT);
@@ -158,11 +161,6 @@ void loop() {
   if (ms_left > period_ms) { ms_left = period_ms; }  // in case of unsigned underflow
   delay(ms_left);
   last_millis += period_ms;
-
-  
-//  Serial.print("TIMER ISR COUNT: ");
-//  Serial.println(timer_isr_count);
-//  timer_isr_count=0;
   
   // Reset
   if (push_button1.update() && push_button1.fallingEdge()) {
@@ -177,8 +175,6 @@ void loop() {
     __enable_irq();
   }
 
-  //Serial.println(push_button1.read());
-
   // Take a snapshot of isr values and reset isr_count
   IsrStatus _isr_status;
   __disable_irq();
@@ -188,11 +184,8 @@ void loop() {
   }
   __enable_irq();
 
-  //digitalWriteFast(LED1, true);
 
   static char buffer[200];
-  //tft.fillScreen(ST7735_BLACK);
-
   tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
 
   const int x0 = 25;
@@ -231,17 +224,7 @@ void loop() {
   tft.setCursor(x0, y);
   sprintf(buffer, "STEPS  %6d",  _isr_status.full_steps);
   tft.print(buffer);
-  //Serial.println(buffer);
 
- // digitalWriteFast(LED1, false);
-
-  
-
-  
-
-
-  // Print snapshot
-  //static uint32_t last_isr_count = 0;
 
   if (1) {
     sprintf(buffer, "[%lu][%d][e:%lu] [%5d, %5d] [e:%d %lu] s:%d  steps:%d ",
@@ -273,26 +256,16 @@ void loop() {
 //    last_capture_full = new_capture_full;
 //  }
 
-
-  //digitalWriteFast(LED2, _isr_status.quadrature_errors);
-
-
-
-  //last_isr_count = _isr_status.isr_count;
-
-  adc->printError();  // Print adc errors, if any
- 
+  adc.printError();  // Print adc errors, if any
 }
 
-void adc0_isr(void) {
-  digitalWriteFast(LED3, true);
+//adc0_isr;
 
-  static ADC::Sync_result result;
+// Called from isr
+void isr_process_adc_result(ADC::Sync_result& result) {
 
-  // Get the latest values of the two channels respectivly.
   // The casting to uint1_t is required only with 16 bit conversion
   // to make sure the MSB bit is not signed extended to the 32bit ints.
-  result = adc->readSynchronizedContinuous();
   const int v1 = ((int)((uint16_t)result.result_adc0)) - VAL1_OFFSET;
   const int v2 = ((int)((uint16_t)result.result_adc1)) - VAL2_OFFSET;
 
@@ -375,6 +348,5 @@ void adc0_isr(void) {
     }
   }
 
-  digitalWriteFast(LED3, false);
 
 }
