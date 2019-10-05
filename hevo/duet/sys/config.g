@@ -30,17 +30,15 @@ M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
 
 ; Based on:
 ; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
+; Sets:
+;   M566 ....    ; max jerk
+;   M201 ....    ; max acceleration 
 M98 P"/sys/mode_normal.g"
 
-;M566 X300 Y300 Z100 E3000    ; Set maximum instantaneous speed changes (mm/min) (jerk)
-;M201 X6000 Y6000 Z60  E9000    ; Set maximum accelerations (mm/s^2)
-
 ; Note: too fast E speed may skip steps
-M203 X15000 Y15000 Z3000 E3000                        	; Set maximum speeds (mm/min)
-M204 P1000 T3000					; Set printing and travel accelerations
-;M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
-;M906 X1500 Y1500 Z1500 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
-M906 X1500 Y1500 Z1500 E1200 I30             ; Set motor currents (mA) and motor idle factor in per cent
+M203 X15000 Y15000 Z3000 E3000                ; Set maximum speeds (mm/min)
+M204 P1000 T3000			      ; Set printing and travel accelerations
+M906 X1500 Y1500 Z1500 E1200 I30              ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
@@ -73,8 +71,6 @@ M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and t
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
-;G31 P500 X20.5 Y12.9 Z1.400                   ; Set Z probe trigger value, offset and trigger height
-;G31 P500 X23.5 Y22.9 Z1.500                   ; Set Z probe trigger value, offset and trigger height
 G31 P500 X20.5 Y12.9 Z1.450                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
@@ -93,8 +89,6 @@ G10 P0 X0 Y0 Z0                              ; Set tool 0 axis offsets
 G10 P0 R0 S0                                 ; Set initial tool 0 active and standby temperatures to 0C
 
 ; Leveling
-;M671 X26:266:266:26 Y29:29:269:269 P0.7      ; positions of adjustment screws
-;M671 X29:269:269:29 Y39:39:279:279 P0.7      ; positions of adjustment screws
 M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
 
 M557 X23:279 Y30:286 S32                     ; Define mesh grid
