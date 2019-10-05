@@ -25,8 +25,8 @@ M569 P2 S1                                    ; Drive 2 goes forwards
 M569 P3 S1                                    ; Drive 3 goes forwards
 M350 X16 Y16 Z16 E16 I1                       ; Configure microstepping with interpolation
 
-;M92 X200.00 Y200.00 Z400.00 E415.0            ; Set micrsteps per mm
-M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
+;M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
+M92 X200.00 Y200.00 Z400.00 E415.0            ; Set microsteps per mm
 
 ; Based on:
 ; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
@@ -35,12 +35,12 @@ M98 P"/sys/mode_normal.g"
 ;M566 X300 Y300 Z100 E3000    ; Set maximum instantaneous speed changes (mm/min) (jerk)
 ;M201 X6000 Y6000 Z60  E9000    ; Set maximum accelerations (mm/s^2)
 
-
-M203 X15000 Y15000 Z3000 E15000                        	; Set maximum speeds (mm/min)
+; Note: too fast E speed may skip steps
+M203 X15000 Y15000 Z3000 E3000                        	; Set maximum speeds (mm/min)
 M204 P1000 T3000					; Set printing and travel accelerations
 ;M906 X1000 Y1000 Z1000 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
 ;M906 X1500 Y1500 Z1500 E1000 I30             ; Set motor currents (mA) and motor idle factor in per cent
-M906 X1500 Y1500 Z1500 E750 I30             ; Set motor currents (mA) and motor idle factor in per cent
+M906 X1500 Y1500 Z1500 E1200 I30             ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
 
 ; Axis Limits
