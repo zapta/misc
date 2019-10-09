@@ -9,6 +9,26 @@
 
 namespace acquisition {
 
+struct CalibrationData {
+  int offset1;
+  int offset2;
+};
+
+enum CaptureState {
+  CAPTURE_IDLE,
+  CAPTURE_ACTIVE,
+  CAPTURE_READY
+};
+
+const int CAPTURE_SIZE = 500;
+
+struct CaptureItem {
+  int16_t v1;
+  int16_t v2;
+};
+
+extern CaptureItem capture_buffer[CAPTURE_SIZE];
+
 enum Direction {
   UNKNOWN_DIRECTION,
   FORWARD,
@@ -27,20 +47,21 @@ struct HistogramBucket {
 struct State {
   public:
     State() :
-      isr_count(0), adc_val1(0), adc_val2(0),
-      is_energized(false), non_energized_count(0), quadrant(0), 
-      full_steps(0), quadrature_errors(0),  
+      isr_count(0), display_v1(0), display_v2(0),
+      is_energized(false), non_energized_count(0), quadrant(0),
+      full_steps(0), quadrature_errors(0), sampling_errors(0),
       last_step_direction(UNKNOWN_DIRECTION), max_current_in_step(0), ticks_in_step(0) {
-      memset(buckets, 0, sizeof(buckets)); 
+      memset(buckets, 0, sizeof(buckets));
     }
-    
+
     // Number of isr invocactions so far. Overlofw is normal.
     uint32_t isr_count;
-    // Signed adc current readings. For a 200mv/A current sensor, units
-    // are (0.2V * 4095)/3.3V = 248 counts/A.
-    int  adc_val1;
-    int  adc_val2;
+    // Slow filtered values of v1, v2, in adc count units.
+    int  display_v1;
+    int  display_v2;
+    // True if coils are energized.
     bool is_energized;
+    // Number of times coils were deenergized.
     uint32_t non_energized_count;
     // The current quadrant, one of [0, 1, 2, 3]. Each quadrant
     // represents half of a full step.
@@ -49,6 +70,8 @@ struct State {
     int full_steps;
     // Total invalid quadrant transitions. Normally 0.
     uint32_t quadrature_errors;
+    // Number of ticks DAC results were not ready
+    uint32_t sampling_errors;
     //int capture_size;
     // for tracking step speed
     Direction last_step_direction;
@@ -59,8 +82,14 @@ struct State {
     HistogramBucket buckets[NUM_BUCKETS];
 };
 
+extern CaptureState capture_state();
+
+extern void start_capture(int divider);
+
+extern void capture_done();
+
 // Called once during program setup.
-extern void setup();
+extern void setup(CalibrationData& calibration_data);
 
 // Return a copy of the acquision state.
 extern void get_state(State* state);
@@ -73,6 +102,9 @@ extern int adc_value_to_milliamps(int adc_value);
 
 // Convert adc value to amps.
 extern float adc_value_to_amps(int adc_value);
+
+extern void calibrate_zeros(CalibrationData* calibration_data);
+
 
 }  // namespace acquisition
 

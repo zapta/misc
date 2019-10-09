@@ -4,12 +4,28 @@
 #define IO_H
 
 #include <arduino.h>
-#include <Bounce.h>
+#include <Bounce2.h>
+#include <elapsedMillis.h>
+
 
 namespace io {
 
-extern Bounce push_button1;
-extern Bounce push_button2;
+class Button {
+  public:
+    Button(int pin, int interval);
+    void update();
+    bool is_click();
+    bool is_long_press();
+  private:
+    Bounce _bounce;
+    elapsedMillis _elapsed_since_fell;
+    bool _is_click;
+    bool _is_long_press;
+    bool _long_press_armed;
+};
+
+extern Button button1;
+extern Button button2;
 
 const int LED1_PIN = 1;
 const int LED2_PIN = 2;
@@ -18,11 +34,11 @@ const int LED3_PIN = 3;
 // --- LED1
 
 inline void set_led1() {
-  digitalWriteFast(LED1_PIN, 0);
+  digitalWriteFast(LED1_PIN, 1);
 }
 
 inline void reset_led1() {
-  digitalWriteFast(LED1_PIN, 1);
+  digitalWriteFast(LED1_PIN, 0);
 }
 
 inline void toggle_led1() {
@@ -32,11 +48,11 @@ inline void toggle_led1() {
 // --- LED2
 
 inline void set_led2() {
-  digitalWriteFast(LED2_PIN, 0);
+  digitalWriteFast(LED2_PIN, 1);
 }
 
 inline void reset_led2() {
-  digitalWriteFast(LED2_PIN, 1);
+  digitalWriteFast(LED2_PIN, 0);
 }
 
 inline void toggle_led2() {
@@ -46,11 +62,11 @@ inline void toggle_led2() {
 // --- LED3
 
 inline void set_led3() {
-  digitalWriteFast(LED3_PIN, 0);
+  digitalWriteFast(LED3_PIN, 1);
 }
 
 inline void reset_led3() {
-  digitalWriteFast(LED3_PIN, 1);
+  digitalWriteFast(LED3_PIN, 0);
 }
 
 inline void toggle_led3() {

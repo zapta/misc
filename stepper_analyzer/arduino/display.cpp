@@ -90,18 +90,24 @@ static void update_info_screen(const acquisition::State& state, bool full_redraw
     tft.fillScreen(ST7735_BLACK);
   }
 
+  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
+  tft.setCursor(123, 152);
+  tft.print("1");
+
+  tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
+
   tft.setCursor(0, 10);
   const int x0 = 25;
   const int dy = 20;
   int y = 20;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "A      %6.2f",  acquisition::adc_value_to_amps(state.adc_val1));
+  sprintf(buffer, "A      %6.2f",  acquisition::adc_value_to_amps(state.display_v1));
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "B      %6.2f",  acquisition::adc_value_to_amps(state.adc_val2));
+  sprintf(buffer, "B      %6.2f",  acquisition::adc_value_to_amps(state.display_v2));
   tft.print(buffer);
   y += dy;
 
@@ -126,14 +132,24 @@ static void update_info_screen(const acquisition::State& state, bool full_redraw
   tft.setCursor(x0, y);
   sprintf(buffer, "STEPS  %6d",  state.full_steps);
   tft.print(buffer);
+
+//  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
+//  tft.setCursor(10, 10);
+  //tft.print(test++);
+//
+ // tft.setCursor(30, 10);
+ // tft.print(state.isr_count);
 }
 
 static void update_time_histogram_screen(const acquisition::State& state, bool full_redraw) {
   if (full_redraw) {
     tft.fillScreen(ST7735_BLACK);
   }
-  tft.setCursor(80, 120);
-  tft.print("Screen 2");
+
+  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
+  tft.setCursor(123, 152);
+  tft.print("2");
+  
   for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
     histogram_buffer[i] = state.buckets[i].total_ticks_in_steps;
   }
@@ -144,8 +160,11 @@ static void update_amps_histogram_screen(const acquisition::State& state, bool f
   if (full_redraw) {
     tft.fillScreen(ST7735_BLACK);
   }
-  tft.setCursor(80, 120);
-  tft.print("Screen 3");
+  
+  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
+  tft.setCursor(123, 152);
+  tft.print("3");
+  
   // copy values to buffer
   for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
     const acquisition::HistogramBucket& bucket = state.buckets[i];
