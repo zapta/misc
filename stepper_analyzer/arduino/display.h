@@ -14,10 +14,10 @@ namespace display {
 // Called once from main setup().
 extern void setup();
 
-// Called at fixed intervals.
-extern void update_screen(const acquisition::State& state);
-
-extern void next_screen();
+extern void draw_info_screen(acquisition::State& acq_state, bool full_redraw);
+extern void draw_time_histogram_screen(acquisition::State& acq_state, bool full_redraw);
+extern void draw_amps_histogram_screen(acquisition::State& acq_state, bool full_redraw);
+extern void draw_signals_screen(acquisition::CaptureBuffer& signals, bool signals_change);
 
 }  // namespace display
 

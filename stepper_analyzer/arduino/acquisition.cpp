@@ -59,17 +59,16 @@ namespace isr_data {
   static int capture_size;
   static uint32_t capture_divider;
   static uint32_t capture_tick_counter;
-  static CaptureState capture_state_var = CAPTURE_IDLE;
+  static bool capture_active;
+  static CaptureBuffer capture_buffer;
 }  // namespace isr_data
 
-// NOTE: this is excluded from isr_data because it's reffered to externally.
-CaptureItem capture_buffer[CAPTURE_SIZE];
 
-extern CaptureState capture_state() {
-  CaptureState result;
+extern bool is_capture_ready() {
+  bool result;
   __disable_irq();
   {
-    result = isr_data::capture_state_var;
+    result = !isr_data::capture_active;
   }
   __enable_irq();
   return result;
@@ -89,20 +88,20 @@ extern void start_capture(int divider) {
     isr_data::capture_size = 0;
     isr_data::capture_divider = (uint32_t)divider;
     isr_data::capture_tick_counter = 0;
-    isr_data::capture_state_var = CAPTURE_ACTIVE;
+    isr_data::capture_active = true;
   }
   __enable_irq();
 }
 
-extern void capture_done() {
+
+void get_capture(CaptureBuffer* buffer) {
   __disable_irq();
   {
-    isr_data::capture_state_var = CAPTURE_IDLE;
+    *buffer = isr_data::capture_buffer;
   }
-  __enable_irq();
-  io::reset_led2();
-
+  __enable_irq();  
 }
+
 
 // Return a copy of the acquision state.
 void get_state(State* state) {
@@ -146,6 +145,49 @@ void calibrate_zeros(CalibrationData* calibration_data) {
   __enable_irq();
 }
 
+static char buffer[200];
+
+void dump_state(const State& acq_state) {
+  static uint32_t last_isr_count = 0;
+
+  sprintf(buffer, "[%lu][er:%lu|%lu] [%5d, %5d] [en:%d %lu] s:%d/%d  steps:%d",
+          acq_state.isr_count - last_isr_count,
+          acq_state.sampling_errors, acq_state.quadrature_errors,
+          acq_state.display_v1, acq_state.display_v2, acq_state.is_energized, acq_state.non_energized_count,
+          acq_state.quadrant, acq_state.last_step_direction,  acq_state.full_steps);
+  last_isr_count = acq_state.isr_count;
+  Serial.println(buffer);
+
+  for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
+    Serial.print(acq_state.buckets[i].total_ticks_in_steps);
+    Serial.print(" ");
+  }
+  Serial.println();
+
+  for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
+    if (!acq_state.buckets[i].total_steps) {
+      Serial.print(0);
+    } else {
+      Serial.print((uint32_t)(acq_state.buckets[i].total_step_peak_currents / acq_state.buckets[i].total_steps));
+    }
+    Serial.print(" ");
+  }
+  Serial.println();
+}
+
+// Assumed to be in READY state.
+ void dump_capture(const CaptureBuffer& buffer) {
+  for (int i = 0; i < acquisition::CAPTURE_SIZE; i++) {
+    const acquisition::CaptureItem& item =buffer.items[i];
+    Serial.print(-15);
+    Serial.print(' ');
+    Serial.print(item.v1);
+    Serial.print(' ');
+    Serial.print(item.v2);
+    Serial.print(' ');
+    Serial.println(15);
+  }
+}
 
 // Maybe add step's information to the histogram.
 // Called from isr when existing a step.
@@ -195,16 +237,16 @@ inline void isr_process_adc_results(int adc1_reading, int adc2_reading) {
   isr_data::isr_state.display_v2 = (int)display2_filter.update(raw_v2);
 
   // Hangle capturing.
-  if (isr_data::capture_state_var == CAPTURE_ACTIVE) {
+  if (isr_data::capture_active) {
     if (isr_data::capture_size < CAPTURE_SIZE) {
       if ((isr_data::capture_tick_counter++ % isr_data::capture_divider) == 0) {
-        CaptureItem& item = capture_buffer[isr_data::capture_size++];
+        CaptureItem& item = isr_data::capture_buffer.items[isr_data::capture_size++];
         item.v1 = (int16_t)v1;
         item.v2 = (int16_t)v2;
       }
     }
     if (isr_data::capture_size >= CAPTURE_SIZE) {
-      isr_data::capture_state_var = CAPTURE_READY;
+      isr_data::capture_active = false;
       io::reset_led2();
     }
   }

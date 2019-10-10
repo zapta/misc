@@ -14,20 +14,17 @@ struct CalibrationData {
   int offset2;
 };
 
-enum CaptureState {
-  CAPTURE_IDLE,
-  CAPTURE_ACTIVE,
-  CAPTURE_READY
-};
 
-const int CAPTURE_SIZE = 500;
+const int CAPTURE_SIZE = 128;
 
 struct CaptureItem {
   int16_t v1;
   int16_t v2;
 };
 
-extern CaptureItem capture_buffer[CAPTURE_SIZE];
+struct CaptureBuffer {
+  CaptureItem items[CAPTURE_SIZE];
+};
 
 enum Direction {
   UNKNOWN_DIRECTION,
@@ -82,11 +79,17 @@ struct State {
     HistogramBucket buckets[NUM_BUCKETS];
 };
 
-extern CaptureState capture_state();
+extern void dump_state(const State& acq_state);
+extern void dump_capture(const CaptureBuffer& capture_buffer );
+
+
+extern bool is_capture_ready();
+
+extern void get_capture(CaptureBuffer* buffer);
 
 extern void start_capture(int divider);
 
-extern void capture_done();
+extern void stop_capture();
 
 // Called once during program setup.
 extern void setup(CalibrationData& calibration_data);

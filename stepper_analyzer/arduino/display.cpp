@@ -16,65 +16,40 @@ namespace display {
 
 static ST7735_t3 tft(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
-enum ScreenId {
-  INFO_SCREEN,
-  TIME_HISTOGRAM_SCREEN,
-  AMPS_HISTOGRAM_SCREEN
-};
-
-static ScreenId screen_id = INFO_SCREEN;
-
 static uint64_t histogram_buffer[acquisition::NUM_BUCKETS] = {};
-
-// Indicates that screen changed and needs full redraw.
-static bool needs_full_redraw = true;
 
 // Draw an histogram from the data histogram_buffer.
 static void draw_histogram_buffer() {
-    // Determine full scale value
-    uint64_t full_scale = 1;
-    for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
-      if (histogram_buffer[i] > full_scale) {
-        full_scale = histogram_buffer[i];
-      }
+  // Determine full scale value
+  uint64_t full_scale = 1;
+  for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
+    if (histogram_buffer[i] > full_scale) {
+      full_scale = histogram_buffer[i];
+    }
+  }
+
+  // Draw
+  for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
+    const uint64_t value = histogram_buffer[i];
+    // TODO: change the bar length calculation to round fraction of pixels up.
+    int bar_length = (100 * value) / full_scale;
+    if (value > 0 && bar_length < 1) {
+      bar_length = 1;
     }
 
-    // Draw 
-    for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
-      const uint64_t value = histogram_buffer[i];
-      // TODO: change the bar length calculation to round fraction of pixels up.
-      int bar_length = (100 * value) / full_scale;
-      if (value > 0 && bar_length < 1) {
-        bar_length = 1;
-      }
-
-      // Buckets are drawen buttom up on the screen.
-      const int x0 =  10;
-      const int y = 3 + (acquisition::NUM_BUCKETS - i) * 7;
-      // First x, y is 0,0 (upper left corner).
-      if (bar_length > 0) {
-        tft.fillRect(x0, y , bar_length, 6, ST7735_YELLOW);
-        tft.fillRect(x0 + bar_length, y , 100 - bar_length, 6, ST7735_BLACK);
-      } else {
-        // Bar of length 1 in a neutral color
-        tft.fillRect(x0, y , 1, 6, ST7735_BLUE);  // TODO: make gray
-        tft.fillRect(x0 + 1, y , 100 - 1, 6, ST7735_BLACK);  
-      }
-    }  
-}
-
-//void update_display(const acquisition::State& state) {
-//}
-
-void next_screen() {
-  // Increment the screen id, wrapping around if at end.
-  // Screen will be painted in next update.
-  if (screen_id == AMPS_HISTOGRAM_SCREEN) {
-    screen_id = INFO_SCREEN;
-  } else {
-    screen_id=(ScreenId)((int)screen_id+1);
+    // Buckets are drawen buttom up on the screen.
+    const int x0 =  10;
+    const int y = 3 + (acquisition::NUM_BUCKETS - i) * 7;
+    // First x, y is 0,0 (upper left corner).
+    if (bar_length > 0) {
+      tft.fillRect(x0, y , bar_length, 6, ST7735_YELLOW);
+      tft.fillRect(x0 + bar_length, y , 100 - bar_length, 6, ST7735_BLACK);
+    } else {
+      // Bar of length 1 in a neutral color
+      tft.fillRect(x0, y , 1, 6, ST7735_BLUE);  // TODO: make gray
+      tft.fillRect(x0 + 1, y , 100 - 1, 6, ST7735_BLACK);
+    }
   }
-  needs_full_redraw = true;
 }
 
 void setup() {
@@ -85,7 +60,7 @@ void setup() {
 
 static char buffer[200] = {};
 
-static void update_info_screen(const acquisition::State& state, bool full_redraw) {
+void draw_info_screen(acquisition::State& acq_state, bool full_redraw) {
   if (full_redraw) {
     tft.fillScreen(ST7735_BLACK);
   }
@@ -102,46 +77,39 @@ static void update_info_screen(const acquisition::State& state, bool full_redraw
   int y = 20;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "A      %6.2f",  acquisition::adc_value_to_amps(state.display_v1));
+  sprintf(buffer, "A      %6.2f",  acquisition::adc_value_to_amps(acq_state.display_v1));
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "B      %6.2f",  acquisition::adc_value_to_amps(state.display_v2));
+  sprintf(buffer, "B      %6.2f",  acquisition::adc_value_to_amps(acq_state.display_v2));
   tft.print(buffer);
   y += dy;
 
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "ERRORS %6lu",  state.quadrature_errors);
+  sprintf(buffer, "ERRORS %6lu",  acq_state.quadrature_errors);
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "POWER     %s",  state.is_energized? " ON" : "OFF");
+  sprintf(buffer, "POWER     %s",  acq_state.is_energized ? " ON" : "OFF");
   tft.print(buffer);
   y += dy;
 
   tft.setCursor(x0, y);
-  sprintf(buffer, "IDLES  %6lu",  state.non_energized_count);
+  sprintf(buffer, "IDLES  %6lu",  acq_state.non_energized_count);
   tft.print(buffer);
   y += dy;
 
   tft.setTextColor(ST7735_YELLOW, ST7735_BLACK);
   y += dy;
   tft.setCursor(x0, y);
-  sprintf(buffer, "STEPS  %6d",  state.full_steps);
+  sprintf(buffer, "STEPS  %6d",  acq_state.full_steps);
   tft.print(buffer);
-
-//  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
-//  tft.setCursor(10, 10);
-  //tft.print(test++);
-//
- // tft.setCursor(30, 10);
- // tft.print(state.isr_count);
 }
 
-static void update_time_histogram_screen(const acquisition::State& state, bool full_redraw) {
+void draw_time_histogram_screen(acquisition::State& acq_state, bool full_redraw) {
   if (full_redraw) {
     tft.fillScreen(ST7735_BLACK);
   }
@@ -149,25 +117,25 @@ static void update_time_histogram_screen(const acquisition::State& state, bool f
   tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
   tft.setCursor(123, 152);
   tft.print("2");
-  
+
   for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
-    histogram_buffer[i] = state.buckets[i].total_ticks_in_steps;
+    histogram_buffer[i] = acq_state.buckets[i].total_ticks_in_steps;
   }
   draw_histogram_buffer();
 }
 
-static void update_amps_histogram_screen(const acquisition::State& state, bool full_redraw) {
-  if (full_redraw) {
+void draw_amps_histogram_screen(acquisition::State& acq_state, bool full_draw) {
+  if (full_draw) {
     tft.fillScreen(ST7735_BLACK);
   }
-  
+ 
   tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
   tft.setCursor(123, 152);
   tft.print("3");
-  
+
   // copy values to buffer
   for (int i = 0; i < acquisition::NUM_BUCKETS; i++) {
-    const acquisition::HistogramBucket& bucket = state.buckets[i];
+    const acquisition::HistogramBucket& bucket = acq_state.buckets[i];
     if (bucket.total_steps == 0) {
       histogram_buffer[i] = 0;
     } else {
@@ -178,22 +146,35 @@ static void update_amps_histogram_screen(const acquisition::State& state, bool f
   draw_histogram_buffer();
 }
 
-void update_screen(const acquisition::State& state) {
-  switch (screen_id) {
-    case INFO_SCREEN:
-      update_info_screen(state, needs_full_redraw);
-      break;
-    case TIME_HISTOGRAM_SCREEN:
-      update_time_histogram_screen(state, needs_full_redraw);
-      break;
-    case AMPS_HISTOGRAM_SCREEN:
-      update_amps_histogram_screen(state, needs_full_redraw);
-      break;
-    default:
-      tft.fillScreen(ST7735_RED);
-      break;
+void draw_signals_screen(acquisition::CaptureBuffer& signals, bool signals_changed) {
+ if (!signals_changed) {
+    return;
   }
-  needs_full_redraw = false;
+  
+  tft.fillScreen(ST7735_BLACK);
+
+  tft.setTextColor(ST7735_GREEN, ST7735_BLACK);
+  tft.setCursor(123, 152);
+  tft.print("4");
+
+  const int Y0 = 110;
+  const int K = 10;
+  tft.drawFastHLine(0, Y0, tft.width(), ST7735_WHITE);
+
+  int prev_y1 = Y0 - signals.items[0].v1 / K;
+  int prev_y2 = Y0 - signals.items[0].v2 / K;
+  for (int i = 1; i < 128; i++) {
+    int y1 = Y0 - signals.items[i].v1 / K;
+    int y2 = Y0 - signals.items[i].v2 / K;
+    tft.drawLine(i-1, prev_y1, i, y1, ST7735_GREEN);
+    tft.drawLine(i-1, prev_y2, i, y2, ST7735_RED);
+    prev_y1 = y1;
+    prev_y2 = y2;
+  }
+
+  
+  // TODO: draw signals 
 }
+
 
 }  // namespace display
