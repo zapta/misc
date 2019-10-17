@@ -22,9 +22,21 @@ K LED diode
 F ~
 $ENDCMP
 #
+$CMP MountingHole
+D Mounting Hole without connection
+K mounting hole
+F ~
+$ENDCMP
+#
 $CMP R_POT_US
 D Potentiometer, US symbol
 K resistor variable
+F ~
+$ENDCMP
+#
+$CMP SW_Push
+D Push button switch, generic, two pins
+K switch normally-open pushbutton push-button
 F ~
 $ENDCMP
 #

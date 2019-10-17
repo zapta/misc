@@ -1,4 +1,4 @@
-16305743857520896
+16319885505421747
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -72891,6 +72891,20 @@ varistor SIOV
 2
 2
 stepper_analyzer
+Allegro_QFN-12-10-1EP_3x3mm_P0.5mm
+Allegro Microsystems 12-Lead (10-Lead Populated) Quad Flat Pack, 3x3mm Body, 0.5mm Pitch (http://www.allegromicro.com/~/media/Files/Datasheets/ACS711-Datasheet.ashx)
+Allegro QFN 0.5
+0
+14
+10
+stepper_analyzer
+C_0603_1608Metric
+Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+capacitor
+0
+2
+2
+stepper_analyzer
 DIP-TFT
 6-lead though-hole mounted DIP package, row spacing 10.16 mm (400 mils), LongPads
 THT DIP DIL PDIP 2.54mm 10.16mm 400mil LongPads
@@ -72898,16 +72912,65 @@ THT DIP DIL PDIP 2.54mm 10.16mm 400mil LongPads
 12
 12
 stepper_analyzer
+LED_0603_1608Metric
+LED SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: http://www.tortai-tech.com/upload/download/2011102023233369053.pdf), generated with kicad-footprint-generator
+diode
+0
+2
+2
+stepper_analyzer
+Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical
+Molex KK-254 Interconnect System, old/engineering part number: AE-6410-04A example for new part number: 22-27-2041, 4 Pins (http://www.molex.com/pdm_docs/sd/022272021_sd.pdf), generated with kicad-footprint-generator
+connector Molex KK-254 side entry
+0
+4
+4
+stepper_analyzer
+MountingHole_3.2mm_M3_Pad
+Mounting Hole 3.2mm, M3
+mounting hole 3.2mm m3
+0
+1
+1
+stepper_analyzer
+PinHeader_1x03_P2.54mm_Vertical
+Through hole straight pin header, 1x03, 2.54mm pitch, single row
+Through hole pin header THT 1x03 2.54mm single row
+0
+3
+3
+stepper_analyzer
+Potentiometer_TT_P0915N
+http://www.ttelectronics.com/sites/default/files/download-files/Datasheet_PanelPot_P09xSeries.pdf
+potentiometer vertical TT P0915N single
+0
+5
+3
+stepper_analyzer
+R_0201_0603Metric
+Resistor SMD 0201 (0603 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: https://www.vishay.com/docs/20052/crcw0201e3.pdf), generated with kicad-footprint-generator
+resistor
+0
+4
+2
+stepper_analyzer
+SW_PUSH_6mm_H7.3mm
+tactile push button, 6x6mm e.g. PHAP33xx series, height=7.3mm
+tact sw push 6mm
+0
+4
+2
+stepper_analyzer
+TEENSY40
+6-lead though-hole mounted DIP package, row spacing 10.16 mm (400 mils), LongPads
+THT DIP DIL PDIP 2.54mm 10.16mm 400mil LongPads
+0
+33
+33
+stepper_analyzer
 TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded
 wire loop with bead as test point, loop diameter 1.8mm, hole diameter 1.0mm
 test point wire loop bead
 0
 1
 1
-stepper_analyzer
-UQFN-16-1EP_3x3mm_Pitch0.5mm
-16-Lead Ultra Thin Quad Flat, No Lead Package (UC) - 3x3x0.5 mm Body [UQFN]; (see Microchip Packaging Specification 00000049BS.pdf)
-QFN 0.5
-0
-10
-10

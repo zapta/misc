@@ -235,10 +235,10 @@ Wire Wire Line
 Wire Wire Line
 	4450 6550 4450 6600
 $Comp
-L stepper_analyzer:TestPoint TP3
+L stepper_analyzer:TestPoint TP6
 U 1 1 5DA4E91E
 P 4450 6200
-F 0 "TP3" H 4508 6318 50  0000 L CNN
+F 0 "TP6" H 4508 6318 50  0000 L CNN
 F 1 "TestPoint" H 4508 6227 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4650 6200 50  0001 C CNN
 F 3 "~" H 4650 6200 50  0001 C CNN
@@ -246,10 +246,10 @@ F 3 "~" H 4650 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:TestPoint TP2
+L stepper_analyzer:TestPoint TP5
 U 1 1 5DA4EE33
 P 4050 6200
-F 0 "TP2" H 4108 6318 50  0000 L CNN
+F 0 "TP5" H 4108 6318 50  0000 L CNN
 F 1 "TestPoint" H 4108 6227 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4250 6200 50  0001 C CNN
 F 3 "~" H 4250 6200 50  0001 C CNN
@@ -257,10 +257,10 @@ F 3 "~" H 4250 6200 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:TestPoint GND
+L stepper_analyzer:TestPoint TP3
 U 1 1 5DA4FBBB
 P 5200 6900
-F 0 "GND" H 5258 7018 50  0000 L CNN
+F 0 "TP3" H 5258 7018 50  0000 L CNN
 F 1 "TestPoint" H 5258 6927 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 5400 6900 50  0001 C CNN
 F 3 "~" H 5400 6900 50  0001 C CNN
@@ -268,10 +268,10 @@ F 3 "~" H 5400 6900 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:TestPoint TP1
+L stepper_analyzer:TestPoint TP4
 U 1 1 5DA275D6
 P 3650 6200
-F 0 "TP1" H 3708 6318 50  0000 L CNN
+F 0 "TP4" H 3708 6318 50  0000 L CNN
 F 1 "TestPoint" H 3708 6227 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 3850 6200 50  0001 C CNN
 F 3 "~" H 3850 6200 50  0001 C CNN
@@ -423,10 +423,10 @@ Wire Wire Line
 Wire Wire Line
 	3900 3150 3900 3100
 $Comp
-L stepper_analyzer:TestPoint CH2
+L stepper_analyzer:TestPoint TP1
 U 1 1 5DC6D323
 P 5100 3100
-F 0 "CH2" H 5158 3218 50  0000 L CNN
+F 0 "TP1" H 5158 3218 50  0000 L CNN
 F 1 "TestPoint" H 5158 3127 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 5300 3100 50  0001 C CNN
 F 3 "~" H 5300 3100 50  0001 C CNN
@@ -442,7 +442,7 @@ Wire Wire Line
 Wire Wire Line
 	3650 6200 3650 6250
 Text GLabel 5050 2500 2    50   Input ~ 0
-POT2
+POT1
 Text GLabel 7600 4500 2    50   Output ~ 0
 LED1
 Text GLabel 7600 4600 2    50   Output ~ 0
@@ -815,10 +815,10 @@ Connection ~ 4600 4050
 Wire Wire Line
 	3900 4050 4600 4050
 $Comp
-L stepper_analyzer:TestPoint CH1
+L stepper_analyzer:TestPoint TP2
 U 1 1 5DAAE84C
 P 4600 4050
-F 0 "CH1" H 4658 4168 50  0000 L CNN
+F 0 "TP2" H 4658 4168 50  0000 L CNN
 F 1 "TestPoint" H 4658 4077 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4800 4050 50  0001 C CNN
 F 3 "~" H 4800 4050 50  0001 C CNN
@@ -861,7 +861,7 @@ $EndComp
 Wire Wire Line
 	4150 3800 4200 3800
 Text GLabel 4200 3800 2    50   Input ~ 0
-POT1
+POT2
 Wire Wire Line
 	1950 4050 2100 4050
 Wire Wire Line
