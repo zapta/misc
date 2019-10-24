@@ -7,12 +7,13 @@
 
 namespace display {
 
-// Display is 1.8", portrait, 128 x 160.
+// Display is 1.8", portrait, 128 x 160. Pins are aruino logical 
+// pin numbers, not Teensy's physical pins.
 #define TFT_SCLK 13  // SCLK (also LED_BUILTIN so don't use it) Can be 14 on T3.2
 #define TFT_MOSI 11  // MOSI can also use pin 7
 #define TFT_CS   10  // CS & DC can use pins 2, 6, 9, 10, 15, 20, 21, 22, 23
 #define TFT_DC    9  //   but certain pairs must NOT be used: 2+10, 6+9, 20+23, 21+22
-#define TFT_RST   8  // RST can use any pin
+#define TFT_RST  14  // RST can use any pin
 
 static ST7735_t3 tft(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 

@@ -19,7 +19,7 @@ struct EepromData {
 // EEPROM address for storing configuration. This is an arbitrary value.
 static const uint32_t EEPROM_ADDRESS = 16;
 
-static int screen_num = 3;
+static int screen_num = 0;
 static bool full_redraw = true;
 
 static acquisition::State acq_state;
@@ -28,8 +28,6 @@ static int screen_updates_since_last_capture;
 static bool capture_pending;
 static acquisition::CaptureBuffer capture_buffer;
 static bool capture_changed = true;
-
-//static char buffer[300];
 
 
 static void next_screen() {
@@ -49,6 +47,7 @@ static void update_display() {
   switch (screen_num) {
     case 0:
       acquisition::get_state(&acq_state);
+      // acquisition::dump_state(acq_state);
       display::draw_info_screen(acq_state, full_redraw);
       break;
       
@@ -114,15 +113,19 @@ void setup() {
 
 void loop() {
 
+  static char buffer[300];
+
   // Display
   if (millis_since_display_update >= 250) {
-    Serial.print("Ready: "); Serial.print(acquisition::is_capture_ready()); Serial.print(" Pending: "); Serial.println(capture_pending);
     millis_since_display_update = 0;
     update_display();
+    sprintf(buffer, "Switches: %d %d %d %d", 
+      io::dip_switch1(),  io::dip_switch2(),  io::dip_switch3(),  io::dip_switch4());
+      Serial.println(buffer);
   }
 
   if (capture_pending && acquisition::is_capture_ready()) {
-    Serial.println("READY");
+    Serial.println("CAPTURE READY");
     acquisition::get_capture(&capture_buffer);
     //acquisition::dump_capture(capture_buffer);
     screen_updates_since_last_capture = 0;

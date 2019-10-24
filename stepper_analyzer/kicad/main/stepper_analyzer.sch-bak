@@ -78,7 +78,7 @@ U 1 1 5DA23C63
 P 5550 3100
 F 0 "R5" V 5345 3100 50  0000 C CNN
 F 1 "330R" V 5436 3100 50  0000 C CNN
-F 2 "stepper_analyzer:R_0201_0603Metric" H 5550 3100 50  0001 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 5550 3100 50  0001 C CNN
 F 3 "~" H 5550 3100 50  0001 C CNN
 	1    5550 3100
 	0    1    1    0   
@@ -86,24 +86,24 @@ $EndComp
 $Comp
 L Connector_Generic:Conn_01x04 J2
 U 1 1 5DA27E7D
-P 3100 1600
-F 0 "J2" V 3100 1850 50  0000 C CNN
-F 1 "Conn_01x04" H 3018 1826 50  0001 C CNN
-F 2 "stepper_analyzer:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical" H 3100 1600 50  0001 C CNN
-F 3 "~" H 3100 1600 50  0001 C CNN
-	1    3100 1600
-	0    1    -1   0   
+P 2400 1600
+F 0 "J2" V 2450 1250 50  0000 C CNN
+F 1 "Conn_01x04" H 2318 1826 50  0001 C CNN
+F 2 "stepper_analyzer:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical" H 2400 1600 50  0001 C CNN
+F 3 "~" H 2400 1600 50  0001 C CNN
+	1    2400 1600
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector_Generic:Conn_01x04 J1
 U 1 1 5DA29873
-P 1850 1600
-F 0 "J1" V 1850 1850 50  0000 C CNN
-F 1 "Conn_01x04" H 1768 1826 50  0001 C CNN
-F 2 "stepper_analyzer:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical" H 1850 1600 50  0001 C CNN
-F 3 "~" H 1850 1600 50  0001 C CNN
-	1    1850 1600
-	0    1    -1   0   
+P 1500 1600
+F 0 "J1" V 1550 1250 50  0000 C CNN
+F 1 "Conn_01x04" H 1418 1826 50  0001 C CNN
+F 2 "stepper_analyzer:Molex_KK-254_AE-6410-04A_1x04_P2.54mm_Vertical" H 1500 1600 50  0001 C CNN
+F 3 "~" H 1500 1600 50  0001 C CNN
+	1    1500 1600
+	0    -1   -1   0   
 $EndComp
 $Comp
 L Device:C_Small C5
@@ -119,34 +119,34 @@ $EndComp
 $Comp
 L stepper_analyzer:LED D1
 U 1 1 5DA1EAF1
-P 3650 6750
-F 0 "D1" V 3750 6650 50  0000 R CNN
-F 1 "LED" V 3650 6650 50  0000 R CNN
-F 2 "stepper_analyzer:LED_0603_1608Metric" H 3650 6750 50  0001 C CNN
-F 3 "~" H 3650 6750 50  0001 C CNN
-	1    3650 6750
+P 3600 6950
+F 0 "D1" V 3700 6850 50  0000 R CNN
+F 1 "LED" V 3600 6850 50  0000 R CNN
+F 2 "stepper_analyzer:LED_0603_1608Metric" H 3600 6950 50  0001 C CNN
+F 3 "~" H 3600 6950 50  0001 C CNN
+	1    3600 6950
 	0    -1   -1   0   
 $EndComp
 $Comp
 L stepper_analyzer:LED D2
 U 1 1 5DA1F8F0
-P 4050 6750
-F 0 "D2" V 4150 6650 50  0000 R CNN
-F 1 "LED" V 4050 6650 50  0000 R CNN
-F 2 "stepper_analyzer:LED_0603_1608Metric" H 4050 6750 50  0001 C CNN
-F 3 "~" H 4050 6750 50  0001 C CNN
-	1    4050 6750
+P 4000 6950
+F 0 "D2" V 4100 6850 50  0000 R CNN
+F 1 "LED" V 4000 6850 50  0000 R CNN
+F 2 "stepper_analyzer:LED_0603_1608Metric" H 4000 6950 50  0001 C CNN
+F 3 "~" H 4000 6950 50  0001 C CNN
+	1    4000 6950
 	0    -1   -1   0   
 $EndComp
 $Comp
 L stepper_analyzer:LED D3
 U 1 1 5DA2009A
-P 4450 6750
-F 0 "D3" V 4550 6650 50  0000 R CNN
-F 1 "LED" V 4450 6650 50  0000 R CNN
-F 2 "stepper_analyzer:LED_0603_1608Metric" H 4450 6750 50  0001 C CNN
-F 3 "~" H 4450 6750 50  0001 C CNN
-	1    4450 6750
+P 4400 6950
+F 0 "D3" V 4500 6850 50  0000 R CNN
+F 1 "LED" V 4400 6850 50  0000 R CNN
+F 2 "stepper_analyzer:LED_0603_1608Metric" H 4400 6950 50  0001 C CNN
+F 3 "~" H 4400 6950 50  0001 C CNN
+	1    4400 6950
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -165,136 +165,136 @@ Wire Wire Line
 $Comp
 L Device:R_Small_US R1
 U 1 1 5DA26AF3
-P 3650 6450
-F 0 "R1" H 3550 6500 50  0000 C CNN
-F 1 "3K" H 3550 6400 50  0000 C CNN
-F 2 "stepper_analyzer:R_0201_0603Metric" H 3650 6450 50  0001 C CNN
-F 3 "~" H 3650 6450 50  0001 C CNN
-	1    3650 6450
+P 3600 6650
+F 0 "R1" H 3500 6700 50  0000 C CNN
+F 1 "3K" H 3500 6600 50  0000 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 3600 6650 50  0001 C CNN
+F 3 "~" H 3600 6650 50  0001 C CNN
+	1    3600 6650
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R_Small_US R2
 U 1 1 5DA27BEB
-P 4050 6450
-F 0 "R2" H 3950 6500 50  0000 C CNN
-F 1 "3K" H 3950 6400 50  0000 C CNN
-F 2 "stepper_analyzer:R_0201_0603Metric" H 4050 6450 50  0001 C CNN
-F 3 "~" H 4050 6450 50  0001 C CNN
-	1    4050 6450
+P 4000 6650
+F 0 "R2" H 3900 6700 50  0000 C CNN
+F 1 "3K" H 3900 6600 50  0000 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 4000 6650 50  0001 C CNN
+F 3 "~" H 4000 6650 50  0001 C CNN
+	1    4000 6650
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R_Small_US R3
 U 1 1 5DA284F9
-P 4450 6450
-F 0 "R3" H 4350 6500 50  0000 C CNN
-F 1 "3K" H 4350 6400 50  0000 C CNN
-F 2 "stepper_analyzer:R_0201_0603Metric" H 4450 6450 50  0001 C CNN
-F 3 "~" H 4450 6450 50  0001 C CNN
-	1    4450 6450
+P 4400 6650
+F 0 "R3" H 4300 6700 50  0000 C CNN
+F 1 "3K" H 4300 6600 50  0000 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 4400 6650 50  0001 C CNN
+F 3 "~" H 4400 6650 50  0001 C CNN
+	1    4400 6650
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR08
 U 1 1 5DA2951D
-P 3650 6950
-F 0 "#PWR08" H 3650 6700 50  0001 C CNN
-F 1 "GND" H 3654 6795 50  0000 C CNN
-F 2 "" H 3650 6950 50  0001 C CNN
-F 3 "" H 3650 6950 50  0001 C CNN
-	1    3650 6950
+P 3600 7150
+F 0 "#PWR08" H 3600 6900 50  0001 C CNN
+F 1 "GND" H 3604 6995 50  0000 C CNN
+F 2 "" H 3600 7150 50  0001 C CNN
+F 3 "" H 3600 7150 50  0001 C CNN
+	1    3600 7150
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR011
 U 1 1 5DA29ADC
-P 4050 6950
-F 0 "#PWR011" H 4050 6700 50  0001 C CNN
-F 1 "GND" H 4054 6795 50  0000 C CNN
-F 2 "" H 4050 6950 50  0001 C CNN
-F 3 "" H 4050 6950 50  0001 C CNN
-	1    4050 6950
+P 4000 7150
+F 0 "#PWR011" H 4000 6900 50  0001 C CNN
+F 1 "GND" H 4004 6995 50  0000 C CNN
+F 2 "" H 4000 7150 50  0001 C CNN
+F 3 "" H 4000 7150 50  0001 C CNN
+	1    4000 7150
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR013
 U 1 1 5DA29E0E
-P 4450 6950
-F 0 "#PWR013" H 4450 6700 50  0001 C CNN
-F 1 "GND" H 4454 6795 50  0000 C CNN
-F 2 "" H 4450 6950 50  0001 C CNN
-F 3 "" H 4450 6950 50  0001 C CNN
-	1    4450 6950
+P 4400 7150
+F 0 "#PWR013" H 4400 6900 50  0001 C CNN
+F 1 "GND" H 4404 6995 50  0000 C CNN
+F 2 "" H 4400 7150 50  0001 C CNN
+F 3 "" H 4400 7150 50  0001 C CNN
+	1    4400 7150
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3650 6550 3650 6600
+	3600 6750 3600 6800
 Wire Wire Line
-	4050 6550 4050 6600
+	4000 6750 4000 6800
 Wire Wire Line
-	4450 6550 4450 6600
-$Comp
-L stepper_analyzer:TestPoint TP6
-U 1 1 5DA4E91E
-P 4450 6200
-F 0 "TP6" H 4508 6318 50  0000 L CNN
-F 1 "TestPoint" H 4508 6227 50  0001 L CNN
-F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4650 6200 50  0001 C CNN
-F 3 "~" H 4650 6200 50  0001 C CNN
-	1    4450 6200
-	1    0    0    -1  
-$EndComp
-$Comp
-L stepper_analyzer:TestPoint TP5
-U 1 1 5DA4EE33
-P 4050 6200
-F 0 "TP5" H 4108 6318 50  0000 L CNN
-F 1 "TestPoint" H 4108 6227 50  0001 L CNN
-F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4250 6200 50  0001 C CNN
-F 3 "~" H 4250 6200 50  0001 C CNN
-	1    4050 6200
-	1    0    0    -1  
-$EndComp
+	4400 6750 4400 6800
 $Comp
 L stepper_analyzer:TestPoint TP3
-U 1 1 5DA4FBBB
-P 5200 6900
-F 0 "TP3" H 5258 7018 50  0000 L CNN
-F 1 "TestPoint" H 5258 6927 50  0001 L CNN
-F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 5400 6900 50  0001 C CNN
-F 3 "~" H 5400 6900 50  0001 C CNN
-	1    5200 6900
+U 1 1 5DA4E91E
+P 4400 6400
+F 0 "TP3" H 4458 6518 50  0000 L CNN
+F 1 "TestPoint" H 4458 6427 50  0001 L CNN
+F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4600 6400 50  0001 C CNN
+F 3 "~" H 4600 6400 50  0001 C CNN
+	1    4400 6400
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:TestPoint TP4
+L stepper_analyzer:TestPoint TP2
+U 1 1 5DA4EE33
+P 4000 6400
+F 0 "TP2" H 4058 6518 50  0000 L CNN
+F 1 "TestPoint" H 4058 6427 50  0001 L CNN
+F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4200 6400 50  0001 C CNN
+F 3 "~" H 4200 6400 50  0001 C CNN
+	1    4000 6400
+	1    0    0    -1  
+$EndComp
+$Comp
+L stepper_analyzer:TestPoint GND1
+U 1 1 5DA4FBBB
+P 4650 5250
+F 0 "GND1" H 4708 5368 50  0000 L CNN
+F 1 "TestPoint" H 4708 5277 50  0001 L CNN
+F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4850 5250 50  0001 C CNN
+F 3 "~" H 4850 5250 50  0001 C CNN
+	1    4650 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L stepper_analyzer:TestPoint TP1
 U 1 1 5DA275D6
-P 3650 6200
-F 0 "TP4" H 3708 6318 50  0000 L CNN
-F 1 "TestPoint" H 3708 6227 50  0001 L CNN
-F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 3850 6200 50  0001 C CNN
-F 3 "~" H 3850 6200 50  0001 C CNN
-	1    3650 6200
+P 3600 6400
+F 0 "TP1" H 3658 6518 50  0000 L CNN
+F 1 "TestPoint" H 3658 6427 50  0001 L CNN
+F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 3800 6400 50  0001 C CNN
+F 3 "~" H 3800 6400 50  0001 C CNN
+	1    3600 6400
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR014
 U 1 1 5DA6D6E8
-P 5200 6950
-F 0 "#PWR014" H 5200 6700 50  0001 C CNN
-F 1 "GND" H 5204 6795 50  0000 C CNN
-F 2 "" H 5200 6950 50  0001 C CNN
-F 3 "" H 5200 6950 50  0001 C CNN
-	1    5200 6950
+P 4650 5300
+F 0 "#PWR014" H 4650 5050 50  0001 C CNN
+F 1 "GND" H 4654 5145 50  0000 C CNN
+F 2 "" H 4650 5300 50  0001 C CNN
+F 3 "" H 4650 5300 50  0001 C CNN
+	1    4650 5300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3650 6900 3650 6950
+	3600 7100 3600 7150
 Wire Wire Line
-	4050 6900 4050 6950
+	4000 7100 4000 7150
 Wire Wire Line
-	4450 6900 4450 6950
+	4400 7100 4400 7150
 Wire Wire Line
 	4300 2500 4450 2500
 $Comp
@@ -328,83 +328,73 @@ Wire Wire Line
 $Comp
 L stepper_analyzer:R_POT_US RV2
 U 1 1 5DAF15AA
-P 2450 6750
-F 0 "RV2" H 2383 6796 50  0000 R CNN
-F 1 "10K" H 2383 6705 50  0000 R CNN
-F 2 "stepper_analyzer:Potentiometer_TT_P0915N" H 2450 6750 50  0001 C CNN
-F 3 "~" H 2450 6750 50  0001 C CNN
-	1    2450 6750
+P 2600 6950
+F 0 "RV2" H 2533 6996 50  0000 R CNN
+F 1 "10K" H 2533 6905 50  0000 R CNN
+F 2 "stepper_analyzer:Potentiometer_TT_P0915N" H 2600 6950 50  0001 C CNN
+F 3 "~" H 2600 6950 50  0001 C CNN
+	1    2600 6950
 	1    0    0    1   
 $EndComp
 $Comp
 L stepper_analyzer:R_POT_US RV1
 U 1 1 5DA459B5
-P 1550 6750
-F 0 "RV1" H 1483 6796 50  0000 R CNN
-F 1 "10K" H 1483 6705 50  0000 R CNN
-F 2 "stepper_analyzer:Potentiometer_TT_P0915N" H 1550 6750 50  0001 C CNN
-F 3 "~" H 1550 6750 50  0001 C CNN
-	1    1550 6750
+P 1700 6950
+F 0 "RV1" H 1633 6996 50  0000 R CNN
+F 1 "10K" H 1633 6905 50  0000 R CNN
+F 2 "stepper_analyzer:Potentiometer_TT_P0915N" H 1700 6950 50  0001 C CNN
+F 3 "~" H 1700 6950 50  0001 C CNN
+	1    1700 6950
 	1    0    0    1   
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR02
 U 1 1 5DB295C6
-P 1550 6950
-F 0 "#PWR02" H 1550 6700 50  0001 C CNN
-F 1 "GND" H 1554 6795 50  0000 C CNN
-F 2 "" H 1550 6950 50  0001 C CNN
-F 3 "" H 1550 6950 50  0001 C CNN
-	1    1550 6950
+P 1700 7150
+F 0 "#PWR02" H 1700 6900 50  0001 C CNN
+F 1 "GND" H 1704 6995 50  0000 C CNN
+F 2 "" H 1700 7150 50  0001 C CNN
+F 3 "" H 1700 7150 50  0001 C CNN
+	1    1700 7150
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:GND #PWR04
 U 1 1 5DB29E97
-P 2450 6950
-F 0 "#PWR04" H 2450 6700 50  0001 C CNN
-F 1 "GND" H 2454 6795 50  0000 C CNN
-F 2 "" H 2450 6950 50  0001 C CNN
-F 3 "" H 2450 6950 50  0001 C CNN
-	1    2450 6950
+P 2600 7150
+F 0 "#PWR04" H 2600 6900 50  0001 C CNN
+F 1 "GND" H 2604 6995 50  0000 C CNN
+F 2 "" H 2600 7150 50  0001 C CNN
+F 3 "" H 2600 7150 50  0001 C CNN
+	1    2600 7150
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:3V3 #PWR01
 U 1 1 5DB2A2D4
-P 1550 6550
-F 0 "#PWR01" H 1550 6400 50  0001 C CNN
-F 1 "3V3" H 1565 6723 50  0000 C CNN
-F 2 "" H 1550 6550 50  0001 C CNN
-F 3 "" H 1550 6550 50  0001 C CNN
-	1    1550 6550
+P 1700 6750
+F 0 "#PWR01" H 1700 6600 50  0001 C CNN
+F 1 "3V3" H 1715 6923 50  0000 C CNN
+F 2 "" H 1700 6750 50  0001 C CNN
+F 3 "" H 1700 6750 50  0001 C CNN
+	1    1700 6750
 	1    0    0    -1  
 $EndComp
 $Comp
 L stepper_analyzer:3V3 #PWR03
 U 1 1 5DB2AA08
-P 2450 6550
-F 0 "#PWR03" H 2450 6400 50  0001 C CNN
-F 1 "3V3" H 2465 6723 50  0000 C CNN
-F 2 "" H 2450 6550 50  0001 C CNN
-F 3 "" H 2450 6550 50  0001 C CNN
-	1    2450 6550
+P 2600 6750
+F 0 "#PWR03" H 2600 6600 50  0001 C CNN
+F 1 "3V3" H 2615 6923 50  0000 C CNN
+F 2 "" H 2600 6750 50  0001 C CNN
+F 3 "" H 2600 6750 50  0001 C CNN
+	1    2600 6750
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
 	5500 5250 5500 5300
 Wire Wire Line
 	5900 5250 5900 5300
-Wire Wire Line
-	3200 1800 3200 2000
-Wire Wire Line
-	3200 2000 1950 2000
-Wire Wire Line
-	1950 2000 1950 1800
-Wire Wire Line
-	3000 1800 3000 1900
-Wire Wire Line
-	1750 1900 1750 1800
 Wire Wire Line
 	6650 5200 6650 5250
 Wire Wire Line
@@ -417,16 +407,12 @@ Wire Wire Line
 Wire Wire Line
 	6950 5250 6800 5250
 Wire Wire Line
-	3100 1800 3100 2100
-Wire Wire Line
-	3100 2100 1950 2100
-Wire Wire Line
 	3900 3150 3900 3100
 $Comp
-L stepper_analyzer:TestPoint TP1
+L stepper_analyzer:TestPoint CH2
 U 1 1 5DC6D323
 P 5100 3100
-F 0 "TP1" H 5158 3218 50  0000 L CNN
+F 0 "CH2" H 5158 3218 50  0000 L CNN
 F 1 "TestPoint" H 5158 3127 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 5300 3100 50  0001 C CNN
 F 3 "~" H 5300 3100 50  0001 C CNN
@@ -436,62 +422,62 @@ $EndComp
 Wire Wire Line
 	5100 3100 5450 3100
 Wire Wire Line
-	4450 6200 4450 6250
+	4400 6400 4400 6450
 Wire Wire Line
-	4050 6200 4050 6250
+	4000 6400 4000 6450
 Wire Wire Line
-	3650 6200 3650 6250
+	3600 6400 3600 6450
 Text GLabel 5050 2500 2    50   Input ~ 0
-POT1
+POT2
 Text GLabel 7600 4500 2    50   Output ~ 0
 LED1
 Text GLabel 7600 4600 2    50   Output ~ 0
 LED2
 Text GLabel 7600 4700 2    50   Output ~ 0
 LED3
-Text GLabel 3600 6250 0    50   Input ~ 0
+Text GLabel 3550 6450 0    50   Input ~ 0
 LED1
-Text GLabel 4000 6250 0    50   Input ~ 0
+Text GLabel 3950 6450 0    50   Input ~ 0
 LED2
-Text GLabel 4400 6250 0    50   Input ~ 0
+Text GLabel 4350 6450 0    50   Input ~ 0
 LED3
-Text GLabel 2700 6750 2    50   Output ~ 0
+Text GLabel 2850 6950 2    50   Output ~ 0
 POT2
-Text GLabel 1800 6750 2    50   Output ~ 0
+Text GLabel 1950 6950 2    50   Output ~ 0
 POT1
 Wire Wire Line
-	1800 6750 1700 6750
+	1950 6950 1850 6950
 Wire Wire Line
-	2700 6750 2600 6750
-Text Notes 1800 1450 0    50   ~ 0
+	2850 6950 2750 6950
+Text Notes 1800 1650 0    50   ~ 0
 IN
-Text Notes 3000 1450 0    50   ~ 0
-IN
+Text Notes 2700 1650 0    50   ~ 0
+OUT
 Wire Wire Line
-	5200 6900 5200 6950
+	4650 5250 4650 5300
 Wire Wire Line
-	2450 6900 2450 6950
+	2600 7100 2600 7150
 Wire Wire Line
-	1550 6900 1550 6950
+	1700 7100 1700 7150
 Wire Wire Line
-	1550 6550 1550 6600
+	1700 6750 1700 6800
 Wire Wire Line
-	2450 6550 2450 6600
+	2600 6750 2600 6800
 Wire Wire Line
-	3600 6250 3650 6250
-Connection ~ 3650 6250
+	3550 6450 3600 6450
+Connection ~ 3600 6450
 Wire Wire Line
-	3650 6250 3650 6350
+	3600 6450 3600 6550
 Wire Wire Line
-	4000 6250 4050 6250
-Connection ~ 4050 6250
+	3950 6450 4000 6450
+Connection ~ 4000 6450
 Wire Wire Line
-	4050 6250 4050 6350
+	4000 6450 4000 6550
 Wire Wire Line
-	4400 6250 4450 6250
-Connection ~ 4450 6250
+	4350 6450 4400 6450
+Connection ~ 4400 6450
 Wire Wire Line
-	4450 6250 4450 6350
+	4400 6450 4400 6550
 Wire Wire Line
 	5750 3100 6100 3100
 Connection ~ 5750 3100
@@ -555,10 +541,6 @@ Wire Wire Line
 Wire Wire Line
 	5500 4650 5500 4850
 Wire Wire Line
-	1650 1800 1650 2450
-Wire Wire Line
-	1650 2450 3300 2450
-Wire Wire Line
 	4700 2650 4700 3100
 Wire Wire Line
 	4700 3100 5100 3100
@@ -568,18 +550,14 @@ Wire Wire Line
 $Comp
 L stepper_analyzer:Stepper_Motor_bipolar M1
 U 1 1 5DC305A6
-P 2450 1250
-F 0 "M1" H 2678 1315 50  0001 L CNN
-F 1 "Stepper_Motor_bipolar" H 2638 1283 50  0001 L CNN
-F 2 "" H 2460 1240 50  0001 C CNN
-F 3 "http://www.infineon.com/dgdl/Application-Note-TLE8110EE_driving_UniPolarStepperMotor_V1.1.pdf?fileId=db3a30431be39b97011be5d0aa0a00b0" H 2460 1240 50  0001 C CNN
-	1    2450 1250
+P 2300 1300
+F 0 "M1" H 2528 1365 50  0001 L CNN
+F 1 "Stepper_Motor_bipolar" H 2488 1333 50  0001 L CNN
+F 2 "stepper_analyzer:NO_PADS" H 2310 1290 50  0001 C CNN
+F 3 "" H 2310 1290 50  0001 C CNN
+	1    2300 1300
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	3300 2750 2900 2750
-Wire Wire Line
-	2900 2750 2900 1800
 $Comp
 L stepper_analyzer:3V3 #PWR0101
 U 1 1 5DAA3320
@@ -595,19 +573,19 @@ $Comp
 L stepper_analyzer:ACS70331 U2
 U 1 1 5DAA891F
 P 3900 2600
-F 0 "U2" H 3250 2350 50  0000 C CNN
-F 1 "ACS70331" H 3350 2200 50  0000 C CNN
+F 0 "U2" H 3400 3250 50  0000 C CNN
+F 1 "ACS70331EESATR-2P5U3" H 3300 3100 50  0000 C CNN
 F 2 "Sensor_Current:Allegro_QFN-12-10-1EP_3x3mm_P0.5mm" H 4300 2550 50  0001 L CIN
 F 3 "" H 3900 2600 50  0001 C CNN
 	1    3900 2600
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:Teensy4 U3
+L stepper_analyzer-rescue:Teensy4-stepper_analyzer U3
 U 1 1 5DAB0033
 P 6800 4200
 F 0 "U3" H 7250 3200 50  0000 C CNN
-F 1 "Teensy4" H 7300 3100 50  0000 C CNN
+F 1 "Teensy 4,0" H 7300 3100 50  0000 C CNN
 F 2 "stepper_analyzer:TEENSY40" H 6750 4200 50  0001 C CIN
 F 3 "" H 6750 4200 50  0001 C CNN
 	1    6800 4200
@@ -791,13 +769,9 @@ F 3 "~" H 9050 1600 50  0001 C CNN
 $EndComp
 Text Notes 4450 700  0    50   ~ 0
 TODO: Verify pin numbers
-Text Notes 4450 1050 0    50   ~ 0
-TODO: check netlist
 Text Notes 4450 850  0    50   ~ 0
 TODO: check footprints sizes
 Connection ~ 2650 3350
-Wire Wire Line
-	3000 1900 1750 1900
 $Comp
 L stepper_analyzer:GND #PWR0103
 U 1 1 5DAAF509
@@ -815,10 +789,10 @@ Connection ~ 4600 4050
 Wire Wire Line
 	3900 4050 4600 4050
 $Comp
-L stepper_analyzer:TestPoint TP2
+L stepper_analyzer:TestPoint CH1
 U 1 1 5DAAE84C
 P 4600 4050
-F 0 "TP2" H 4658 4168 50  0000 L CNN
+F 0 "CH1" H 4658 4168 50  0000 L CNN
 F 1 "TestPoint" H 4658 4077 50  0001 L CNN
 F 2 "stepper_analyzer:TestPoint_Loop_D1.80mm_Drill1.0mm_Beaded" H 4800 4050 50  0001 C CNN
 F 3 "~" H 4800 4050 50  0001 C CNN
@@ -851,8 +825,8 @@ $Comp
 L stepper_analyzer:ACS70331 U1
 U 1 1 5DAA9FDD
 P 2700 3900
-F 0 "U1" H 2100 3650 50  0000 C CNN
-F 1 "ACS70331" H 2150 3500 50  0000 C CNN
+F 0 "U1" H 2050 3600 50  0000 C CNN
+F 1 "ACS70331EESATR-2P5U3" H 1900 3450 50  0000 C CNN
 F 2 "Sensor_Current:Allegro_QFN-12-10-1EP_3x3mm_P0.5mm" H 3100 3850 50  0001 L CIN
 F 3 "" H 2700 3900 50  0001 C CNN
 	1    2700 3900
@@ -861,15 +835,7 @@ $EndComp
 Wire Wire Line
 	4150 3800 4200 3800
 Text GLabel 4200 3800 2    50   Input ~ 0
-POT2
-Wire Wire Line
-	1950 4050 2100 4050
-Wire Wire Line
-	1950 2100 1950 4050
-Wire Wire Line
-	1850 3750 2100 3750
-Wire Wire Line
-	1850 1800 1850 3750
+POT1
 Wire Wire Line
 	5250 4300 5250 4350
 Wire Wire Line
@@ -893,7 +859,7 @@ U 1 1 5DA26250
 P 5050 4050
 F 0 "R4" V 4845 4050 50  0000 C CNN
 F 1 "330R" V 4936 4050 50  0000 C CNN
-F 2 "stepper_analyzer:R_0201_0603Metric" H 5050 4050 50  0001 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 5050 4050 50  0001 C CNN
 F 3 "~" H 5050 4050 50  0001 C CNN
 	1    5050 4050
 	0    1    1    0   
@@ -941,6 +907,107 @@ $EndComp
 Wire Wire Line
 	5250 4050 6100 4050
 Connection ~ 5250 4050
-Text Notes 5950 2300 0    50   ~ 0
-TODO: swap ADC1, ADC2 inputs ?
+Text Notes 4450 1050 0    50   ~ 0
+TODO: check netlist
+Text Notes 8400 5900 0    50   ~ 0
+1.8" 128x160 pixels, color TFT\nSPI, ST7735 controller
+Wire Notes Line
+	1200 5900 4950 5900
+Wire Notes Line
+	4950 5900 4950 7550
+Wire Notes Line
+	4950 7550 1200 7550
+Wire Notes Line
+	1200 7550 1200 5900
+Text Notes 1200 5800 0    50   ~ 0
+Optional, for firmware developement.
+Wire Wire Line
+	2100 3750 1900 3750
+Wire Wire Line
+	1400 1800 1400 2100
+Wire Wire Line
+	1400 2100 2300 2100
+Wire Wire Line
+	2300 2100 2300 1800
+Wire Wire Line
+	1700 1800 1700 1950
+Wire Wire Line
+	1700 1950 2600 1950
+Wire Wire Line
+	2600 1950 2600 1800
+Wire Wire Line
+	1600 1800 1600 4050
+Wire Wire Line
+	1600 4050 2100 4050
+Wire Wire Line
+	1500 1800 1500 2750
+Wire Wire Line
+	1500 2750 3300 2750
+Wire Wire Line
+	2400 2450 3300 2450
+Wire Wire Line
+	2400 1800 2400 2450
+Wire Wire Line
+	2500 1800 2500 2250
+Wire Wire Line
+	2500 2250 1900 2250
+Wire Wire Line
+	1900 2250 1900 3750
+Text Notes 1850 4500 0    50   ~ 0
++/- 2.5A
+Text Notes 3200 2250 0    50   ~ 0
++/- 2.5A
+Wire Wire Line
+	6600 2050 6600 2000
+$Comp
+L stepper_analyzer:GND #PWR0112
+U 1 1 5DC777F8
+P 7150 2050
+F 0 "#PWR0112" H 7150 1800 50  0001 C CNN
+F 1 "GND" H 7154 1895 50  0000 C CNN
+F 2 "" H 7150 2050 50  0001 C CNN
+F 3 "" H 7150 2050 50  0001 C CNN
+	1    7150 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7150 2000 7150 2050
+$Comp
+L stepper_analyzer:SW_DIP_x04 SW3
+U 1 1 5DC6C322
+P 6800 2350
+F 0 "SW3" V 6950 2900 50  0000 R CNN
+F 1 "SW_DIP_x04" V 6800 3150 50  0000 R CNN
+F 2 "stepper_analyzer:SW_DIP_SPSTx04_Slide_Copal_CHS-04B_W7.62mm_P1.27mm" H 6800 2350 50  0001 C CNN
+F 3 "~" H 6800 2350 50  0001 C CNN
+	1    6800 2350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6700 2050 6700 2000
+Wire Wire Line
+	6600 2000 6700 2000
+Connection ~ 6700 2000
+Wire Wire Line
+	6800 2050 6800 2000
+Wire Wire Line
+	6700 2000 6800 2000
+Connection ~ 6800 2000
+Wire Wire Line
+	6900 2050 6900 2000
+Wire Wire Line
+	6800 2000 6900 2000
+Wire Wire Line
+	6900 2000 7150 2000
+Connection ~ 6900 2000
+Wire Wire Line
+	6600 2650 6600 2750
+Wire Wire Line
+	6700 2650 6700 2750
+Wire Wire Line
+	6800 2650 6800 2750
+Wire Wire Line
+	6900 2650 6900 2750
+Text Notes 6450 1900 0    50   ~ 0
+CONFIGURATION
 $EndSCHEMATC

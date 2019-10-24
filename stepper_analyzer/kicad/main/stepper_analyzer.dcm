@@ -34,6 +34,12 @@ K resistor variable
 F ~
 $ENDCMP
 #
+$CMP SW_DIP_x04
+D 4x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol
+K dip switch
+F ~
+$ENDCMP
+#
 $CMP SW_Push
 D Push button switch, generic, two pins
 K switch normally-open pushbutton push-button

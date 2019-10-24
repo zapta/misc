@@ -10,6 +10,10 @@
 
 namespace io {
 
+//--- Push buttons
+
+// Press buttons
+
 class Button {
   public:
     Button(int pin, int interval);
@@ -26,6 +30,8 @@ class Button {
 
 extern Button button1;
 extern Button button2;
+
+// --- LEDS
 
 const int LED1_PIN = 1;
 const int LED2_PIN = 2;
@@ -71,6 +77,29 @@ inline void reset_led3() {
 
 inline void toggle_led3() {
   digitalWriteFast(LED3_PIN, !digitalReadFast(LED3_PIN));
+}
+
+// --- DIP switch
+
+// Polarity is inverted since switched short to groun when ON.
+// Since switches signals are state based, we don't bother with debouncing.
+
+const int DIP_SWITCH1_PIN = 4;
+const int DIP_SWITCH2_PIN = 5;
+const int DIP_SWITCH3_PIN = 6;
+const int DIP_SWITCH4_PIN = 8;
+
+inline bool dip_switch1() {
+  return !digitalReadFast(DIP_SWITCH1_PIN);
+}
+inline bool dip_switch2() {
+  return !digitalReadFast(DIP_SWITCH2_PIN);
+}
+inline bool dip_switch3() {
+  return !digitalReadFast(DIP_SWITCH3_PIN);
+}
+inline bool dip_switch4() {
+  return !digitalReadFast(DIP_SWITCH4_PIN);
 }
 
 // ---

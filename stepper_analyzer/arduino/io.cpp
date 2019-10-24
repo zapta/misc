@@ -57,9 +57,15 @@ void setup() {
   reset_led2();
   reset_led3();
 
-  // Buttons
+  // Push buttons
   pinMode(BUTTON1_PIN, INPUT_PULLUP);
   pinMode(BUTTON2_PIN, INPUT_PULLUP);
+
+  // Dip switches
+  pinMode(DIP_SWITCH1_PIN, INPUT_PULLUP);
+  pinMode(DIP_SWITCH2_PIN, INPUT_PULLUP);
+  pinMode(DIP_SWITCH3_PIN, INPUT_PULLUP);
+  pinMode(DIP_SWITCH4_PIN, INPUT_PULLUP);
 }
 
 }  // namespace io
