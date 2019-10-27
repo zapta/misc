@@ -370,25 +370,14 @@ F 3 "" H 2600 7150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:3V3 #PWR01
-U 1 1 5DB2A2D4
-P 1700 6750
-F 0 "#PWR01" H 1700 6600 50  0001 C CNN
-F 1 "3V3" H 1715 6923 50  0000 C CNN
-F 2 "" H 1700 6750 50  0001 C CNN
-F 3 "" H 1700 6750 50  0001 C CNN
-	1    1700 6750
-	1    0    0    -1  
-$EndComp
-$Comp
 L stepper_analyzer:3V3 #PWR03
 U 1 1 5DB2AA08
-P 2600 6750
-F 0 "#PWR03" H 2600 6600 50  0001 C CNN
-F 1 "3V3" H 2615 6923 50  0000 C CNN
-F 2 "" H 2600 6750 50  0001 C CNN
-F 3 "" H 2600 6750 50  0001 C CNN
-	1    2600 6750
+P 2150 6300
+F 0 "#PWR03" H 2150 6150 50  0001 C CNN
+F 1 "3V3" H 2165 6473 50  0000 C CNN
+F 2 "" H 2150 6300 50  0001 C CNN
+F 3 "" H 2150 6300 50  0001 C CNN
+	1    2150 6300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -449,20 +438,12 @@ Wire Wire Line
 	1950 6950 1850 6950
 Wire Wire Line
 	2850 6950 2750 6950
-Text Notes 1800 1650 0    50   ~ 0
-IN
-Text Notes 2700 1650 0    50   ~ 0
-OUT
 Wire Wire Line
 	4650 5250 4650 5300
 Wire Wire Line
 	2600 7100 2600 7150
 Wire Wire Line
 	1700 7100 1700 7150
-Wire Wire Line
-	1700 6750 1700 6800
-Wire Wire Line
-	2600 6750 2600 6800
 Wire Wire Line
 	3550 6450 3600 6450
 Connection ~ 3600 6450
@@ -548,17 +529,6 @@ Connection ~ 5100 3100
 Wire Wire Line
 	5050 2500 4950 2500
 $Comp
-L stepper_analyzer:Stepper_Motor_bipolar M1
-U 1 1 5DC305A6
-P 2300 1300
-F 0 "M1" H 2528 1365 50  0001 L CNN
-F 1 "Stepper_Motor_bipolar" H 2488 1333 50  0001 L CNN
-F 2 "stepper_analyzer:NO_PADS" H 2310 1290 50  0001 C CNN
-F 3 "" H 2310 1290 50  0001 C CNN
-	1    2300 1300
-	1    0    0    -1  
-$EndComp
-$Comp
 L stepper_analyzer:3V3 #PWR0101
 U 1 1 5DAA3320
 P 3850 1900
@@ -573,8 +543,8 @@ $Comp
 L stepper_analyzer:ACS70331 U2
 U 1 1 5DAA891F
 P 3900 2600
-F 0 "U2" H 3400 3250 50  0000 C CNN
-F 1 "ACS70331EESATR-2P5U3" H 3300 3100 50  0000 C CNN
+F 0 "U2" H 3350 3150 50  0000 C CNN
+F 1 "ACS70331EESATR-2P5U3" H 3250 3000 50  0000 C CNN
 F 2 "Sensor_Current:Allegro_QFN-12-10-1EP_3x3mm_P0.5mm" H 4300 2550 50  0001 L CIN
 F 3 "" H 3900 2600 50  0001 C CNN
 	1    3900 2600
@@ -930,11 +900,11 @@ Wire Wire Line
 Wire Wire Line
 	2300 2100 2300 1800
 Wire Wire Line
-	1700 1800 1700 1950
+	1700 1800 1700 2000
 Wire Wire Line
-	1700 1950 2600 1950
+	1700 2000 2600 2000
 Wire Wire Line
-	2600 1950 2600 1800
+	2600 2000 2600 1800
 Wire Wire Line
 	1600 1800 1600 4050
 Wire Wire Line
@@ -948,15 +918,13 @@ Wire Wire Line
 Wire Wire Line
 	2400 1800 2400 2450
 Wire Wire Line
-	2500 1800 2500 2250
+	2500 1800 2500 2200
 Wire Wire Line
-	2500 2250 1900 2250
+	2500 2200 1900 2200
 Wire Wire Line
-	1900 2250 1900 3750
-Text Notes 1850 4500 0    50   ~ 0
-+/- 2.5A
-Text Notes 3200 2250 0    50   ~ 0
-+/- 2.5A
+	1900 2200 1900 3750
+Text Notes 2750 2400 0    50   ~ 0
+I2\n
 Wire Wire Line
 	6600 2050 6600 2000
 $Comp
@@ -977,7 +945,7 @@ L stepper_analyzer:SW_DIP_x04 SW3
 U 1 1 5DC6C322
 P 6800 2350
 F 0 "SW3" V 6950 2900 50  0000 R CNN
-F 1 "SW_DIP_x04" V 6800 3150 50  0000 R CNN
+F 1 "SW_DIP_x04" V 6800 3150 50  0001 R CNN
 F 2 "stepper_analyzer:SW_DIP_SPSTx04_Slide_Copal_CHS-04B_W7.62mm_P1.27mm" H 6800 2350 50  0001 C CNN
 F 3 "~" H 6800 2350 50  0001 C CNN
 	1    6800 2350
@@ -1008,8 +976,64 @@ Wire Wire Line
 	6800 2650 6800 2750
 Wire Wire Line
 	6900 2650 6900 2750
-Text Notes 6450 1900 0    50   ~ 0
-CONFIGURATION
-Text Notes 1400 1350 0    50   ~ 0
+Text Notes 6500 1900 0    50   ~ 0
+CONFIGURATION\nSWITCHES
+Text Notes 1350 1450 0    50   ~ 0
 To Stepper\nController
+$Comp
+L Device:R_Small_US R6
+U 1 1 5DB2651A
+P 2150 6450
+F 0 "R6" H 1950 6550 50  0000 C CNN
+F 1 "400R" H 1950 6450 50  0000 C CNN
+F 2 "stepper_analyzer:R_0603_1608Metric" H 2150 6450 50  0001 C CNN
+F 3 "~" H 2150 6450 50  0001 C CNN
+	1    2150 6450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1700 6650 2150 6650
+Wire Wire Line
+	1700 6650 1700 6800
+Wire Wire Line
+	2600 6650 2600 6800
+Wire Wire Line
+	2150 6550 2150 6650
+Wire Wire Line
+	2150 6350 2150 6300
+Connection ~ 2150 6650
+Wire Wire Line
+	2150 6650 2600 6650
+Text Notes 2350 6600 0    50   ~ 0
+3VDC
+Text Notes 2850 1300 0    50   ~ 0
+Connectors J1, J2 are\ninterchangeable
+Text Notes 4850 2850 0    50   ~ 0
+1.5V + 0.4xI1
+Text Notes 4350 4200 0    50   ~ 0
+1.5V + 0.4xI1
+Text Notes 2650 2550 0    50   ~ 0
++/-2,5A\n
+Text Notes 1950 3050 0    50   ~ 0
+I1\n
+Text Notes 1950 3150 0    50   ~ 0
++/-2,5A\n
+Text Notes 5700 2350 0    50   ~ 0
+SMD 1.27mm pitch\n
+Text Notes 5800 5750 0    50   ~ 0
+RIGHT\nBUTTON
+Text Notes 5350 5750 0    50   ~ 0
+LEFT\nBUTTON
+Text Label 1600 1900 0    50   ~ 0
+B
+Text Label 1700 1900 0    50   ~ 0
+~B
+Text Label 1400 1900 2    50   ~ 0
+~A
+Text Label 1500 1900 2    50   ~ 0
+A
+Text Notes 2325 1475 0    50   ~ 0
+A
+Text Notes 2525 1475 0    50   ~ 0
+B
 $EndSCHEMATC
