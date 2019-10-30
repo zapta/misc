@@ -1041,4 +1041,15 @@ Wire Notes Line
 	1200 5900 5275 5900
 Wire Notes Line
 	1200 7550 5275 7550
+$Comp
+L stepper_analyzer:Stepper_Motor_bipolar M?
+U 1 1 5DB96B5F
+P 2300 1325
+F 0 "M?" H 2350 1725 50  0001 L CNN
+F 1 "Stepper_Motor_bipolar" H 2200 1675 50  0001 L TNN
+F 2 "" H 2310 1415 50  0001 C CNN
+F 3 "http://www.infineon.com/dgdl/Application-Note-TLE8110EE_driving_UniPolarStepperMotor_V1.1.pdf?fileId=db3a30431be39b97011be5d0aa0a00b0" H 2310 1415 50  0001 C CNN
+	1    2300 1325
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

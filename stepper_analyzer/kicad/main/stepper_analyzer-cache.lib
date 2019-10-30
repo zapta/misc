@@ -303,6 +303,41 @@ X 2 2 200 0 100 L 50 50 0 1 P
 ENDDRAW
 ENDDEF
 #
+# stepper_analyzer_Stepper_Motor_bipolar
+#
+DEF stepper_analyzer_Stepper_Motor_bipolar M 0 0 Y N 1 F N
+F0 "M" 50 400 50 H I L CNN
+F1 "stepper_analyzer_Stepper_Motor_bipolar" -100 350 50 H I L TNN
+F2 "" 10 90 50 H I C CNN
+F3 "" 10 90 50 H I C CNN
+$FPLIST
+ PinHeader*P2.54mm*Vertical*
+ TerminalBlock*
+ Motor*
+$ENDFPLIST
+DRAW
+A -75 -75 25 1 1799 0 1 0 N -50 -75 -100 -75
+A -25 -75 25 1 1799 0 1 0 N 0 -75 -50 -75
+A 25 -75 25 1 1799 0 1 0 N 50 -75 0 -75
+A 75 -75 25 1 1799 0 1 0 N 100 -75 50 -75
+A 175 25 25 901 -901 0 1 0 N 175 50 175 0
+A 175 75 25 901 -901 0 1 0 N 175 100 175 50
+A 175 125 25 901 -901 0 1 0 N 175 150 175 100
+A 175 175 25 901 -901 0 1 0 N 175 200 175 150
+C 0 100 128 0 1 10 N
+P 2 0 0 0 200 0 200 -100 N
+P 5 0 0 0 -50 30 -50 180 0 80 50 180 50 30 N
+P 2 0 1 0 -100 -100 -100 -75 N
+P 2 0 1 0 100 -100 100 -250 N
+P 2 0 1 0 100 -100 100 -75 N
+P 2 0 1 0 200 -100 200 -250 N
+P 2 0 1 0 200 0 175 0 N
+P 2 0 1 0 200 200 175 200 N
+P 3 0 1 0 300 -250 300 200 200 200 N
+P 4 0 1 0 0 -250 0 -150 -100 -150 -100 -100 N
+ENDDRAW
+ENDDEF
+#
 # stepper_analyzer_TFT
 #
 DEF stepper_analyzer_TFT U 0 20 Y Y 1 F N
