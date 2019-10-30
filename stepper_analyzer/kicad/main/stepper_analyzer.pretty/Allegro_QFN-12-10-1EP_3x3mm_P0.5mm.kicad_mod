@@ -1,4 +1,4 @@
-(module Allegro_QFN-12-10-1EP_3x3mm_P0.5mm (layer F.Cu) (tedit 5DA7E03F)
+(module Allegro_QFN-12-10-1EP_3x3mm_P0.5mm (layer F.Cu) (tedit 5DB900DB)
   (descr "Allegro Microsystems 12-Lead (10-Lead Populated) Quad Flat Pack, 3x3mm Body, 0.5mm Pitch (http://www.allegromicro.com/~/media/Files/Datasheets/ACS711-Datasheet.ashx)")
   (tags "Allegro QFN 0.5")
   (attr smd)
@@ -29,6 +29,7 @@
   (fp_line (start 1.7 -1.62) (end 1.2 -1.62) (layer F.SilkS) (width 0.12))
   (fp_line (start 1.7 1.62) (end 1.2 1.62) (layer F.SilkS) (width 0.12))
   (fp_line (start -1.54 -1.25) (end -1.8 -1.25) (layer F.SilkS) (width 0.12))
+  (fp_circle (center -2.667 -1.524) (end -2.447 -1.524) (layer F.SilkS) (width 0.4))
   (pad 10 smd roundrect (at 0.23 -1.85) (size 0.3 1.65) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
   (pad 9 smd roundrect (at 0.73 -1.85) (size 0.3 1.65) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
   (pad 3 smd roundrect (at 0.23 1.85) (size 0.3 1.65) (layers F.Cu F.Paste F.Mask) (roundrect_rratio 0.25))
