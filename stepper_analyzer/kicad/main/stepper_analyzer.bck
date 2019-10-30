@@ -5,6 +5,16 @@ D Power symbol creates a global label with name "+3V3"
 K power-flag
 $ENDCMP
 #
+$CMP 3V3A
+D Power symbol creates a global label with name "+3V3"
+K power-flag
+$ENDCMP
+#
+$CMP 3V3D
+D Power symbol creates a global label with name "+3V3"
+K power-flag
+$ENDCMP
+#
 $CMP GND
 D Power symbol creates a global label with name "GNDD" , digital ground
 K power-flag
@@ -31,6 +41,12 @@ $ENDCMP
 $CMP R_POT_US
 D Potentiometer, US symbol
 K resistor variable
+F ~
+$ENDCMP
+#
+$CMP SW_DIP_x04
+D 4x DIP Switch, Single Pole Single Throw (SPST) switch, small symbol
+K dip switch
 F ~
 $ENDCMP
 #

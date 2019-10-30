@@ -301,8 +301,8 @@ $Comp
 L Device:C_Small C4
 U 1 1 5DAB5183
 P 5750 3250
-F 0 "C4" V 5521 3250 50  0000 C CNN
-F 1 "0.1uF" V 5612 3250 50  0000 C CNN
+F 0 "C4" H 5950 3300 50  0000 C CNN
+F 1 "0.22uF" H 5925 3400 50  0000 C CNN
 F 2 "stepper_analyzer:C_0603_1608Metric" H 5750 3250 50  0001 C CNN
 F 3 "~" H 5750 3250 50  0001 C CNN
 	1    5750 3250
@@ -367,17 +367,6 @@ F 1 "GND" H 2604 6995 50  0000 C CNN
 F 2 "" H 2600 7150 50  0001 C CNN
 F 3 "" H 2600 7150 50  0001 C CNN
 	1    2600 7150
-	1    0    0    -1  
-$EndComp
-$Comp
-L stepper_analyzer:3V3 #PWR03
-U 1 1 5DB2AA08
-P 2150 6300
-F 0 "#PWR03" H 2150 6150 50  0001 C CNN
-F 1 "3V3" H 2165 6473 50  0000 C CNN
-F 2 "" H 2150 6300 50  0001 C CNN
-F 3 "" H 2150 6300 50  0001 C CNN
-	1    2150 6300
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
@@ -463,15 +452,6 @@ Wire Wire Line
 	5750 3100 6100 3100
 Connection ~ 5750 3100
 Wire Wire Line
-	7500 3050 7550 3050
-Wire Wire Line
-	7500 3150 7550 3150
-Wire Wire Line
-	7550 3150 7550 3050
-Connection ~ 7550 3050
-Wire Wire Line
-	7550 3050 7600 3050
-Wire Wire Line
 	7500 4500 7600 4500
 Wire Wire Line
 	7500 4600 7600 4600
@@ -529,17 +509,6 @@ Connection ~ 5100 3100
 Wire Wire Line
 	5050 2500 4950 2500
 $Comp
-L stepper_analyzer:3V3 #PWR0101
-U 1 1 5DAA3320
-P 3850 1900
-F 0 "#PWR0101" H 3850 1750 50  0001 C CNN
-F 1 "3V3" H 3865 2073 50  0000 C CNN
-F 2 "" H 3850 1900 50  0001 C CNN
-F 3 "" H 3850 1900 50  0001 C CNN
-	1    3850 1900
-	1    0    0    -1  
-$EndComp
-$Comp
 L stepper_analyzer:ACS70331 U2
 U 1 1 5DAA891F
 P 3900 2600
@@ -584,28 +553,6 @@ F 3 "" H 8350 4500 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L stepper_analyzer:3V3 #PWR0106
-U 1 1 5DAB4E1F
-P 8700 4250
-F 0 "#PWR0106" H 8700 4100 50  0001 C CNN
-F 1 "3V3" H 8715 4423 50  0000 C CNN
-F 2 "" H 8700 4250 50  0001 C CNN
-F 3 "" H 8700 4250 50  0001 C CNN
-	1    8700 4250
-	1    0    0    -1  
-$EndComp
-$Comp
-L stepper_analyzer:3V3 #PWR0107
-U 1 1 5DAB5DD3
-P 7600 3050
-F 0 "#PWR0107" H 7600 2900 50  0001 C CNN
-F 1 "3V3" V 7615 3178 50  0000 L CNN
-F 2 "" H 7600 3050 50  0001 C CNN
-F 3 "" H 7600 3050 50  0001 C CNN
-	1    7600 3050
-	0    1    1    0   
-$EndComp
-$Comp
 L stepper_analyzer:GND #PWR0108
 U 1 1 5DAB662C
 P 3900 3150
@@ -625,17 +572,6 @@ F 1 "GND" H 3054 3195 50  0000 C CNN
 F 2 "" H 3050 3350 50  0001 C CNN
 F 3 "" H 3050 3350 50  0001 C CNN
 	1    3050 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L stepper_analyzer:3V3 #PWR0110
-U 1 1 5DAB7435
-P 2650 3200
-F 0 "#PWR0110" H 2650 3050 50  0001 C CNN
-F 1 "3V3" H 2665 3373 50  0000 C CNN
-F 2 "" H 2650 3200 50  0001 C CNN
-F 3 "" H 2650 3200 50  0001 C CNN
-	1    2650 3200
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -739,7 +675,7 @@ F 3 "~" H 9050 1600 50  0001 C CNN
 $EndComp
 Text Notes 4450 700  0    50   ~ 0
 TODO: Verify pin numbers
-Text Notes 4450 850  0    50   ~ 0
+Text Notes 4450 875  0    50   ~ 0
 TODO: check footprints sizes
 Connection ~ 2650 3350
 $Comp
@@ -838,8 +774,8 @@ $Comp
 L Device:C_Small C3
 U 1 1 5DA254E5
 P 5250 4200
-F 0 "C3" V 5021 4200 50  0000 C CNN
-F 1 "0.1uF" V 5112 4200 50  0000 C CNN
+F 0 "C3" H 5075 4200 50  0000 C CNN
+F 1 "0.22uF" H 5000 4300 50  0000 C CNN
 F 2 "stepper_analyzer:C_0603_1608Metric" H 5250 4200 50  0001 C CNN
 F 3 "~" H 5250 4200 50  0001 C CNN
 	1    5250 4200
@@ -923,8 +859,6 @@ Wire Wire Line
 	2500 2200 1900 2200
 Wire Wire Line
 	1900 2200 1900 3750
-Text Notes 2750 2400 0    50   ~ 0
-I2\n
 Wire Wire Line
 	6600 2050 6600 2000
 $Comp
@@ -1009,11 +943,11 @@ Text Notes 2350 6600 0    50   ~ 0
 Text Notes 2850 1300 0    50   ~ 0
 Connectors J1, J2 are\ninterchangeable
 Text Notes 4850 2850 0    50   ~ 0
-1.5V + 0.4xI1
+1.5V + 0.4*I1
 Text Notes 4350 4200 0    50   ~ 0
-1.5V + 0.4xI1
-Text Notes 2650 2550 0    50   ~ 0
-+/-2,5A\n
+1.5V + 0.4*I1
+Text Notes 2600 2425 0    50   ~ 0
+I2, +/-2,5A\n
 Text Notes 1950 3050 0    50   ~ 0
 I1\n
 Text Notes 1950 3150 0    50   ~ 0
@@ -1036,15 +970,79 @@ Text Notes 2325 1475 0    50   ~ 0
 A
 Text Notes 2525 1475 0    50   ~ 0
 B
+Text Notes 4450 1225 0    50   ~ 0
+TODO: add stepper motor symbol after completing the pcb layout
+NoConn ~ 7500 4150
+Text Notes 6275 6550 0    50   ~ 0
+Resistors, capacitors and LEDS are 0603 SMD packages.
 $Comp
-L stepper_analyzer:Stepper_Motor_bipolar M1
-U 1 1 5DC305A6
-P 2300 1300
-F 0 "M1" H 2528 1365 50  0001 L CNN
-F 1 "Stepper_Motor_bipolar" H 2488 1333 50  0001 L CNN
-F 2 "" H 2310 1290 50  0001 C CNN
-F 3 "" H 2310 1290 50  0001 C CNN
-	1    2300 1300
+L stepper_analyzer:3V3A #PWR0101
+U 1 1 5DB84904
+P 3850 1900
+F 0 "#PWR0101" H 3850 1750 50  0001 C CNN
+F 1 "3V3A" H 3865 2073 50  0000 C CNN
+F 2 "" H 3850 1900 50  0001 C CNN
+F 3 "" H 3850 1900 50  0001 C CNN
+	1    3850 1900
 	1    0    0    -1  
+$EndComp
+$Comp
+L stepper_analyzer:3V3A #PWR0106
+U 1 1 5DB851D9
+P 2650 3200
+F 0 "#PWR0106" H 2650 3050 50  0001 C CNN
+F 1 "3V3A" H 2665 3373 50  0000 C CNN
+F 2 "" H 2650 3200 50  0001 C CNN
+F 3 "" H 2650 3200 50  0001 C CNN
+	1    2650 3200
+	1    0    0    -1  
+$EndComp
+$Comp
+L stepper_analyzer:3V3A #PWR0107
+U 1 1 5DB85717
+P 2150 6300
+F 0 "#PWR0107" H 2150 6150 50  0001 C CNN
+F 1 "3V3A" H 2165 6473 50  0000 C CNN
+F 2 "" H 2150 6300 50  0001 C CNN
+F 3 "" H 2150 6300 50  0001 C CNN
+	1    2150 6300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7500 3050 7600 3050
+$Comp
+L stepper_analyzer:3V3D #PWR0110
+U 1 1 5DB861CB
+P 7600 3150
+F 0 "#PWR0110" H 7600 3000 50  0001 C CNN
+F 1 "3V3D" V 7615 3278 50  0000 L CNN
+F 2 "" H 7600 3150 50  0001 C CNN
+F 3 "" H 7600 3150 50  0001 C CNN
+	1    7600 3150
+	0    1    1    0   
+$EndComp
+$Comp
+L stepper_analyzer:3V3D #PWR0113
+U 1 1 5DB871AF
+P 8700 4250
+F 0 "#PWR0113" H 8700 4100 50  0001 C CNN
+F 1 "3V3D" H 8675 4425 50  0000 C CNN
+F 2 "" H 8700 4250 50  0001 C CNN
+F 3 "" H 8700 4250 50  0001 C CNN
+	1    8700 4250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7500 3150 7600 3150
+$Comp
+L stepper_analyzer:3V3A #PWR0114
+U 1 1 5DB8D3EF
+P 7600 3050
+F 0 "#PWR0114" H 7600 2900 50  0001 C CNN
+F 1 "3V3A" V 7615 3178 50  0000 L CNN
+F 2 "" H 7600 3050 50  0001 C CNN
+F 3 "" H 7600 3050 50  0001 C CNN
+	1    7600 3050
+	0    1    1    0   
 $EndComp
 $EndSCHEMATC

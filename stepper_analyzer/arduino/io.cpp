@@ -4,8 +4,8 @@
 
 namespace io {
 
-static const int BUTTON1_PIN = 18;
-static const int BUTTON2_PIN = 19;
+static const int BUTTON1_PIN = 16;
+static const int BUTTON2_PIN = 15;
 
 const uint32_t MAX_CLICK_MILLIs = 1000;
 const uint32_t MIN_LONG_PRESS_MILLIS = 3000;
