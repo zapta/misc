@@ -123,7 +123,8 @@ M307 H1 A549.5 C234.0 D4.7 V24.1 B0
 
 ; Calibration shows that 1.15 provides best uniformity across the selected
 ; speed changes (for 0.2mm layer).
-M572 D0 S1.2 ; set pressure advance
+;M572 D0 S1.15 ; set pressure advance
+M572 D0 S0.5 ; set pressure advance
 
 ; Automatic saving after power loss is not enabled
 
