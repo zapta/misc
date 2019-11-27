@@ -17,6 +17,9 @@ namespace rgb_led {
 static PassiveTimer blink_timer;
 static bool blink_signal;
 
+// Use to force periodc led updates, even if no change.
+static PassiveTimer force_update_timer;
+
 static const Color OFF_COLOR = make_color(0, 0, 0);
 
 static Color current_color = OFF_COLOR;
@@ -30,20 +33,27 @@ static Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO
 inline raw_set(Color color) {
   pixels.fill(color, 0, NUM_LEDS);
   pixels.show();
+  force_update_timer.restart();
 }
 
 void setup() {
   pixels.begin();
   raw_set(current_color);
   blink_timer.restart();
+  force_update_timer.restart();
 }
 
 void loop() {
+  if (force_update_timer.timeMillis() > 5000) {
+    force_update_timer.restart();
+    raw_set(blink_signal ? OFF_COLOR : current_color);
+  }
+  
   if (current_blink_millis && blink_timer.timeMillis() > current_blink_millis) {
     blink_timer.restart();
     blink_signal = !blink_signal;
     raw_set(blink_signal ? OFF_COLOR : current_color);
-    pixels.show();
+    force_update_timer.restart();
   }
 }
 
