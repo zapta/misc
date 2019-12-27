@@ -47,6 +47,7 @@ static void update_display() {
   switch (screen_num) {
     case 0:
       acquisition::get_state(&acq_state);
+      Serial.println(acq_state.full_steps);
       // acquisition::dump_state(acq_state);
       display::draw_info_screen(acq_state, full_redraw);
       break;
@@ -119,9 +120,9 @@ void loop() {
   if (millis_since_display_update >= 250) {
     millis_since_display_update = 0;
     update_display();
-    sprintf(buffer, "Switches: %d %d %d %d", 
-      io::dip_switch1(),  io::dip_switch2(),  io::dip_switch3(),  io::dip_switch4());
-      Serial.println(buffer);
+//    sprintf(buffer, "Switches: %d %d %d %d", 
+//      io::dip_switch1(),  io::dip_switch2(),  io::dip_switch3(),  io::dip_switch4());
+//      Serial.println(buffer);
   }
 
   if (capture_pending && acquisition::is_capture_ready()) {
