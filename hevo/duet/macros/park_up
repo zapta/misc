@@ -8,4 +8,4 @@ M400
 M913 Z100         ; Z motors to 100% current
 
 G90               ; absolute positioning
-G1 X50 Y300 F3000  ; move XY to parking position
+G1 X240 Y280 F3000  ; move XY to parking position

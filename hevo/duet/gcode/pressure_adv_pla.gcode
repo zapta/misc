@@ -26,8 +26,8 @@
 
 T0
 M140 S60 ; set and wait for bed temp
-M104 S220 ; set nozzle temp and continue
-M109 S220 ; block waiting for nozzle temp
+M104 S200 ; set nozzle temp and continue
+M109 S200 ; block waiting for nozzle temp
 M190 S60
 
 G28 ; home all
