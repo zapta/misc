@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="json_parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="duet_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="duet_parser_test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="json_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="simple_string.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="simple_vector.h">
+    <ClInclude Include="duet_parser.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="json_parser.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="duet_parser.h">
+    <ClInclude Include="simple_string.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_vector.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,9 +18,20 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="duet_parser.cpp" />
+    <ClCompile Include="duet_parser_test.cpp" />
+    <ClCompile Include="json_parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="duet_parser.h" />
+    <ClInclude Include="json_parser.h" />
+    <ClInclude Include="simple_string.h" />
+    <ClInclude Include="simple_vector.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{28414385-000D-4D46-9120-09048B5DAC40}</ProjectGuid>
+    <ProjectGuid>{C2117E6E-F30D-445E-BDFE-1474986184DC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>duet3dparser</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -146,17 +157,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="duet_parser.cpp" />
-    <ClCompile Include="json_parser.cpp" />
-    <ClCompile Include="duet_parser_test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="duet_parser.h" />
-    <ClInclude Include="json_parser.h" />
-    <ClInclude Include="simple_string.h" />
-    <ClInclude Include="simple_vector.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
