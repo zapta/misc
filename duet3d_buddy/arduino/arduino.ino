@@ -64,7 +64,7 @@ void loop() {
       // Check http response code
       if (httpCode == HTTP_CODE_OK) {
         // Parse the duet response. This is a json message.
-        duet_parser.start_parsing_json_message();
+        duet_parser.StartParsingJsonMessage();
         WiFiClient& stream = http.getStream();
         while (stream.available()) {
           int c = stream.read();
@@ -72,9 +72,9 @@ void loop() {
           Serial.print(char(c));
         }
         Serial.println();
-        if (duet_parser.is_message_ok()) {
+        if (duet_parser.IsParsedMessageOk()) {
           updates++;
-          duet_status = duet_parser.get_duet_state();
+          duet_status = duet_parser.GetParsedDuetStatus();
           status_char = duet_status.state_char;
           progress_permils = duet_status.progress_permils;
           Serial.println("parser ok");

@@ -31,7 +31,7 @@ bool GetFloat(const char s[], float& rslt) {
   return *endptr == 0;  // we parsed a float
 }
 
-void DuetParser::start_parsing_json_message() {
+void DuetParser::StartParsingJsonMessage() {
   json_listener_impl_.Reset();
   json_parser_.StartParsing(&json_listener_impl_);
 }

@@ -52,17 +52,17 @@ class JsonParserListenerImpl : public JsonParserListener {
 class DuetParser {
  public:
   // Start parsing a new json message.
-  void start_parsing_json_message();
+  void StartParsingJsonMessage();
   // Prase the next char of the json message.
   void ParseNextChar(const char c);
 
   // Call this to check if the message was parsed ok.
-  bool is_message_ok() {
+  bool IsParsedMessageOk() {
     return json_listener_impl_.duet_parser_state_ ==
            JsonParserListenerImpl::MESSAGE_DONE;
   }
   // If the message parsed ok, call this to get the parsed data.
-  const DuetStatus get_duet_state() {
+  const DuetStatus GetParsedDuetStatus() {
     return json_listener_impl_.captured_duet_status_;
   }
 
