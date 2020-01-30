@@ -25,10 +25,10 @@
 ;
 
 T0
-M140 S60 ; set and wait for bed temp
-M104 S240 ; set nozzle temp and continue
-M109 S240 ; block waiting for nozzle temp
-M190 S60
+M140 S70 ; set and wait for bed temp
+M104 S245 ; set nozzle temp and continue
+M109 S245 ; block waiting for nozzle temp
+M190 S70
 
 G28 ; home all
 
@@ -51,7 +51,7 @@ G1 X110 Y87.5 F12000 ; move to pattern start
 G91 ; use relative coordinates
 
 ; line 1
-M572 D0 S0.0 ; set K-factor
+M572 D0 S0.08 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -61,7 +61,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 2
-M572 D0 S0.1 ; set K-factor
+M572 D0 S0.08 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -71,7 +71,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 3
-M572 D0 S0.2 ; set K-factor
+M572 D0 S0.085 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -81,7 +81,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 4
-M572 D0 S0.3 ; set K-factor
+M572 D0 S0.085 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -91,7 +91,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 5
-M572 D0 S0.4 ; set K-factor
+M572 D0 S0.090 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -101,7 +101,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 6
-M572 D0 S0.5 ; set K-factor
+M572 D0 S0.095 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -111,7 +111,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 7
-M572 D0 S0.6 ; set K-factor
+M572 D0 S0.100 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -121,7 +121,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 8
-M572 D0 S0.7 ; set K-factor
+M572 D0 S0.100 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -131,7 +131,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 9
-M572 D0 S0.8 ; set K-factor
+M572 D0 S0.105 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200
@@ -141,57 +141,7 @@ G1 E-2.5
 G1 X-80 Y5 F12000
 
 ; line 10
-M572 D0 S0.9 ; set K-factor
-M400
-G1 E2.5
-G1 X20 Y0 E0.73172 F1200
-G1 X40 Y0 E1.46345 F4200
-G1 X20 Y0 E0.73172 F1200
-G1 E-2.5
-G1 X-80 Y5 F12000
-
-; line 11
-M572 D0 S1.0 ; set K-factor
-M400
-G1 E2.5
-G1 X20 Y0 E0.73172 F1200
-G1 X40 Y0 E1.46345 F4200
-G1 X20 Y0 E0.73172 F1200
-G1 E-2.5
-G1 X-80 Y5 F12000
-
-; line 12
-M572 D0 S1.1 ; set K-factor
-M400
-G1 E2.5
-G1 X20 Y0 E0.73172 F1200
-G1 X40 Y0 E1.46345 F4200
-G1 X20 Y0 E0.73172 F1200
-G1 E-2.5
-G1 X-80 Y5 F12000
-
-; line 13
-M572 D0 S1.2 ; set K-factor
-M400
-G1 E2.5
-G1 X20 Y0 E0.73172 F1200
-G1 X40 Y0 E1.46345 F4200
-G1 X20 Y0 E0.73172 F1200
-G1 E-2.5
-G1 X-80 Y5 F12000
-
-; line 14
-M572 D0 S1.3 ; set K-factor
-M400
-G1 E2.5
-G1 X20 Y0 E0.73172 F1200
-G1 X40 Y0 E1.46345 F4200
-G1 X20 Y0 E0.73172 F1200
-G1 E-2.5
-G1 X-80 Y5 F12000
-
-; line 15
-M572 D0 S1.4 ; set K-factor
+M572 D0 S0.105 ; set K-factor
 M400
 G1 E2.5
 G1 X20 Y0 E0.73172 F1200

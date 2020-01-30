@@ -12,14 +12,6 @@ M104 S0 ; turn off extruder
 M140 S0 ; turn off bed heaters
 M106 S0 ; turn off part cooling fan
 
-;G1 X20 Y280 F3000 ; move XY to parking position
-;M400               ; wait motion stop
-;M913 Z50           ; Z motors to 35% current
-;;G1 Z280 F500       ; move Z slowly to parking position
-;G1 Z280 F750       ; move Z slowly to parking position
-;M400               ; wait motion stop
-;M913 Z100          ; Z motors to 100% current
-
 M98 P"/macros/park_up"
 
 M84 ; disable motors
