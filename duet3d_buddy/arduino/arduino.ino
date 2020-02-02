@@ -100,36 +100,47 @@ static const StatusConfig& decodeStatusChar(char c) {
 }
 
 // Common helper for text screens.
-static void initTextScreen(uint16_t bg_color, uint16_t text_color) {
-  M5.Lcd.fillScreen(bg_color);
-  M5.Lcd.setTextColor(text_color, bg_color);
+static void initTextScreen() {
+  M5.Lcd.fillScreen(kBlue);
+  M5.Lcd.setTextColor(kYellow, kBlue);
   M5.Lcd.setTextSize(2);
   M5.Lcd.setCursor(0, 12);
 }
 
 static bool fatal_error = false;
+static bool wifi_connected = false;
 
 // Common rendering for all fatal error messages.
 static void drawFatalErrorScreen(const char* msg) {
   fatal_error = true;
-  initTextScreen(kBlue, kYellow);
+  initTextScreen();
   M5.Lcd.print(" FATAL ERROR:\n\n ");
   M5.Lcd.print(msg);
 }
 
 static void drawNoWifiScreen() {
-  initTextScreen(kBlue, kYellow);
-  M5.Lcd.print(" Connecting to WIFI.");
+  wifi_connected = false;
+  initTextScreen();
+  M5.Lcd.printf(" Connecting to WIFI.\n\n\n SSID: [%s]",
+                config_parser.ParsedData().wifi_ssid.c_str());
+}
+
+static void drawWifiConnectedScreen() {
+  wifi_connected = true;
+  initTextScreen();
+  M5.Lcd.printf(" Wifi connected.\n\n\n Connecting to Duet.\n\n\n IP: [%s]",
+                config_parser.ParsedData().duet_ip.c_str());
 }
 
 static void drawNoHttpConnectionScreen(const char* error_message) {
-  initTextScreen(kBlue, kYellow);
-  M5.Lcd.print(" Duet connection failed:\n\n\n ");
+  initTextScreen();
+  M5.Lcd.print(" Duet connection failed.\n\n\n ");
   M5.Lcd.println(error_message);
+  M5.Lcd.printf("\n\n IP: [%s]", config_parser.ParsedData().duet_ip.c_str());
 }
 
 static void drawBadDuetResponseScreen() {
-  initTextScreen(kBlue, kYellow);
+  initTextScreen();
   M5.Lcd.print(" Bad response from duet.");
 }
 
@@ -236,6 +247,12 @@ void loop() {
     drawNoWifiScreen();
     delay(500);
     return;
+  }
+
+  // Wifi was just connected.
+  if (!wifi_connected) {
+    drawWifiConnectedScreen();
+    // We keep going to the http connection.
   }
 
   // Connect to duet and send a Get status http request.
