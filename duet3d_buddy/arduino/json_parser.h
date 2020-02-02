@@ -9,6 +9,7 @@
 // Interface of a json event callbacks handler.
 class JsonParserListener {
  public:
+  virtual void OnStartParsing() = 0;
   virtual void OnReceivedValue(const char id[], const char val[],
                                const int arrayDepth, const int indices[]) = 0;
 

@@ -1,12 +1,10 @@
-// Duet state monitor. Parses the sniffed PanelDue serial communication
-// and extracts the Duet state.
+// Implementation of duet_parser.h.
 
 #include "duet_parser.h"
+#include "json_parser.h"
 
 #include <stdlib.h>
 #include <string.h>
-
-#include "json_parser.h"
 
 // Try to get an unsigned integer value from a string
 bool GetUnsignedInteger(const char s[], unsigned int& rslt) {
@@ -31,19 +29,13 @@ bool GetFloat(const char s[], float& rslt) {
   return *endptr == 0;  // we parsed a float
 }
 
-void DuetParser::StartParsingJsonMessage() {
-  json_listener_impl_.Reset();
-  json_parser_.StartParsing(&json_listener_impl_);
-}
-
-void JsonParserListenerImpl::Reset() {
+void DuetParser::OnStartParsing() {
   duet_parser_state_ = DuetParserState::IDLE;
   captured_duet_status_.reset();
 }
 
 // Utility for message events preconditions.
-bool JsonParserListenerImpl::CheckExpectedState(
-    DuetParserState expected_state) {
+bool DuetParser::CheckExpectedState(DuetParserState expected_state) {
   if (duet_parser_state_ == expected_state) {
     return true;
   }
@@ -52,9 +44,8 @@ bool JsonParserListenerImpl::CheckExpectedState(
 }
 
 // Json parser encounted a field or array value.
-void JsonParserListenerImpl::OnReceivedValue(const char id[], const char val[],
-                                             const int arrayDepth,
-                                             const int indices[]) {
+void DuetParser::OnReceivedValue(const char id[], const char val[],
+                                 const int arrayDepth, const int indices[]) {
   if (!CheckExpectedState(DuetParserState::IN_MESSAGE)) {
     return;
   }
@@ -84,8 +75,8 @@ void JsonParserListenerImpl::OnReceivedValue(const char id[], const char val[],
 }
 
 // Parser exited an array.
-void JsonParserListenerImpl::OnArrayEnd(const char id[], const int arrayDepth,
-                                        const int indices[]) {
+void DuetParser::OnArrayEnd(const char id[], const int arrayDepth,
+                            const int indices[]) {
   if (!CheckExpectedState(DuetParserState::IN_MESSAGE)) {
     return;
   }
@@ -93,7 +84,7 @@ void JsonParserListenerImpl::OnArrayEnd(const char id[], const int arrayDepth,
 
 // Received a begining of a json message. This may or may not be a status
 // report message.
-void JsonParserListenerImpl::OnStartReceivedMessage() {
+void DuetParser::OnStartReceivedMessage() {
   if (!CheckExpectedState(DuetParserState::IDLE)) {
     return;
   }
@@ -101,7 +92,7 @@ void JsonParserListenerImpl::OnStartReceivedMessage() {
 }
 
 // Recieved an end of a json message.
-void JsonParserListenerImpl::OnEndReceivedMessage() {
+void DuetParser::OnEndReceivedMessage() {
   if (!CheckExpectedState(DuetParserState::IN_MESSAGE)) {
     return;
   }
@@ -109,10 +100,4 @@ void JsonParserListenerImpl::OnEndReceivedMessage() {
 }
 
 // Traffic parser reported an error.
-void JsonParserListenerImpl::OnError() {
-  CheckExpectedState(DuetParserState::ERROR);
-}
-
-  void DuetParser::ParseNextChar(const char c) {
-    json_parser_.ParseNextChar(c);
-  }
+void DuetParser::OnError() { CheckExpectedState(DuetParserState::ERROR); }

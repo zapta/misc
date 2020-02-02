@@ -1,14 +1,13 @@
-// Parse for the duet status json message. These are the 
-// messages returned from GET requests to 
+// Parser for the duet json status responses. These
+// are the HTTP responses that the duet return for the URL
 // http://xx.xx.xx.xx/rr_status?type=3
-
 
 #ifndef DUET_PARSER_H
 #define DUET_PARSER_H
 
 #include "json_parser.h"
 
-// Represents parsed duet status.
+// Parsed values.
 struct DuetStatus {
   char state_char;
   int progress_permils;
@@ -20,55 +19,46 @@ struct DuetStatus {
   }
 };
 
-// Internal implementation of the duet parser. This class
-// is used to handle events from the json parser.
-class JsonParserListenerImpl : public JsonParserListener {
- public:
-  void Reset();
+class DuetParser : public JsonParserListener {
+  public:
+    //void Reset();
 
-  virtual void OnReceivedValue(const char id[], const char val[],
-                               const int arrayDepth, const int indices[]);
+    // Methods for callbacks from the json parse.
+    virtual void OnStartParsing();
 
-  virtual void OnArrayEnd(const char id[], const int arrayDepth,
-                          const int indices[]);
+    virtual void OnReceivedValue(const char id[], const char val[],
+                                 const int arrayDepth, const int indices[]);
 
-  virtual void OnStartReceivedMessage();
-  virtual void OnEndReceivedMessage();
-  virtual void OnError();
+    virtual void OnArrayEnd(const char id[], const int arrayDepth,
+                            const int indices[]);
 
- private:
-  enum DuetParserState { IDLE = 1, IN_MESSAGE, MESSAGE_DONE, ERROR };
-  bool CheckExpectedState(DuetParserState expected_state);
+    virtual void OnStartReceivedMessage();
+    virtual void OnEndReceivedMessage();
+    virtual void OnError();
 
-  DuetParserState duet_parser_state_;
-  DuetStatus captured_duet_status_;
+    // Methods for clients
+    bool IsParsedMessageOk() {
+      return duet_parser_state_ == MESSAGE_DONE;
+    }
 
-  friend class DuetParser;
+    // If the message parsed ok, call this to access internal parsed data.
+    const DuetStatus& ParsedData() {
+      return captured_duet_status_;
+    }
+
+    // For debugging
+    int State() {
+      return duet_parser_state_;
+    }
+
+  private:
+    enum DuetParserState { IDLE = 1, IN_MESSAGE, MESSAGE_DONE, ERROR };
+
+    bool CheckExpectedState(DuetParserState expected_state);
+
+    DuetParserState duet_parser_state_;
+    DuetStatus captured_duet_status_;
 };
 
-// Public API of the duet status reponse parser. Same 
-// instance can be used for an unlimited of message
-// parsings.
-class DuetParser {
- public:
-  // Start parsing a new json message.
-  void StartParsingJsonMessage();
-  // Prase the next char of the json message.
-  void ParseNextChar(const char c);
-
-  // Call this to check if the message was parsed ok.
-  bool IsParsedMessageOk() {
-    return json_listener_impl_.duet_parser_state_ ==
-           JsonParserListenerImpl::MESSAGE_DONE;
-  }
-  // If the message parsed ok, call this to get the parsed data.
-  const DuetStatus GetParsedDuetStatus() {
-    return json_listener_impl_.captured_duet_status_;
-  }
-
- private:
-  JsonParserListenerImpl json_listener_impl_;
-  JsonParser json_parser_;
-};
 
 #endif
