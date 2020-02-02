@@ -212,7 +212,7 @@ void loop() {
   }
 
   // No wifi connection. Try again.
-  if ((wifiMulti.run() != WL_CONNECTED)) {
+  if ((wifiMulti.run(10000) != WL_CONNECTED)) {
     drawScreenNoWifi();
     delay(500);
     return;
