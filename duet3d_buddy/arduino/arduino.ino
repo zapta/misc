@@ -80,7 +80,6 @@ static const StatusConfig status_configs[] = {
   {'D', "PAUSING", true, true, false, kYellow, kBlack},
   {'F', "FLASHING", false, false, false, kYellow, kBlack},
   {'I', "IDLE", false, true, false,  kGreen, kBlack},  // fix
- // {'I', "IDLE", true, true, true,  kGreen, kBlack},  // fix
   {'P', "PRINTING", true, true, true, kRed, kBlack},
   {'R', "RESUMING", true, true, false, kYellow, kBlack},
   {'S', "PAUSED", true, true, false, kYellow, kBlack},
@@ -89,7 +88,7 @@ static const StatusConfig status_configs[] = {
 };
 
 // Finds the configuration for a given duet status char.
-static const StatusConfig& decodeStatusConfig(char c) {
+static const StatusConfig& decodeStatusChar(char c) {
   const StatusConfig* p = status_configs;
   for (;;) {
     // Actual match or a catch all default terminator.
@@ -111,34 +110,32 @@ static void initTextScreen(uint16_t bg_color, uint16_t text_color) {
 static bool fatal_error = false;
 
 // Common rendering for all fatal error messages.
-static void drawScreenFatalError(const char* msg) {
+static void drawFatalErrorScreen(const char* msg) {
   fatal_error = true;
   initTextScreen(kBlue, kYellow);
   M5.Lcd.print(" FATAL ERROR:\n\n ");
   M5.Lcd.print(msg);
 }
 
-
-static void drawScreenNoWifi() {
+static void drawNoWifiScreen() {
   initTextScreen(kBlue, kYellow);
-  M5.Lcd.print(" Connecting to WIFI....");
+  M5.Lcd.print(" Connecting to WIFI.");
 }
 
-static void drawScreenNoHttpConnection(const char* error_message) {
-  // last_screen = SCREEN_NO_HTTP;
+static void drawNoHttpConnectionScreen(const char* error_message) {
   initTextScreen(kBlue, kYellow);
-  M5.Lcd.print(" Duet connection failed:.\n\n ");
+  M5.Lcd.print(" Duet connection failed:\n\n\n ");
   M5.Lcd.println(error_message);
 }
 
-static void drawScreenBadResponse() {
+static void drawBadDuetResponseScreen() {
   initTextScreen(kBlue, kYellow);
   M5.Lcd.print(" Bad response from duet.");
 }
 
-static void drawScreenInfo(const DuetStatus& duet_status) {
+static void drawInfoScreen(const DuetStatus& duet_status) {
   // Map the duet status char to screen configuration.
-  const StatusConfig& config = decodeStatusConfig(duet_status.state_char);
+  const StatusConfig& config = decodeStatusChar(duet_status.state_char);
   M5.Lcd.fillScreen(config.bg_color);
   M5.Lcd.setTextColor(config.text_color);
 
@@ -174,14 +171,14 @@ void setup() {
 
   // Open SD drive.
   if (!SD.begin()) {
-    drawScreenFatalError("SD card not found.");
+    drawFatalErrorScreen("SD card not found.");
     return;
   }
 
   // Open config file
   File file = SD.open("/duet_buddy.json");
   if (!file) {
-    drawScreenFatalError("Config file not found.");
+    drawFatalErrorScreen("Config file not found.");
     return;
   }
 
@@ -198,20 +195,20 @@ void setup() {
 
   // Config json parsed ok?
   if (!config_parser.IsParsedMessageOk()) {
-    drawScreenFatalError("Bad config file.");
+    drawFatalErrorScreen("Bad config file.");
     return;
   }
 
   // Has all required config values?
   const Config& config = config_parser.ParsedData();
   if (config.wifi_ssid.isEmpty() || config.wifi_password.isEmpty() || config.duet_ip.isEmpty()) {
-    drawScreenFatalError("Missing required config field.");
+    drawFatalErrorScreen("Missing required config field.");
     return;
   }
 
   // Setup Wifi AP.
   if (!wifiMulti.addAP(config.wifi_ssid.c_str(), config.wifi_password.c_str())) {
-    drawScreenFatalError("Wifi setup failed.");
+    drawFatalErrorScreen("Wifi setup failed.");
     return;
   }
 
@@ -223,7 +220,7 @@ void setup() {
 
   // Initialization done OK. Next we will connect to Wifi within
   // loop().
-  drawScreenNoWifi();
+  drawNoWifiScreen();
 }
 
 
@@ -236,7 +233,7 @@ void loop() {
 
   // No wifi connection. Try again.
   if ((wifiMulti.run(10000) != WL_CONNECTED)) {
-    drawScreenNoWifi();
+    drawNoWifiScreen();
     delay(500);
     return;
   }
@@ -252,7 +249,7 @@ void loop() {
 
   // No HTTP connection or an HTTP error status.
   if (httpCode != HTTP_CODE_OK) {
-    drawScreenNoHttpConnection(http.errorToString(httpCode).c_str());
+    drawNoHttpConnectionScreen(http.errorToString(httpCode).c_str());
     http.end();  // remember to close the http client.
     delay(500);
     return;
@@ -275,13 +272,13 @@ void loop() {
   // Duet Json parsing failed. Not an expected response.
   if (!duet_parser.IsParsedMessageOk()) {
     Serial.println("Message not ok");
-    drawScreenBadResponse();
+    drawBadDuetResponseScreen();
     delay(1000);
     return;
   }
 
-  // All is good and we got a valid json response.
+  // We got a valid json response.
   const DuetStatus& duet_status = duet_parser.ParsedData();
-  drawScreenInfo(duet_status);
-  delay(3000);
+  drawInfoScreen(duet_status);
+  delay(5000);
 }
