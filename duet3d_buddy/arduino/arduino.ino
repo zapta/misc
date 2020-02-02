@@ -25,7 +25,6 @@
 
 
 // TODO: add beeping in pause mode.
-// TODO: filter out sporadic connection/response issues.
 
 #include <Arduino.h>
 #include "duet_parser.h"
@@ -58,6 +57,14 @@ static DuetParser duet_parser;
 static ConfigParser config_parser;
 static SimpleString<80> duet_url;
 
+// When true, we do nothing and stay with the
+// fatal error screen.
+static bool fatal_error = false;
+
+// Counts consecutive duet connection errors. Used to filter
+// out transient errors.
+static int duet_error_allowance = 0;
+
 // Per duet status char screen configurations.
 // Colors are 16 bit RGB565 format.
 struct StatusConfig {
@@ -76,15 +83,15 @@ struct StatusConfig {
 static const StatusConfig status_configs[] = {
   {'A', "PAUSED", true, true, false, kPurple, kBlack},
   {'B', "BUSY", false, true, false, kRed, kBlack},
-  {'C', "CONFIGURING", false,  false, false, kYellow, kBlack},
+  {'C', "CONFIG", false,  false, false, kYellow, kBlack},
   {'D', "PAUSING", true, true, false, kYellow, kBlack},
   {'F', "FLASHING", false, false, false, kYellow, kBlack},
   {'I', "IDLE", false, true, false,  kGreen, kBlack},  // fix
   {'P', "PRINTING", true, true, true, kRed, kBlack},
   {'R', "RESUMING", true, true, false, kYellow, kBlack},
   {'S', "PAUSED", true, true, false, kYellow, kBlack},
-  // Default terminator. Must be last.
-  {'*', "[unknown]", false, false, false, kGray, kBlack}
+  // Terminator and default. Must be last.
+  {'*', "[UNKNOWN]", false, false, false, kGray, kBlack}
 };
 
 // Finds the configuration for a given duet status char.
@@ -103,12 +110,9 @@ static const StatusConfig& decodeStatusChar(char c) {
 static void initTextScreen() {
   M5.Lcd.fillScreen(kBlue);
   M5.Lcd.setTextColor(kYellow, kBlue);
+  M5.Lcd.setCursor(0, 12, 1);
   M5.Lcd.setTextSize(2);
-  M5.Lcd.setCursor(0, 12);
 }
-
-static bool fatal_error = false;
-static bool wifi_connected = false;
 
 // Common rendering for all fatal error messages.
 static void drawFatalErrorScreen(const char* msg) {
@@ -119,17 +123,9 @@ static void drawFatalErrorScreen(const char* msg) {
 }
 
 static void drawNoWifiScreen() {
-  wifi_connected = false;
   initTextScreen();
   M5.Lcd.printf(" Connecting to WIFI.\n\n\n SSID: [%s]",
                 config_parser.ParsedData().wifi_ssid.c_str());
-}
-
-static void drawWifiConnectedScreen() {
-  wifi_connected = true;
-  initTextScreen();
-  M5.Lcd.printf(" Wifi connected.\n\n\n Connecting to Duet.\n\n\n IP: [%s]",
-                config_parser.ParsedData().duet_ip.c_str());
 }
 
 static void drawNoHttpConnectionScreen(const char* error_message) {
@@ -151,25 +147,24 @@ static void drawInfoScreen(const DuetStatus& duet_status) {
   M5.Lcd.setTextColor(config.text_color);
 
   // Status name.
-  M5.Lcd.setCursor(20, 80, 2);
-  M5.Lcd.setTextSize(4);
+  M5.Lcd.setCursor(20, 102, 1);
+  M5.Lcd.setTextSize(5);
   M5.Lcd.print(config.text);
 
   if (config.display_progress) {
-    M5.Lcd.setCursor(160, 3, 2);
+    M5.Lcd.setCursor(197, 12, 1);
     M5.Lcd.setTextSize(3);
     M5.Lcd.printf("%5.1f%%", duet_status.progress_percents);
   }
 
   if (config.display_z) {
-    M5.Lcd.setCursor(20, 200, 2);
+    M5.Lcd.setCursor(12, 215, 1);
     M5.Lcd.setTextSize(2);
-    M5.Lcd.printf("Z:%0.1f", duet_status.z_height);
-
+    M5.Lcd.printf("%0.1fmm", duet_status.z_height);
   }
 
   if (config.display_temps) {
-    M5.Lcd.setCursor(130, 200, 2);
+    M5.Lcd.setCursor(130, 215, 1);
     M5.Lcd.setTextSize(2);
     M5.Lcd.printf("%0.1fc  %0.1fc", duet_status.temp1, duet_status.temp2);
   }
@@ -245,14 +240,9 @@ void loop() {
   // No wifi connection. Try again.
   if ((wifiMulti.run(10000) != WL_CONNECTED)) {
     drawNoWifiScreen();
+    duet_error_allowance = 0;
     delay(500);
     return;
-  }
-
-  // Wifi was just connected.
-  if (!wifi_connected) {
-    drawWifiConnectedScreen();
-    // We keep going to the http connection.
   }
 
   // Connect to duet and send a Get status http request.
@@ -263,10 +253,15 @@ void loop() {
   const int httpCode = http.GET();
   Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 
-
   // No HTTP connection or an HTTP error status.
   if (httpCode != HTTP_CODE_OK) {
-    drawNoHttpConnectionScreen(http.errorToString(httpCode).c_str());
+    // If already had a consecutive connection error.
+    if (duet_error_allowance > 0) {
+      Serial.println("Ignoring duet connection error");
+      duet_error_allowance--;
+    } else {
+      drawNoHttpConnectionScreen(http.errorToString(httpCode).c_str());
+    }
     http.end();  // remember to close the http client.
     delay(500);
     return;
@@ -288,8 +283,13 @@ void loop() {
 
   // Duet Json parsing failed. Not an expected response.
   if (!duet_parser.IsParsedMessageOk()) {
-    Serial.println("Message not ok");
-    drawBadDuetResponseScreen();
+    if (duet_error_allowance > 0) {
+      Serial.println("Ignoring duet response parsing error.");
+      duet_error_allowance--;
+    } else {
+      Serial.println("Message not ok");
+      drawBadDuetResponseScreen();
+    }
     delay(1000);
     return;
   }
@@ -297,5 +297,7 @@ void loop() {
   // We got a valid json response.
   const DuetStatus& duet_status = duet_parser.ParsedData();
   drawInfoScreen(duet_status);
+  // We will allow one transient duet error.
+  duet_error_allowance = 1;
   delay(5000);
 }
