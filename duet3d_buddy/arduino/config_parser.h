@@ -7,14 +7,14 @@
 
 // Represents parsed config
 struct Config {
-  SimpleString<30> wifi_ssid_;
-  SimpleString<30> wifi_password_;
-  SimpleString<100> duet_ip_;
+  SimpleString<30> wifi_ssid;
+  SimpleString<30> wifi_password;
+  SimpleString<100> duet_ip;
 
   void reset() {
-    wifi_ssid_.clear();
-    wifi_password_.clear();
-    duet_ip_.clear();
+    wifi_ssid.clear();
+    wifi_password.clear();
+    duet_ip.clear();
   }
 };
 
@@ -45,11 +45,6 @@ class ConfigParser : public JsonParserListener {
     // If the message parsed ok, call this to access internal parsed data.
     const Config& ParsedData() {
       return captured_config_;
-    }
-
-    // For debugging
-    int State() {
-      return config_parser_state_;
     }
 
   private:

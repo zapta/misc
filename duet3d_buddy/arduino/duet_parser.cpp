@@ -1,22 +1,34 @@
-// Implementation of duet_parser.h.
+// Duet state monitor. Parses the sniffed PanelDue serial communication
+// and extracts the Duet state.
 
 #include "duet_parser.h"
-#include "json_parser.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Try to get an unsigned integer value from a string
-bool GetUnsignedInteger(const char s[], unsigned int& rslt) {
+#include "json_parser.h"
+
+// TODO: move GetUnsignedInteger and GetFloat to a common util file.
+
+// Try to get an unsigned integer value from a string.
+// Return true if ok. If false, rstl is left as is.
+static bool GetUnsignedInteger(const char s[], unsigned int* rslt) {
   if (s[0] == 0) return false;  // empty string
   char* endptr;
-  rslt = (int)strtoul(s, &endptr, 10);
-  return *endptr == 0;
+  unsigned int temp;
+  temp = (unsigned int)strtoul(s, &endptr, 10);
+  if (*endptr) {
+    return false;
+  }
+  *rslt = temp;
+  return true;
 }
 
 // Try to get a floating point value from a string. if it is actually a floating
 // point value, round it.
-bool GetFloat(const char s[], float& rslt) {
+// Return true if ok. If false, rstl is left as is.
+static bool GetFloat(const char s[], float* rslt) {
   if (s[0] == 0) return false;  // empty string
 
   // GNU strtod is buggy, it's very slow for some long inputs, and some versions
@@ -25,8 +37,13 @@ bool GetFloat(const char s[], float& rslt) {
   if (strlen(s) > 10) return false;
 
   char* endptr;
-  rslt = strtof(s, &endptr);
-  return *endptr == 0;  // we parsed a float
+  float temp;
+  temp = strtof(s, &endptr);
+  if (*endptr) {
+    return false;
+  }
+  *rslt = temp;
+  return true;
 }
 
 void DuetParser::OnStartParsing() {
@@ -50,6 +67,9 @@ void DuetParser::OnReceivedValue(const char id[], const char val[],
     return;
   }
 
+  //printf("Id: [%s] -> [%s]  (%d, [%d, %d, %d])\n", id, val, arrayDepth,
+  //       indices[0], indices[1], indices[2]);
+
   // Capture duet status char.
   if (strcmp(id, "status") == 0) {
     if (strlen(val) == 1) {
@@ -60,16 +80,34 @@ void DuetParser::OnReceivedValue(const char id[], const char val[],
     return;
   }
 
-  // Capture print progress.
   if (strcmp(id, "fractionPrinted") == 0) {
-    float percents;
-    if (GetFloat(val, percents)) {
-      captured_duet_status_.progress_permils = (int)(percents * 10);
-    } else {
+    if (!GetFloat(val, &captured_duet_status_.progress_percents)) {
       duet_parser_state_ = DuetParserState::ERROR;
     }
     return;
   }
+
+  if (strcmp(id, "coords:xyz^") == 0 && indices[0] == 2) {
+    if (!GetFloat(val, &captured_duet_status_.z_height)) {
+      duet_parser_state_ = DuetParserState::ERROR;
+    }
+    return;
+  }
+
+  if (strcmp(id, "temps:current^") == 0) {
+    if (indices[0] == 0) {
+      if (!GetFloat(val, &captured_duet_status_.temp1)) {
+        duet_parser_state_ = DuetParserState::ERROR;
+      }
+    }
+    else if (indices[0] == 1) {
+      if (!GetFloat(val, &captured_duet_status_.temp2)) {
+        duet_parser_state_ = DuetParserState::ERROR;
+      }
+    }
+    return;
+  }
+
 
   // Else, ignored.
 }
@@ -100,4 +138,6 @@ void DuetParser::OnEndReceivedMessage() {
 }
 
 // Traffic parser reported an error.
-void DuetParser::OnError() { CheckExpectedState(DuetParserState::ERROR); }
+void DuetParser::OnError() {
+  CheckExpectedState(DuetParserState::ERROR);
+}

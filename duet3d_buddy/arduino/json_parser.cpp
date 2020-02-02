@@ -38,7 +38,7 @@ bool JsonParser::InArray() {
 
 void JsonParser::ProcessField() {
   json_listener_->OnReceivedValue(field_id_.c_str(), field_val_.c_str(), array_depth_,
-                            array_indices_);
+                                  array_indices_);
   field_val_.clear();
 }
 
@@ -185,7 +185,7 @@ void JsonParser::ParseNextChar( char c) {
             state_ = JsError();
           } else {
             field_val_.add(c);  // ignore any error so that long string parameters
-                              // just get truncated
+            // just get truncated
           }
           break;
       }
@@ -317,7 +317,7 @@ void JsonParser::ParseNextChar( char c) {
       break;
 
     case jsEndVal:  // had the end of a string or array value, expecting comma
-                    // or ] or }
+      // or ] or }
       switch (c) {
         case ',':
           if (InArray()) {

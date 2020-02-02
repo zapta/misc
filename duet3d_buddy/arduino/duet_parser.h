@@ -1,21 +1,28 @@
-// Parser for the duet json status responses. These
-// are the HTTP responses that the duet return for the URL
+// Parse for the duet status json message. These are the
+// messages returned from GET requests to
 // http://xx.xx.xx.xx/rr_status?type=3
+
 
 #ifndef DUET_PARSER_H
 #define DUET_PARSER_H
 
 #include "json_parser.h"
 
-// Parsed values.
+// Represents parsed duet status.
 struct DuetStatus {
   char state_char;
-  int progress_permils;
+  float progress_percents;
+  float z_height;
+  float temp1;
+  float temp2;
 
   void reset() {
     // Default values.
     state_char = ' ';
-    progress_permils = 0;
+    progress_percents = 0.0;
+    z_height = 0.0;
+    temp1 = 0;
+    temp2 = 0;
   }
 };
 
@@ -46,11 +53,6 @@ class DuetParser : public JsonParserListener {
       return captured_duet_status_;
     }
 
-    // For debugging
-    int State() {
-      return duet_parser_state_;
-    }
-
   private:
     enum DuetParserState { IDLE = 1, IN_MESSAGE, MESSAGE_DONE, ERROR };
 
@@ -58,6 +60,7 @@ class DuetParser : public JsonParserListener {
 
     DuetParserState duet_parser_state_;
     DuetStatus captured_duet_status_;
+
 };
 
 

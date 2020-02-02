@@ -17,7 +17,7 @@ void ConfigParser::OnStartParsing() {
 
 // Utility for message events preconditions.
 bool ConfigParser::CheckExpectedState(
-    ConfigParserState expected_state) {
+  ConfigParserState expected_state) {
   if (config_parser_state_ == expected_state) {
     return true;
   }
@@ -27,24 +27,24 @@ bool ConfigParser::CheckExpectedState(
 
 // Json parser encounted a field or array value.
 void ConfigParser::OnReceivedValue(const char id[], const char val[],
-                                             const int arrayDepth,
-                                             const int indices[]) {
+                                   const int arrayDepth,
+                                   const int indices[]) {
   if (!CheckExpectedState(ConfigParserState::IN_MESSAGE)) {
     return;
   }
 
   if (strcmp(id, "wifi_ssid") == 0) {
-    captured_config_.wifi_ssid_ = val;
+    captured_config_.wifi_ssid = val;
     return;
   }
 
-    if (strcmp(id, "wifi_password") == 0) {
-    captured_config_.wifi_password_ = val;
+  if (strcmp(id, "wifi_password") == 0) {
+    captured_config_.wifi_password = val;
     return;
   }
 
-        if (strcmp(id, "duet_ip") == 0) {
-    captured_config_.duet_ip_ = val;
+  if (strcmp(id, "duet_ip") == 0) {
+    captured_config_.duet_ip = val;
     return;
   }
 
@@ -53,7 +53,7 @@ void ConfigParser::OnReceivedValue(const char id[], const char val[],
 
 // Parser exited an array.
 void ConfigParser::OnArrayEnd(const char id[], const int arrayDepth,
-                                        const int indices[]) {
+                              const int indices[]) {
   if (!CheckExpectedState(ConfigParserState::IN_MESSAGE)) {
     return;
   }
@@ -81,6 +81,6 @@ void ConfigParser::OnError() {
   CheckExpectedState(ConfigParserState::ERROR);
 }
 
- /* void DuetParser::ParseNextChar(const char c) {
-    json_parser_.ParseNextChar(c);
+/* void DuetParser::ParseNextChar(const char c) {
+   json_parser_.ParseNextChar(c);
   }*/

@@ -9,14 +9,23 @@
 //   "duet_ip" : "10.20.30.40"
 // }
 //
-// The program polls the duet at the url 
+// The program polls the duet at the url
 // http://xx.xx.xx.xx/rr_status?type=3
-// and displayes selected values such as 
+// and displayes selected values such as
 // state and progress.
+//
+// Arduino IDE configuration:
+// --------------------------
+// Board:             M5Stack-Core-ESP32
+// Upload Speed:      921600
+// Flash Frequencey:  80Mhz
+// Flash Mode:        QIO
+// Partition Schema:  No OTA (Large APP)
+// Core Debug Level:  None
 
-// TODO: code cleanup.
-// TODO: add info fields for temps and Z height.
+
 // TODO: add beeping in pause mode.
+// TODO: filter out sporadic connection/response issues.
 
 #include <Arduino.h>
 #include "duet_parser.h"
@@ -28,10 +37,6 @@
 #include <SD.h>
 #include <WiFiMulti.h>
 #include <HTTPClient.h>
-
-// This includes definitions of CONFIG_SSID, CONFIG_PASSWORD and CONFIG_HOST
-// literal strings and is not checked in into github.
-//#include "_config.h"
 
 // 16 bits RGB565 colors. Picked using
 // http://www.barth-dev.de/online/rgb565-color-picker/
@@ -61,22 +66,26 @@ struct StatusConfig {
   const char c;
   // User friendly status name.
   const char* text;
+  const bool display_progress;
+  const bool display_temps;
+  const bool display_z;
   const uint16_t bg_color;
   const uint16_t text_color;
 };
 
 static const StatusConfig status_configs[] = {
-  {'A', "PAUSED", kPurple, kBlack},
-  {'B', "BUSY", kRed, kBlack},
-  {'C', "CONFIGURING", kYellow, kBlack},
-  {'D', "PAUSING", kYellow, kBlack},
-  {'F', "FLASHING", kYellow, kBlack},
-  {'I', "IDLE", kGreen, kBlack},
-  {'P', "PRINTING", kRed, kBlack},
-  {'R', "RESUMING", kYellow, kBlack},
-  {'S', "PAUSED", kYellow, kBlack},
+  {'A', "PAUSED", true, true, false, kPurple, kBlack},
+  {'B', "BUSY", false, true, false, kRed, kBlack},
+  {'C', "CONFIGURING", false,  false, false, kYellow, kBlack},
+  {'D', "PAUSING", true, true, false, kYellow, kBlack},
+  {'F', "FLASHING", false, false, false, kYellow, kBlack},
+  {'I', "IDLE", false, true, false,  kGreen, kBlack},  // fix
+ // {'I', "IDLE", true, true, true,  kGreen, kBlack},  // fix
+  {'P', "PRINTING", true, true, true, kRed, kBlack},
+  {'R', "RESUMING", true, true, false, kYellow, kBlack},
+  {'S', "PAUSED", true, true, false, kYellow, kBlack},
   // Default terminator. Must be last.
-  {'*', "[unknown]", kGray, kBlack}
+  {'*', "[unknown]", false, false, false, kGray, kBlack}
 };
 
 // Finds the configuration for a given duet status char.
@@ -116,7 +125,7 @@ static void drawScreenNoWifi() {
 }
 
 static void drawScreenNoHttpConnection(const char* error_message) {
- // last_screen = SCREEN_NO_HTTP;
+  // last_screen = SCREEN_NO_HTTP;
   initTextScreen(kBlue, kYellow);
   M5.Lcd.print(" Duet connection failed:.\n\n ");
   M5.Lcd.println(error_message);
@@ -133,15 +142,29 @@ static void drawScreenInfo(const DuetStatus& duet_status) {
   M5.Lcd.fillScreen(config.bg_color);
   M5.Lcd.setTextColor(config.text_color);
 
-  if (duet_status.progress_permils) {
-    M5.Lcd.setCursor(180, 3, 2);
-    M5.Lcd.setTextSize(3);
-    M5.Lcd.printf("%d.%d%%", duet_status.progress_permils / 10, duet_status.progress_permils % 10);
-  }
-
+  // Status name.
   M5.Lcd.setCursor(20, 80, 2);
   M5.Lcd.setTextSize(4);
   M5.Lcd.print(config.text);
+
+  if (config.display_progress) {
+    M5.Lcd.setCursor(160, 3, 2);
+    M5.Lcd.setTextSize(3);
+    M5.Lcd.printf("%5.1f%%", duet_status.progress_percents);
+  }
+
+  if (config.display_z) {
+    M5.Lcd.setCursor(20, 200, 2);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.printf("Z:%0.1f", duet_status.z_height);
+
+  }
+
+  if (config.display_temps) {
+    M5.Lcd.setCursor(130, 200, 2);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.printf("%0.1fc  %0.1fc", duet_status.temp1, duet_status.temp2);
+  }
 }
 
 void setup() {
@@ -181,20 +204,20 @@ void setup() {
 
   // Has all required config values?
   const Config& config = config_parser.ParsedData();
-  if (config.wifi_ssid_.isEmpty() || config.wifi_password_.isEmpty() || config.duet_ip_.isEmpty()) {
+  if (config.wifi_ssid.isEmpty() || config.wifi_password.isEmpty() || config.duet_ip.isEmpty()) {
     drawScreenFatalError("Missing required config field.");
     return;
   }
 
   // Setup Wifi AP.
-  if (!wifiMulti.addAP(config.wifi_ssid_.c_str(), config.wifi_password_.c_str())) {
+  if (!wifiMulti.addAP(config.wifi_ssid.c_str(), config.wifi_password.c_str())) {
     drawScreenFatalError("Wifi setup failed.");
     return;
   }
 
-  // Construct duet URL string.
+  // Construct the duet URL string.
   duet_url.add("http://");
-  duet_url.add(config.duet_ip_.c_str());
+  duet_url.add(config.duet_ip.c_str());
   duet_url.add("/rr_status?type=3");
   Serial.printf("Duet url: [%s]\n", duet_url.c_str());
 

@@ -9,40 +9,56 @@
 // Bounded vector class
 template <class T, int N>
 class SimpleVector {
- public:
-  SimpleVector() : filled(0) {}
+  public:
+    SimpleVector() : filled(0) {}
 
-  bool full() const { return filled == N; }
+    bool full() const {
+      return filled == N;
+    }
 
-  constexpr int capacity() const { return N; }
+    constexpr int capacity() const {
+      return N;
+    }
 
-  int size() const { return filled; }
+    int size() const {
+      return filled;
+    }
 
-  bool isEmpty() const { return filled == 0; }
+    bool isEmpty() const {
+      return filled == 0;
+    }
 
-  const T& operator[](int index) const { return storage[index]; }
+    const T& operator[](int index) const {
+      return storage[index];
+    }
 
-  T& operator[](int index) { return storage[index]; }
+    T& operator[](int index) {
+      return storage[index];
+    }
 
-  bool add(const T& x);
+    bool add(const T& x);
 
-  bool add(const T* p, int n);
+    bool add(const T* p, int n);
 
-  void erase(int pos, int count = 1);
+    void erase(int pos, int count = 1);
 
-  void truncate(int pos);
+    void truncate(int pos);
 
-  void clear() { filled = 0; }
+    void clear() {
+      filled = 0;
+    }
 
-  const T* c_ptr() { return storage; }
+    const T* c_ptr() {
+      return storage;
+    }
 
-  // void sort(bool (*sortfunc)(T, T));
+    // void sort(bool (*sortfunc)(T, T));
 
-  bool replace(T oldVal, T newVal);
+    bool replace(T oldVal, T newVal);
 
- protected:
-  T storage[N];  // static buffer
-  int filled;    // size
+  protected:
+    T storage[N];  // static buffer
+    int filled;    // size
 };
 
 template <class T, int N>
