@@ -43,8 +43,8 @@ void ConfigParser::OnReceivedValue(const char id[], const char val[],
     return;
   }
 
-  if (strcmp(id, "duet_ip") == 0) {
-    captured_config_.duet_ip = val;
+  if (strcmp(id, "status_url") == 0) {
+    captured_config_.status_url = val;
     return;
   }
 

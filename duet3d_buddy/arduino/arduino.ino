@@ -6,13 +6,11 @@
 // {
 //   "wifi_ssid" : "xxx",
 //   "wifi_password" : "yyy",
-//   "duet_ip" : "10.20.30.40"
+//   "status_url" : "http://xx.xx.xx.xx/rr_status?type=3"
 // }
 //
-// The program polls the duet at the url
-// http://xx.xx.xx.xx/rr_status?type=3
-// and displayes selected values such as
-// state and progress.
+// The program polls the duet's status URL and and displayes
+// a few selected values such as state and progress.
 //
 // Arduino IDE configuration:
 // --------------------------
@@ -55,11 +53,11 @@ static JsonParser json_parser;
 static DuetParser duet_parser;
 // Stores configuration parsed from SD file.
 static ConfigParser config_parser;
-static SimpleString<80> duet_url;
 
 // When true, we do nothing and stay with the
 // fatal error screen.
 static bool fatal_error = false;
+static bool wifi_connected = false;
 
 // Counts consecutive duet connection errors. Used to filter
 // out transient errors.
@@ -118,21 +116,32 @@ static void initTextScreen() {
 static void drawFatalErrorScreen(const char* msg) {
   fatal_error = true;
   initTextScreen();
-  M5.Lcd.print(" FATAL ERROR:\n\n ");
+  M5.Lcd.print(" FATAL ERROR.\n\n ");
   M5.Lcd.print(msg);
 }
 
 static void drawNoWifiScreen() {
   initTextScreen();
-  M5.Lcd.printf(" Connecting to WIFI.\n\n\n SSID: [%s]",
+  wifi_connected = false;
+  M5.Lcd.print(" Connecting to WIFI.\n");
+  M5.Lcd.printf("\n\n SSID: [%s]",
                 config_parser.ParsedData().wifi_ssid.c_str());
+}
+
+static void drawWifiConnectedScreen() {
+  initTextScreen();
+  wifi_connected = true;
+  M5.Lcd.print(" WIFI connected.\n\n\n Connecting to duet.");
 }
 
 static void drawNoHttpConnectionScreen(const char* error_message) {
   initTextScreen();
   M5.Lcd.print(" Duet connection failed.\n\n\n ");
-  M5.Lcd.println(error_message);
-  M5.Lcd.printf("\n\n IP: [%s]", config_parser.ParsedData().duet_ip.c_str());
+  M5.Lcd.print(error_message);  
+  M5.Lcd.setCursor(0, 160, 2);
+  M5.Lcd.print(" ");
+  M5.Lcd.setTextSize(1);
+  M5.Lcd.printf("[%s]", config_parser.ParsedData().status_url.c_str());
 }
 
 static void drawBadDuetResponseScreen() {
@@ -207,8 +216,8 @@ void setup() {
 
   // Has all required config values?
   const Config& config = config_parser.ParsedData();
-  if (config.wifi_ssid.isEmpty() || config.wifi_password.isEmpty() || config.duet_ip.isEmpty()) {
-    drawFatalErrorScreen("Missing required config field.");
+  if (config.wifi_ssid.isEmpty() || config.wifi_password.isEmpty() || config.status_url.isEmpty()) {
+    drawFatalErrorScreen("Missing required config\n field.");
     return;
   }
 
@@ -218,14 +227,7 @@ void setup() {
     return;
   }
 
-  // Construct the duet URL string.
-  duet_url.add("http://");
-  duet_url.add(config.duet_ip.c_str());
-  duet_url.add("/rr_status?type=3");
-  Serial.printf("Duet url: [%s]\n", duet_url.c_str());
-
-  // Initialization done OK. Next we will connect to Wifi within
-  // loop().
+  // Initialization done OK. Next we will connect to Wifi within loop().
   drawNoWifiScreen();
 }
 
@@ -240,16 +242,23 @@ void loop() {
   // No wifi connection. Try again.
   if ((wifiMulti.run(10000) != WL_CONNECTED)) {
     drawNoWifiScreen();
+    delay(500);
+    return;
+  }
+
+   // Just connected to WIFI, give a short notice.
+  if (!wifi_connected) {
+    drawWifiConnectedScreen();
     duet_error_allowance = 0;
     delay(500);
     return;
   }
 
   // Connect to duet and send a Get status http request.
-  //http.begin(url);
-  http.begin(duet_url.c_str());
+  const Config& config = config_parser.ParsedData();
+  http.begin(config.status_url.c_str());
   Serial.print("[HTTP] GET ");
-  Serial.println(duet_url.c_str());
+  Serial.println(config.status_url.c_str());
   const int httpCode = http.GET();
   Serial.printf("[HTTP] GET... code: %d\n", httpCode);
 

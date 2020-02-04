@@ -9,12 +9,12 @@
 struct Config {
   SimpleString<30> wifi_ssid;
   SimpleString<30> wifi_password;
-  SimpleString<100> duet_ip;
+  SimpleString<100> status_url;
 
   void reset() {
     wifi_ssid.clear();
     wifi_password.clear();
-    duet_ip.clear();
+    status_url.clear();
   }
 };
 
@@ -54,7 +54,6 @@ class ConfigParser : public JsonParserListener {
 
     ConfigParserState config_parser_state_;
     Config captured_config_;
-
 };
 
 
