@@ -4,47 +4,11 @@
 #include "duet_parser.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "json_parser.h"
+#include "parser_utils.h"
 
-// TODO: move GetUnsignedInteger and GetFloat to a common util file.
-
-// Try to get an unsigned integer value from a string.
-// Return true if ok. If false, rstl is left as is.
-static bool GetUnsignedInteger(const char s[], unsigned int* rslt) {
-  if (s[0] == 0) return false;  // empty string
-  char* endptr;
-  unsigned int temp;
-  temp = (unsigned int)strtoul(s, &endptr, 10);
-  if (*endptr) {
-    return false;
-  }
-  *rslt = temp;
-  return true;
-}
-
-// Try to get a floating point value from a string. if it is actually a floating
-// point value, round it.
-// Return true if ok. If false, rstl is left as is.
-static bool GetFloat(const char s[], float* rslt) {
-  if (s[0] == 0) return false;  // empty string
-
-  // GNU strtod is buggy, it's very slow for some long inputs, and some versions
-  // have a buffer overflow bug. We presume strtof may be buggy too. Tame it by
-  // rejecting any strings that much longer than we expect to receive.
-  if (strlen(s) > 10) return false;
-
-  char* endptr;
-  float temp;
-  temp = strtof(s, &endptr);
-  if (*endptr) {
-    return false;
-  }
-  *rslt = temp;
-  return true;
-}
 
 void DuetParser::OnStartParsing() {
   duet_parser_state_ = DuetParserState::IDLE;
@@ -81,14 +45,14 @@ void DuetParser::OnReceivedValue(const char id[], const char val[],
   }
 
   if (strcmp(id, "fractionPrinted") == 0) {
-    if (!GetFloat(val, &captured_duet_status_.progress_percents)) {
+    if (!StringToFloat(val, &captured_duet_status_.progress_percents)) {
       duet_parser_state_ = DuetParserState::ERROR;
     }
     return;
   }
 
   if (strcmp(id, "coords:xyz^") == 0 && indices[0] == 2) {
-    if (!GetFloat(val, &captured_duet_status_.z_height)) {
+    if (!StringToFloat(val, &captured_duet_status_.z_height)) {
       duet_parser_state_ = DuetParserState::ERROR;
     }
     return;
@@ -96,12 +60,12 @@ void DuetParser::OnReceivedValue(const char id[], const char val[],
 
   if (strcmp(id, "temps:current^") == 0) {
     if (indices[0] == 0) {
-      if (!GetFloat(val, &captured_duet_status_.temp1)) {
+      if (!StringToFloat(val, &captured_duet_status_.temp1)) {
         duet_parser_state_ = DuetParserState::ERROR;
       }
     }
     else if (indices[0] == 1) {
-      if (!GetFloat(val, &captured_duet_status_.temp2)) {
+      if (!StringToFloat(val, &captured_duet_status_.temp2)) {
         duet_parser_state_ = DuetParserState::ERROR;
       }
     }
