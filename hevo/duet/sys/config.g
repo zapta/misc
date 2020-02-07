@@ -32,7 +32,7 @@ M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
 M98 P"/sys/mode_normal.g"
 
 ; Note: too fast E speed may skip steps
-M203 X15000 Y15000 Z3000 E1500                ; Set maximum speeds (mm/min)
+M203 X15000 Y15000 Z3000 E3000                ; Set maximum speeds (mm/min)
 M204 P1000 T3000			      ; Set printing and travel accelerations
 M906 X1500 Y1500 Z1500 E1200 I30              ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
@@ -118,7 +118,7 @@ M307 H0 A237.3 C1430.3 D1.7 V24.2 B0
 M307 H1 A503.6 C235.7 D4.9 V24.1 B0
 
 ; Pressure advance.
-M572 D0 S0.10 ; set pressure advance
+M572 D0 S0.15 ; set pressure advance
 
 ; Automatic saving after power loss is not enabled
 
