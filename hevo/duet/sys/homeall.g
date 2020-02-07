@@ -1,9 +1,7 @@
 ; homeall.g
 ;
-; called to home all axes
-;M117 Started Home All
 
-; Make sure we don't have left over changes.
+; Make sure we don't have leftover changes.
 M98 P"/sys/mode_normal.g"
 
 G29 S2            ; disable bed mesh compensation 
@@ -24,7 +22,6 @@ M98 P"/sys/mode_stall.g"
 ; Home X
 M400
 M913 X30 Y30      ; XY motors to 30% current
-;G1 S1 X-320 F3600 ; move until motors hit X min and stall
 G1 S1 X-320 F2600 ; move until motors hit X min and stall
 G1 X10 F6000      ; go back a few mm on X
 M400
@@ -33,7 +30,6 @@ M913 X100 Y100    ; XY motors to 100% current
 ; Home Y
 M400
 M913 X30 Y30      ; XY motors to 30% current
-;G1 S1 Y-320 F3600 ; move until motors hit Y min and stall
 G1 S1 Y-320 F2600 ; move until motors hit Y min and stall
 G1 Y10 F6000      ; go back a few mm on Y
 M400
@@ -45,17 +41,9 @@ M98 P"/sys/mode_normal.g"
 ; Home Z
 M400
 G90               ; absolute positioning
-;G1 X5 Y29 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
-;G1 X5 Y29 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
-;G1 X50 Y29 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
 G1 X140 Y140 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
 M400
 M913 Z60          ; Z motors to 60% current, in case something goes wrong with bltouch
-;M558 A1 F800      ; Set for probing at fast speed, single probe
-; 
-; TODO: see M558 recomanded config at https://duet3d.dozuki.com/Wiki/BLTouch_Troubleshooting
-;
-;M558 A1 F1200      ; Set for probing at fast speed, single probe
 M558 A1 F800      ; Set for probing at fast speed, single probe
 G30               ; Probe and home Z (pass 1)
 M400
@@ -66,5 +54,3 @@ G30               ; Probe and home Z
 G1 X0 Y-5 F3000   ; Move X,Y to rest position
 G1 Z40 F700       ; Move Z   to rest position
 
-;M98 P"/macros/park_up"
-;M117 Ended Home All
