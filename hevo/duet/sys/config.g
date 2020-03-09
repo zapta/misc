@@ -1,5 +1,7 @@
 ; Configuration file for Duet2 WiFi.
 
+M80     ; ATX PS_ON on
+
 ; General preferences
 G90                                          ; Send absolute coordinates...
 M83                                          ; ...but relative extruder moves
