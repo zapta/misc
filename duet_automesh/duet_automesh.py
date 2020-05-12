@@ -39,10 +39,13 @@ Credit:
 	Thank you both. 
 """
 
+# Prusaslicer's variables are listed here.
+# https://github.com/prusa3d/PrusaSlicer/wiki/Slic3r-placeholders-(a-copy-of-the-mauk.cc-page)
+
 import sys
 import re
 import math
-import os
+# import os
 
 probeSpacing = 20   		# set your required probe point spacing for M557
 
@@ -64,6 +67,8 @@ def main(fname):
 	lines = _Slic3rFile.readlines()
 	_Slic3rFile.close()
 
+	print(f'Line count: {len(lines)}')
+
 	linesNew = calcBed(lines)
 
 	_Slic3rFile = open(fname, "r+")
@@ -83,7 +88,13 @@ def error():
 
 def calcBed(lines):
 	bounds = findBounds(lines)
-	bed = findBed()
+	# print(f'Bounds: {bounds}')
+	# bed = findBed()
+	bed = {
+		'X': 280,
+		'Y': 280,
+	}
+	# print(f'bed: {bed}')
 
 	for axis in bounds:
 		if bounds[axis]['max'] - bounds[axis]['min'] < bed[axis]:
@@ -109,19 +120,19 @@ def calcBed(lines):
 					error()
 	return fillGrid(bounds, lines)
 
-def findBed():
-	bed = {
-		'X': 0,
-		'Y': 0,
-	}
-
-	bedCorners = os.environ.get("SLIC3R_BED_SHAPE")
-	maxXY = bedCorners.split(',')[2].split('x')
-	bed['X'] = int(maxXY[0])
-	bed['Y'] = int(maxXY[1])
-	print(bed)
-
-	return bed
+# def findBed():
+# 	bed = {
+# 		'X': 0,
+# 		'Y': 0,
+# 	}
+#
+# 	bedCorners = os.environ.get("SLIC3R_BED_SHAPE")
+# 	maxXY = bedCorners.split(',')[2].split('x')
+# 	bed['X'] = int(maxXY[0])
+# 	bed['Y'] = int(maxXY[1])
+# 	print(bed)
+#
+# 	return bed
 
 def findBounds(lines):
 	bounds = {
@@ -131,10 +142,14 @@ def findBounds(lines):
 
 	parsing = False
 	for line in lines:
-		if "move to next layer (0)" in line:
+		# if "move to next layer (0)" in line:
+		if "xxx before layer 0" in line:
+			print('Parsing ON')
 			parsing = True
 			continue
-		elif "move to next layer (1)" in line:
+		# elif "move to next layer (1)" in line:
+		elif "xxx before layer 1" in line:
+			print('Parsing OFF)')
 			break
 
 		if parsing:
