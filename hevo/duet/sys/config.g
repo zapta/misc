@@ -66,7 +66,8 @@ M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and t
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
-G31 P500 X30 Y0 Z1.96                   ; Set Z probe trigger value, offset and trigger height
+;G31 P500 X30 Y0 Z1.96                   ; Set Z probe trigger value, offset and trigger height
+G31 P500 X30 Y0 Z1.36                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
@@ -127,4 +128,15 @@ M572 D0 S0.15 ; set pressure advance
 ; Custom settings are not configured
 
 T0   ; select extruder
+
+; PS_ON experiment
+;M570 H0 P10 T10 S0    ; Allow a heat bed anomaly to persist for 10 seconds (P10) 
+;                      ; on the before raising a heater fault. Allow a 10C 
+;                      ; deviation from set point (T10) After 0 minutes of heater 
+;                      ; fault cancel the build (S0).
+;M570 H1 P10 T10 S0    ; Allow a hot end anomaly to persist for 10 seconds (P10)
+;                      ; on the before raising a heater fault. Allow a 
+;                      ; 10C deviation from set point (T10) After 0  
+;                      ; minute of heater fault cancel the build (S0).
+
 
