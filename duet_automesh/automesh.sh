@@ -7,6 +7,14 @@ date > $log
 echo "Args: $*" >> $log
 echo >> $log
 
-$python3 /projects/misc/repo/duet_automesh/duet_automesh.py $* 2>&1 | tee -a $log
+$python3 /projects/misc/repo/duet_automesh/duet_automesh.py $* 2>&1 > $log
+
+RESULT=$?
+if [ $RESULT -eq 0 ]; then
+  osascript -e 'display notification "Mesh done."'
+else
+  osascript -e 'display notification "Mesh script failed."'
+fi
+
 
 
