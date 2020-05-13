@@ -39,6 +39,9 @@ Credit:
   Thank you both.
 """
 
+# Based on a python program posted on the Duet's forums by user CCS86: 
+# https://forum.duet3d.com/topic/15302/cura-script-to-automatically-probe-only-printed-area?_=1589348772496
+
 # TODO: cleanup file description
 # TODO: replace consts with flags (see argparse)
 # TODO: clean code.
