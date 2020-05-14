@@ -43,8 +43,6 @@ Credit:
 # https://forum.duet3d.com/topic/15302/cura-script-to-automatically-probe-only-printed-area?_=1589348772496
 
 # TODO: cleanup file description
-# TODO: replace consts with flags (see argparse)
-# TODO: clean code.
 # TODO: make sure it supports also prints of a single layer
 # TODO: select better layer markers
 
@@ -56,26 +54,67 @@ import re
 import math
 from enum import Enum
 import copy
+import argparse
 
 
-# Print an error message and abort.
+parser = argparse.ArgumentParser()
+parser.add_argument('--printable',
+                    default="0:280,0:280",
+                    help='Bed printable area x1:x2,y1:y2')
+
+parser.add_argument('--meshable',
+                    default="30:280,30:280",
+                    help='Bed meshable area x1:x2,y1:y2')
+
+parser.add_argument('--margin', type=int,
+                    default=10,
+                    help='Expand area to mesh around by this value ')
+
+parser.add_argument('--spacing', type=int,
+                    default=30,
+                    help='Desired mesh spacing.')
+
+parser.add_argument('--min_points', type=int, choices=range(2, 50),
+                    default=2,
+                    help='Minimum number of mesh points in each direction.')
+
+parser.add_argument('--max_points', type=int, choices=range(2, 50),
+                    default=10,
+                    help='Maximum number of mesh points in each direction.')
+
+# Positional arg. Verified in main() to be required.
+parser.add_argument('file_path', default="")
+
+args = parser.parse_args()
+
+
+# Prints an error message and aborts.
 def fatal_error(message):
     print('Fatal error: ' + message)
     input()
     sys.exit(1)
 
 
-# Represents a closed interval [min, max]
+# Represents a closed interval [min, max].
 class Span:
     def __init__(self, min_value, max_value):
         self.min_value = min_value
         self.max_value = max_value
         self.__check()
 
+    # Construct from a string. E.g. "10:320.3"
+    @staticmethod
+    def from_string(str):
+        match = re.fullmatch(r'([\d.-]+):([\d.-]+)', str)
+        if not match:
+            fatal_error(f'Invalid range string format: "{str}"')
+        # TODO: detect numeric exeption and call fatal_error.
+        return Span(float(match[1]), float(match[2]))
+
     # Call after mutations that may break the invariant.
     def __check(self):
         if self.min_value > self.max_value:
-            fatal_error(f'Invalid span: {self}')
+            fatal_error(f'Invalid range value: {self}')
 
     # If needed, expand the span to include given value.
     def expand_to_include(self, value):
@@ -111,19 +150,25 @@ class Span:
         self.__check()
 
     def __repr__(self):
-        return f'min: {self.min_value}, max: {self.max_value}'
+        return f'{self.min_value}:{self.max_value}'
 
 
-# Represents a closed 2D rectangle as two spans, for
-# X and Y respectively.
+# Represents a closed 2D rectangle as two spans, one for X and Y respectively.
 class Rect:
     def __init__(self, x_span, y_span):
         self.x_span = copy.deepcopy(x_span)
         self.y_span = copy.deepcopy(y_span)
 
+    # Construct from a string. E.g. "10:320.3,0:280"
+    @staticmethod
+    def from_string(str):
+        match = re.fullmatch(r'([^,]+),([^,]+)', str)
+        if not match:
+            fatal_error(f'Invalid area string format: "{str}"')
+        return Rect(Span.from_string(match[1]), Span.from_string(match[2]))
+
     # Does this rectangle contains another rectangle.
     def contains_rect(self, other_rect):
-        # print(f'containsRect() called *****')
         return (self.x_span.contains_span(other_rect.x_span) and
                 self.y_span.contains_span(other_rect.y_span))
 
@@ -143,30 +188,14 @@ class Rect:
         self.y_span.expand_by(margin)
 
     def __repr__(self):
-        return f'x_span: {self.x_span}, y_span: {self.y_span}'
+        return f'{self.x_span},{self.y_span}'
 
-
-# Desire mesh spacing.
-DESIRED_SPACING = 35
-
-# Min mesh points in each of X and Y directions.
-MIN_POINTS = 2
-
-# Max mesh points in each of X and Y directions.
-MAX_POINTS = 7
-
-# Mesh the object print area expanded all around by this margin.
-MARGIN = 10
 
 # The printable area of my printer.
-PRINTABLE = Rect(
-    x_span=Span(0, 280),
-    y_span=Span(0, 280))
+PRINTABLE = Rect.from_string(args.printable)
 
 # The meshable area of my printer.
-MESHABLE = Rect(
-    x_span=Span(30, 280),
-    y_span=Span(30, 280))
+MESHABLE = Rect.from_string(args.meshable)
 
 
 # Enum to represent gcode file parsing states.
@@ -176,7 +205,14 @@ class ParsingState(Enum):
     LAYER1_DONE = 3
 
 
-def main(fname):
+def main():
+    fname = args.file_path
+    if not fname:
+        fatal_error("Missing gcode file path argument")
+
+    if args.min_points > args.max_points:
+        fatal_error("--min_points can't be higher than --max_points")
+
     print(f'PRINTABLE area: {PRINTABLE}')
     print(f'MESHABLE area: {MESHABLE}')
 
@@ -196,7 +232,7 @@ def main(fname):
 
     # Compute mesh area
     mesh_area = copy.deepcopy(print_area)
-    mesh_area.expand_by(MARGIN)
+    mesh_area.expand_by(args.margin)
     mesh_area.clip_to(MESHABLE)
     mesh_area.round()
 
@@ -281,8 +317,8 @@ def extract_first_layer_print_area(lines):
 
 # Given an X or Y mesh span, return the number of mesh points.
 def span_to_mesh_point_count(span):
-    return max(MIN_POINTS,
-               1 + round((span.max_value - span.min_value) / DESIRED_SPACING))
+    n = 1 + round((span.max_value - span.min_value) / args.spacing)
+    return max(args.min_points, min(args.max_points, n))
 
 
 # Returns a gcode command to insert
@@ -319,8 +355,4 @@ def replace_lines(original_lines, mesh_gcode):
     return modified_lines
 
 
-if __name__ == '__main__':
-    if sys.argv[1]:
-        main(fname=sys.argv[1])
-    else:
-        fatal_error('Missing gcode file name argument')
+main()
