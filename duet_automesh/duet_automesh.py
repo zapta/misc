@@ -1,42 +1,28 @@
 #!/usr/bin/python
 """
-  Slic3r post-processing script for RepRap firmware printers which dynamically defines the mesh grid dimensions (M557) based on the print dimensions.
-{1}
-Usage:
-{1}
-  Slic3r Settings:
-  In Print Settings > Output Options
-  1. turn no "Verbose G-code"
-  2. in "Post-processing scripts" type the full path to python and the full path to this script
-  e.g. <Python Path>\python.exe  <Script Path>\meshcalc.py;
-{1}
-  In Printer Settings > Custom G-code > Start G-code
-  Make sure the start g-code contains the M557 command, and that you probe the bed and load the compensation map,  e.g.
-  M557 X10:290 Y10:290 S20	; Setup default grid
-  G29							; Mesh bed probe
-  G29 S1						; Load compensation map
+  A Python3 script for per-print selective mesh bed leveling for Duet3d and PrusaSlicer.
 
-  Script Settings
-  probeSpacing = 20 - change this to the preferred probe point spacing in M557
+  The script process the generated gcode file, determine the bounding area of the first layer and
+  insert a M557 gcode command to set mesh bed leveling for that area only.
 
-  Note: The minimum X and Y of the probed area is limited to 2 times the probeSpacing.
-  This is so that prints with a small footprint will have a minimum 3x3 probe mesh
-{1}
-Args:
-{1}
-  Path: The path parameter will be provided by Slic3r.
-{1}
-Requirements:
-{1}
-  The latest version of Python.
-  Note that I use this on windows and haven't tried it on any other platform.
-  Also this script assumes that the bed origin (0,0) is NOT the centre of the bed. Go ahead and modify this script as required.
-{1}
-Credit:
-{1}
-  Based on code originally posted by CCS86 on https://forum.duet3d.com/topic/15302/cura-script-to-automatically-probe-only-printed-area?_=1587348242875.
-  and maybe 90% or more is code posted by MWOLTER on the same thread.
-  Thank you both.
+  Setting up:
+  1. Make sure your computer has python3 installed.
+  2. In your PrusaSlicer, set the Post-processing-scripts in the Plater | Output Options tab to:
+     python3 path-to-this-script.
+  3. In the the Start G-Code setting of yoru slicer add the following lines (preferably after 
+     turning on the bed and nozzle heaters and waiting for them to reach their target temps)
+     ; For automesh
+     M557 TBD  ; parameters will be set automatically
+     G28  ;home
+     G29  ;mesh
+  4. In the Before layer change setting of your slicer insert the line
+     ; Automesh: begin layer [layer_num]
+  5. Slice a model and save it's gcode to a file. This will invoke the script
+     which will set the M577 command to have the proper mesh parameters. 
+  6. Open the gcode file with an editor and verify that the M577 command 
+     indeed has the proper parameters.
+  7. Send the gcode file for printing and verify that it mesh the print area
+     before the first layer is printed.   
 """
 
 # Based on a python program posted on the Duet's forums by user CCS86: 
@@ -58,9 +44,6 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--printable',
-                    default="0:280,0:280",
-                    help='Bed printable area x1:x2,y1:y2')
 
 parser.add_argument('--meshable',
                     default="30:280,30:280",
@@ -81,6 +64,14 @@ parser.add_argument('--min_points', type=int, choices=range(2, 50),
 parser.add_argument('--max_points', type=int, choices=range(2, 50),
                     default=10,
                     help='Maximum number of mesh points in each direction.')
+
+parser.add_argument('--first_layer_start',
+                    default="Automesh: begin layer 0",
+                    help='Beginning of first layer gcode marker')
+
+parser.add_argument('--first_layer_end',
+                    default="Automesh: begin layer 1",
+                    help='End of first layer gcode marker')
 
 # Positional arg. Verified in main() to be required.
 parser.add_argument('file_path', default="")
@@ -104,10 +95,10 @@ class Span:
 
     # Construct from a string. E.g. "10:320.3"
     @staticmethod
-    def from_string(str):
-        match = re.fullmatch(r'([\d.-]+):([\d.-]+)', str)
+    def from_string(s):
+        match = re.fullmatch(r'([\d.-]+):([\d.-]+)', s)
         if not match:
-            fatal_error(f'Invalid range string format: "{str}"')
+            fatal_error(f'Invalid range string format: "{s}"')
         # TODO: detect numeric exeption and call fatal_error.
         return Span(float(match[1]), float(match[2]))
 
@@ -161,10 +152,10 @@ class Rect:
 
     # Construct from a string. E.g. "10:320.3,0:280"
     @staticmethod
-    def from_string(str):
-        match = re.fullmatch(r'([^,]+),([^,]+)', str)
+    def from_string(s):
+        match = re.fullmatch(r'([^,]+),([^,]+)', s)
         if not match:
-            fatal_error(f'Invalid area string format: "{str}"')
+            fatal_error(f'Invalid area string format: "{s}"')
         return Rect(Span.from_string(match[1]), Span.from_string(match[2]))
 
     # Does this rectangle contains another rectangle.
@@ -191,11 +182,8 @@ class Rect:
         return f'{self.x_span},{self.y_span}'
 
 
-# The printable area of my printer.
-PRINTABLE = Rect.from_string(args.printable)
-
 # The meshable area of my printer.
-MESHABLE = Rect.from_string(args.meshable)
+MESHABLE_AREA = Rect.from_string(args.meshable)
 
 
 # Enum to represent gcode file parsing states.
@@ -213,8 +201,7 @@ def main():
     if args.min_points > args.max_points:
         fatal_error("--min_points can't be higher than --max_points")
 
-    print(f'PRINTABLE area: {PRINTABLE}')
-    print(f'MESHABLE area: {MESHABLE}')
+    print(f'MESHABLE area: {MESHABLE_AREA}')
 
     print(f'Opening gcode file: {fname}')
     gcode_file = open(fname, encoding='utf-8')
@@ -227,13 +214,11 @@ def main():
     # Extract from gcode lines a bounding rectangle of first layer.
     print_area = extract_first_layer_print_area(original_lines)
     print(f'printArea: {print_area}')
-    if not PRINTABLE.contains_rect(print_area):
-        fatal_error(f'Print area {print_area} is outsise of printable area: {PRINTABLE}')
 
     # Compute mesh area
     mesh_area = copy.deepcopy(print_area)
     mesh_area.expand_by(args.margin)
-    mesh_area.clip_to(MESHABLE)
+    mesh_area.clip_to(MESHABLE_AREA)
     mesh_area.round()
 
     # Compute M577 command to issue.
@@ -260,7 +245,7 @@ def extract_first_layer_print_area(lines):
     print(f'Parsing state = {state}')
     for line in lines:
         # If start of first layer
-        if "xxx before layer 0" in line:
+        if args.first_layer_start in line:
             print(line)
             if state != ParsingState.WAITING_FOR_LAYER1:
                 fatal_error(f'Unexpected state [1]: {state}')
@@ -269,7 +254,7 @@ def extract_first_layer_print_area(lines):
             continue
 
         # If end of first layer
-        if "xxx before layer 1" in line:
+        if args.first_layer_end in line:
             print(line)
             if state != ParsingState.IN_LAYER1:
                 fatal_error(f'Unexpected state [2]: {state}')
