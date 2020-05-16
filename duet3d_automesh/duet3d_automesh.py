@@ -17,11 +17,14 @@
      G29  ;mesh
   4. In the Before layer change setting of your slicer insert the line
      ; Automesh: begin layer [layer_num]
-  5. Slice a model and save it's gcode to a file. This will invoke the script
+  5. In the Post processing script section of your slicer add a command to invoke the
+     script:
+     <path to your python3> <path_to_the_duet3d_automesh.py file>
+  6. Slice a model and save it's gcode to a file. This will invoke the script
      which will set the M577 command to have the proper mesh parameters. 
-  6. Open the gcode file with an editor and verify that the M577 command 
+  7. Open the gcode file with an editor and verify that the M577 command 
      indeed has the proper parameters.
-  7. Send the gcode file for printing and verify that it mesh the print area
+  8. Send the gcode file for printing and verify that it mesh the print area
      before the first layer is printed.   
 """
 
