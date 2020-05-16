@@ -45,7 +45,6 @@ from enum import Enum
 import copy
 import argparse
 
-
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--meshable',
@@ -328,8 +327,37 @@ def compute_m557_command(mesh_area):
 # Given list of original lines an mesh command to insert, return the
 # list of output lines.
 def replace_lines(original_lines, mesh_gcode):
+    # We keep the M73 remaining time lines so we can restore the display after
+    # a temp change.
+    remaining_time_lines = []
     modified_lines = []
     for original_line in original_lines:
+        # Time marker, e.g. E.g. M73 P27 R16
+        match = re.fullmatch(r'M73 P([\d]+) R([\d]+)', original_line)
+        if match:
+            percents = int(match[1])
+            minutes_left = int(match[2])
+            hh = math.floor(minutes_left / 60)
+            mm = minutes_left % 60
+            modified_lines.append('; ' + original_line)
+            remaining_time_lines = [
+                ';--- Display M73 remaining time',
+                f'M140 R-{hh}',    # Bed standby field
+                f'G10 P0 R-{mm}',  # Extruder standby field
+                ';---'
+            ]
+            modified_lines.extend(remaining_time_lines)
+            continue
+
+        # TODO: invoke this condition also for bed temp change.
+        # M104 destroys the mm display so restore it.
+        if original_line.startswith('M104'):
+            modified_lines.append(original_line)
+            # This does nothing before the first M73.
+            modified_lines.extend(remaining_time_lines)
+            continue
+
+        # M577 mesh insertion.
         if original_line.startswith('M557'):
             modified_lines.extend([
                 "; Replaced marker: " + original_line,
@@ -338,8 +366,10 @@ def replace_lines(original_lines, mesh_gcode):
             ])
             print(f'Marker: {original_line}')
             print(f'Inserted: {mesh_gcode}')
-        else:
-            modified_lines.append(original_line)
+            continue
+
+        # Regular line. Just pass it as is.
+        modified_lines.append(original_line)
     return modified_lines
 
 
