@@ -31,19 +31,18 @@
 # Based on a python program posted on the Duet's forums by user CCS86: 
 # https://forum.duet3d.com/topic/15302/cura-script-to-automatically-probe-only-printed-area?_=1589348772496
 
-# TODO: cleanup file description
-# TODO: make sure it supports also prints of a single layer
-# TODO: select better layer markers
+# TODO: make sure it works well also with a single layer prints.
 
 # Prusaslicer's variables are listed here.
 # https://github.com/prusa3d/PrusaSlicer/wiki/Slic3r-placeholders-(a-copy-of-the-mauk.cc-page)
 
-import sys
-import re
-import math
-from enum import Enum
-import copy
 import argparse
+import copy
+import math
+import re
+import sys
+
+from enum import Enum
 
 parser = argparse.ArgumentParser()
 
@@ -335,23 +334,23 @@ def replace_lines(original_lines, mesh_gcode):
         # Time marker, e.g. E.g. M73 P27 R16
         match = re.fullmatch(r'M73 P([\d]+) R([\d]+)', original_line)
         if match:
-            percents = int(match[1])
+            # percents = int(match[1])
             minutes_left = int(match[2])
             hh = math.floor(minutes_left / 60)
             mm = minutes_left % 60
             modified_lines.append('; ' + original_line)
             remaining_time_lines = [
                 ';--- Display M73 remaining time',
-                f'M140 R-{hh}',    # Bed standby field
+                f'M140 R-{hh}',  # Bed standby field
                 f'G10 P0 R-{mm}',  # Extruder standby field
                 ';---'
             ]
             modified_lines.extend(remaining_time_lines)
             continue
 
-        # TODO: invoke this condition also for bed temp change.
-        # M104 destroys the mm display so restore it.
-        if original_line.startswith('M104'):
+        # If changing extruder or bed temperature, it may overwrite
+        # the standby fields so restore remaining time display.
+        if original_line.startswith('M104') or original_line.startswith('M140'):
             modified_lines.append(original_line)
             # This does nothing before the first M73.
             modified_lines.extend(remaining_time_lines)
