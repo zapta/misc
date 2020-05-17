@@ -61,13 +61,15 @@ M307 H3 A-1 C-1 D-1                          ; Disable heater on PWM channel for
 ;
 ; TODO: see M588 param recomendation at https://duet3d.dozuki.com/Wiki/BLTouch_Troubleshooting
 ;
-M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and the dive height + speeds
+;M558 P9 H3 F120 T12000                       ; Set Z probe type to bltouch and the dive height + speeds
+;M558 P9 H2 F120 T12000                       ; Set Z probe type to bltouch and the dive height + speeds
+M558 P9 H2 F120 T5000                       ; Set Z probe type to bltouch and the dive height + speeds
 ; See http://www.sublimelayers.com/2017/05/fdffsd.html
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
 ;G31 P500 X30 Y0 Z1.96                   ; Set Z probe trigger value, offset and trigger height
-G31 P500 X30 Y0 Z1.36                   ; Set Z probe trigger value, offset and trigger height
+G31 P500 X30 Y0 Z1.76                   ; Set Z probe trigger value, offset and trigger height
 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
