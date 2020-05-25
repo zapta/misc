@@ -1,10 +1,6 @@
 ;
 
-;M106 S255 ; fan at 100% to cool nozzle
-;M1 ; heaters and motors off
-
 M83           ; extruder relative positioning
-;G1 E-10 F3000 ; retract 10mm to avoid a string from the part
 G1 E-5 F1500 ; retract 5mm at to avoid a string from the part
 M82           ; extruder abs positioning
 M400          ; wait for all movements to finish

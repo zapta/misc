@@ -2,6 +2,8 @@
 ; called to perform automatic bed compensation via G32
 ;
 
+M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
+
 G91               ; relative positioning
 M400
 M913 Z25          ; Z motors to 25% current

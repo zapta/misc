@@ -24,6 +24,10 @@ M569 P2 S1                                   ; Drive 2 goes forwards
 M569 P3 S1                                   ; Drive 3 goes forwards
 M350 X16 Y16 Z16 E16 I1                      ; Configure microstepping with interpolation
 
+# Independent Z motors. See documentation at
+# https://duet3d.dozuki.com/Wiki/Bed_levelling_using_multiple_independent_Z_motors#Section_Example_for_2_motors
+M584 X0 Y1 Z2:4 E3; two Z motors connected to driver outputs Z and E1
+
 M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
 
 ; Based on:
@@ -89,9 +93,9 @@ G10 P0 X0 Y0 Z0                              ; Set tool 0 axis offsets
 G10 P0 R0 S0                                 ; Set initial tool 0 active and standby temperatures to 0C
 
 ; Leveling
-M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
+;M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
 
-M557 X32:289 Y29:285 S64                     ; Define mesh grid
+;M557 X32:289 Y29:285 S64                     ; Define mesh grid
 
 ; Bed temp pid autotune
 ; To autotune send [M303 H0 P1.0 S60]. Check progress with [M303]. when stage 4 done, 

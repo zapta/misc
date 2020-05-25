@@ -4,16 +4,27 @@
 M98 P"/sys/mode_normal.g"
 
 T0  ; select extruder tool 0; just in case. Already doing it in config.g
-M116 P0   ; wait for extruder (tool 0) temp to stabalize
 
-;M117 before_print extruder stabalized
+;M116 P0   ; wait for extruder (tool 0) temp to stabalize
 
-G28 ; home all axes
-G29 S1              ; load mesh heightmap
+;M190 S60            ; heat bed and wait until ready
+
+M561                ; clear any bed transform
+
+G28       ; home
+
+M671 X-38:172 Y-38:172 S1.0 ; leadscrews at left (connected to Z) and right (connected to E1) of X axis
+
+G1 X0 Y172 Z10 F4000 ; optional, go at a moderate speed to the probing area.
+
+G30 P0 X30 Y172 Z-99999 ; probe near a leadscrew, half way along Y axis
+G30 P1 X280 Y172 Z-99999 S2 ; probe near a leadscrew and calibrate 2 motors
 
 
-;G1 X25 Y-5 F1000.0     ; go outside print area, away from the tab
-G1 X25 Y-5 F2000.0     ; go outside print area, away from the tab
+G29  ;mesh - based on auto mesh settingss
+
+
+G1 X25 Y-5 F6000.0     ; go outside print area, away from the tab
 G1 Z0.6 F400           ; move Z to purge level
 M400                   ; wait for movements to complete
 

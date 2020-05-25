@@ -42,7 +42,8 @@ M98 P"/sys/mode_normal.g"
 M400
 G90               ; absolute positioning
 ;G1 X140 Y140 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
-G1 X160 Y100 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
+;G1 X160 Y100 F6000   ; go to probing point (close to edge, for better support if bltouch fails)
+G1 X150 Y172 F6000   ; go to probing point (between two Z rods)
 M400
 M913 Z60          ; Z motors to 60% current, in case something goes wrong with bltouch
 M558 A1 F800      ; Set for probing at fast speed, single probe
@@ -52,6 +53,6 @@ M913 Z100         ; Z motors to 100% current
 M558 A5 F100	  ; Set for probing at slow speed, allow multiple trys
 G30               ; Probe and home Z
 
-G1 X0 Y-5 F3000   ; Move X,Y to rest position
-G1 Z40 F700       ; Move Z   to rest position
+G1 X0 Y-5 Z30 F3000   ; Move end to rest position
+;;G1 Z40 F700       ; Move Z   to rest position
 
