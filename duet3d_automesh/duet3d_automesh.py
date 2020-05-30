@@ -55,11 +55,11 @@ parser.add_argument('--margin', type=int,
                     help='Expand area to mesh around by this value ')
 
 parser.add_argument('--spacing', type=int,
-                    default=30,
+                    default=40,
                     help='Desired mesh spacing.')
 
 parser.add_argument('--min_points', type=int, choices=range(2, 50),
-                    default=2,
+                    default=3,
                     help='Minimum number of mesh points in each direction.')
 
 parser.add_argument('--max_points', type=int, choices=range(2, 50),
@@ -82,9 +82,7 @@ args = parser.parse_args()
 
 # Prints an error message and aborts.
 def fatal_error(message):
-    print('Fatal error: ' + message)
-    input()
-    sys.exit(1)
+    raise Exception('Fatal error: ' + message)
 
 
 # Represents a closed interval [min, max].
@@ -97,7 +95,7 @@ class Span:
     # Construct from a string. E.g. "10:320.3"
     @staticmethod
     def from_string(s):
-        match = re.fullmatch(r'([\d.-]+):([\d.-]+)', s)
+        match = re.fullmatch(r'([-]?[\d.-]+):([-]?[\d.-]+)', s)
         if not match:
             fatal_error(f'Invalid range string format: "{s}"')
         # TODO: detect numeric exeption and call fatal_error.
