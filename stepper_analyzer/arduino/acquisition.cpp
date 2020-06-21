@@ -14,10 +14,12 @@ namespace acquisition {
 //
 // 12 bit -> 4096 counts.
 // 3.3V full scale.
-// 0.2V per AMP (for +/- 5A sensor).
-const float COUNTS_PER_AMP = 0.2 * 4096 / 3.3;
+// 0.4V per AMP (for +/- 2.5A sensor).
+const float COUNTS_PER_AMP = 0.4 * 4096 / 3.3;
+
 // We use this value to do multiplications instead of divisions.
 const float AMPS_PER_COUNT = 1 / COUNTS_PER_AMP;
+
 const float MILLIAMPS_PER_COUNT = 1000 / COUNTS_PER_AMP;
 
 // Non energized limit, with hysteresis.

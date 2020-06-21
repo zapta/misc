@@ -1,5 +1,9 @@
-// Skeleton program for reading two input analog channels.
+// Stepper analyzer.
 // Designed for Teensy 4.0.
+//
+// Board: teensy 4.0
+// Optimizer: faster
+// 
 
 #include "display.h"
 #include "acquisition.h"
@@ -43,12 +47,18 @@ static void next_screen() {
   full_redraw = true;
 }
 
+
+static int last_full_steps = 0;
+
 static void update_display() {
   switch (screen_num) {
     case 0:
       acquisition::get_state(&acq_state);
-      Serial.println(acq_state.full_steps);
-      // acquisition::dump_state(acq_state);
+      
+      Serial.println(acq_state.full_steps - last_full_steps);
+      last_full_steps = acq_state.full_steps;
+      
+      acquisition::dump_state(acq_state);
       display::draw_info_screen(acq_state, full_redraw);
       break;
       
@@ -114,10 +124,12 @@ void setup() {
 
 void loop() {
 
-  static char buffer[300];
+  //static char buffer[300];
 
   // Display
   if (millis_since_display_update >= 250) {
+  //
+  if (millis_since_display_update >= 15) {
     millis_since_display_update = 0;
     update_display();
 //    sprintf(buffer, "Switches: %d %d %d %d", 
