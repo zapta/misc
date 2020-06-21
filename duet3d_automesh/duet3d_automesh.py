@@ -267,7 +267,7 @@ def extract_first_layer_print_area(lines):
 
         # Get coordinates on this line
         # TODO: should we restrict this to move operations?
-        for match in re.findall(r'([YX])([\d.]+)\s', line):
+        for match in re.findall(r'([YX])([-]?[\d.]+)\s', line):
             # Get axis letter, e.g. 'X', 'Y', 'Z'.
             axis = match[0]
 
