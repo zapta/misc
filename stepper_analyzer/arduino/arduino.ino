@@ -7,13 +7,14 @@
 
 //#include "display.h"
 #include "acquisition.h"
+#include "simple_string.h"
 #include "io.h"
 #include <string.h>
 #include <stdio.h>
 #include <elapsedMillis.h>
 #include <EEPROM.h>
 
-#define NEXTION Serial2
+#define NEXTION Serial5
 
 static elapsedMillis millis_since_display_update;
 
@@ -25,33 +26,20 @@ struct EepromData {
 static char buffer[300];
 
 
+SimpleString<50> line;
+
+
 // EEPROM address for storing configuration. This is an arbitrary value.
 static const uint32_t EEPROM_ADDRESS = 16;
 
-//static int screen_num = 0;
-//static bool full_redraw = true;
+
 
 static acquisition::State acq_state;
 
-//static int screen_updates_since_last_capture;
 
 //static bool capture_pending;
 //static acquisition::CaptureBuffer capture_buffer;
 //static bool capture_changed = true;
-
-
-//static void next_screen() {
-//  if (screen_num >= 0 && screen_num < 3) {
-//    screen_num++;
-//  } else {
-//    screen_num = 0;
-//  }
-//  if (screen_num == 3) {
-//    // Large to force immediate capture
-//    screen_updates_since_last_capture = 9999;
-//  }
-//  full_redraw = true;
-//}
 
 
 //static int last_full_steps = 0;
@@ -86,54 +74,35 @@ static void update_display() {
 
 }
 
-//static void update_display() {
-//  switch (screen_num) {
-//    case 0:
-//      acquisition::get_state(&acq_state);
-//
-//      Serial.println(acq_state.full_steps - last_full_steps);
-//      last_full_steps = acq_state.full_steps;
-//
-//      acquisition::dump_state(acq_state);
-//      display::draw_info_screen(acq_state, full_redraw);
-//      break;
-//
-//    case 1:
-//      acquisition::get_state(&acq_state);
-//      display::draw_time_histogram_screen(acq_state, full_redraw);
-//      break;
-//
-//    case 2:
-//      acquisition::get_state(&acq_state);
-//      display::draw_amps_histogram_screen(acq_state, full_redraw);
-//      break;
-//
-//    case 3:
-//        if (screen_updates_since_last_capture > 12  && acquisition::is_capture_ready()) {
-//           screen_updates_since_last_capture  = 0;
-//           acquisition::start_capture(48);
-//           capture_pending = true;
-//        }
-//        screen_updates_since_last_capture++;
-//       // acquisition::get_capture(&capture_buffer);
-//        display::draw_signals_screen(capture_buffer, full_redraw || capture_changed);
-//        capture_changed = false;
-//     // }
-//      break;
-//  }
-//  full_redraw = false;
-//}
 
-//static void calibrate_zeros() {
-//    acquisition::CalibrationData calibration_data;
-//    acquisition::calibrate_zeros(&calibration_data);
-//    EEPROM.put(EEPROM_ADDRESS, calibration_data);
-//    Serial.print("Calibrate: ");
-//    Serial.print(calibration_data.offset1);
-//    Serial.print(' ');
-//    Serial.println(calibration_data.offset2);
-//}
 
+
+static void calibrate_zeros() {
+    acquisition::CalibrationData calibration_data;
+    acquisition::calibrate_zeros(&calibration_data);
+    EEPROM.put(EEPROM_ADDRESS, calibration_data);
+    Serial.print("Calibrate: ");
+    Serial.print(calibration_data.offset1);
+    Serial.print(' ');
+    Serial.println(calibration_data.offset2);
+}
+
+// 'line' contains a non empty line from Nextion. Process it.
+static void process_line() {
+  if (line.equals("#RST")) {
+    acquisition::reset_history();
+    Serial.println("Reset history");
+    return;
+  }
+
+  if (line.equals("#ZRO")) {
+    calibrate_zeros();
+    Serial.println("Zero");
+    return;
+  }
+
+  Serial.println("*** UNKNOWN LINE, ignored.");
+}
 
 void setup() {
   Serial.begin(9600);
@@ -158,58 +127,38 @@ void setup() {
 }
 
 
-
-
 void loop() {
 
 
   // Display
-  if (millis_since_display_update >= 1                                     00) {
+  if (millis_since_display_update >= 100) {
     millis_since_display_update = 0;
-    io::set_led2();
+    //io::set_led2();
     update_display();
-    io::reset_led2();
-
+    //io::reset_led2();
   }
-  //
-  //  if (millis_since_display_update >= 15) {
-  //    millis_since_display_update = 0;
-  //    update_display();
-  //    sprintf(buffer, "Switches: %d %d %d %d",
-  //      io::dip_switch1(),  io::dip_switch2(),  io::dip_switch3(),  io::dip_switch4());
-  //      Serial.println(buffer);
-  //  }
 
-  //  if (capture_pending && acquisition::is_capture_ready()) {
-  //    Serial.println("CAPTURE READY");
-  //    acquisition::get_capture(&capture_buffer);
-  //    //acquisition::dump_capture(capture_buffer);
-  //    //screen_updates_since_last_capture = 0;
-  //
-  //    capture_pending = false;
-  //    capture_changed = true;
-  //  }
-
-  //  // Button 1
-  //  io::button1.update();
-  //  if (io::button1.is_click()) {
-  //    // Click: start capturing
-  //    acquisition::start_capture(4);
-  //    capture_pending = true;
-  //  }
-  //  if (io::button1.is_long_press()) {
-  //    // Long press: zero current sensors.
-  //    calibrate_zeros();
-  //  }
-
-  //  // Button 2
-  //  io::button2.update();
-  //  if (io::button2.is_click()) {
-  //    // Click: next screen
-  //    next_screen();
-  //  }
-  //  if (io::button2.is_long_press()) {
-  //    // Long press: reset history
-  //    acquisition::reset_history();
-  //  }
+  while (NEXTION.available()) {
+    char c = char(NEXTION.read());
+    if (c != '\n' && c != '\r') {
+      if (!line.full()) {
+        sprintf(buffer, "* %02x '%c'",  c, c);
+        Serial.println(buffer);
+        line.add(c);
+      }
+    } else {
+      if (!line.isEmpty()) {
+        Serial.println(line.c_str());
+        if (line.full()) {
+          Serial.println("Line buffer is full. Ignoring.");
+        } else {
+          process_line();
+        }
+        line.clear();
+        Serial.println("cleared");
+        // One line at most in a loop();
+        break;
+      }
+    }
+  }
 }
