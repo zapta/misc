@@ -10,6 +10,7 @@
 #include "filters.h"
 
 namespace acquisition {
+
 // TODO: define a const for the reciprocal to speed up conversion to amps.
 //
 // 12 bit -> 4096 counts.
@@ -200,11 +201,11 @@ inline void isr_add_step_to_histogram(
   if (entry_direction != exit_direction || entry_direction == UNKNOWN_DIRECTION) {
     return;
   }
-  uint32_t speed = 50000 / ticks;  // speed in steps per second
-  if (speed < 50) {
+  uint32_t steps_per_sec = TICKS_PER_SEC / ticks;  // speed in steps per second
+  if (steps_per_sec < 10) {
     return;   // ignore very slow steps as they dominate the histogram.
   }
-  uint32_t bucket_index = speed / 100;   // Each bucket represents a speed range of 100 steps/sec.
+  uint32_t bucket_index = steps_per_sec / BUCKET_SPAN;
   if (bucket_index >= NUM_BUCKETS) {
     bucket_index =  NUM_BUCKETS - 1;
   }
@@ -428,7 +429,7 @@ void setup(CalibrationData& calibration_data) {
   //
   // TDOO: why setting PWM for pin TIMER1_B_PIN, the real output, doesn't work?
   pinMode(TIMER1_B_PIN, OUTPUT);        // Timer output - pin 7.
-  Timer1.initialize(10);                // 20 us = 50 kHz
+  Timer1.initialize(USECS_PER_TICK);                // 10 us = 50 kHz
   Timer1.pwm(TIMER1_A_PIN, 1024 / 4);   // 25% (abitrary)
   Timer1.attachInterrupt(adcTimingIsr); // ISR
 }

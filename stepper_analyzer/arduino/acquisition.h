@@ -32,7 +32,16 @@ enum Direction {
   BACKWARD
 };
 
+// 100KHz sampling.
+const int USECS_PER_TICK = 10;
+const int TICKS_PER_SEC = 1000000 / USECS_PER_TICK;
+
+const int MAX_MILLIAMPS = 2500;
 const int NUM_BUCKETS = 20;
+// Each histogram bucket represents a speed range of 100 
+// steps per sec, starting from zero. Overflow counts are
+// aggregated in the last bucket.
+const int BUCKET_SPAN = 100;
 
 // A single histogram bucket
 struct HistogramBucket {
