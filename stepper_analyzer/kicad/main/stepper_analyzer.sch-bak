@@ -709,19 +709,6 @@ $EndComp
 Wire Wire Line
 	7500 3050 7600 3050
 $Comp
-L stepper_analyzer:3V3D #PWR0114
-U 1 1 5DB861CB
-P 7600 3150
-F 0 "#PWR0114" H 7600 3000 50  0001 C CNN
-F 1 "3V3D" V 7615 3278 50  0000 L CNN
-F 2 "" H 7600 3150 50  0001 C CNN
-F 3 "" H 7600 3150 50  0001 C CNN
-	1    7600 3150
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	7500 3150 7600 3150
-$Comp
 L stepper_analyzer:3V3A #PWR0115
 U 1 1 5DB8D3EF
 P 7600 3050
@@ -842,4 +829,6 @@ Text Label 1900 6425 0    50   ~ 0
 POT1
 Text Label 1900 6325 0    50   ~ 0
 POT2
+NoConn ~ 7500 3150
+NoConn ~ 8500 3600
 $EndSCHEMATC
