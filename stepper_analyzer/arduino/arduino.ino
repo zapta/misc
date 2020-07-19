@@ -12,39 +12,42 @@
 #include <string.h>
 #include <stdio.h>
 #include <elapsedMillis.h>
-#include <EEPROM.h>
+#include "eeprom.h"
+//#include <EEPROM.h>
 
-#define NEXTION Serial5
+
+#define NEXTION Serial3
 
 // Page 1 fields
 #define P1_AMPS_A "t4.txt"
 #define P1_AMPS_B "t5.txt"
 #define P1_ERRORS "t6.txt"
-#define P1_POWER "t7.txt"
-#define P1_IDLES "t9.txt"
-#define P1_STEPS "t11.txt"
+#define P1_POWER  "t7.txt"
+#define P1_IDLES  "t9.txt"
+#define P1_STEPS  "t11.txt"
 
 // Page 2 fields
-#define P2_STEPS "t11.txt"
+#define P2_STEPS  "t11.txt"
 
 // Page 5 fields
-#define P5_SPEED "t9.txt"
-#define P5_STEPS "t11.txt"
-#define P5_DIAL  "z0.val"
+#define P5_SPEED  "t9.txt"
+#define P5_STEPS  "t11.txt"
+#define P5_DIAL   "z0.val"
 
 // Page 9 fields
 #define P9_AMPS_A "t4.txt"
 #define P9_AMPS_B "t5.txt"
+#define P9_REV_DIR "c0.val"
 
 
 
 // https://github.com/pfeerick/elapsedMillis/blob/master/elapsedMillis.h
 static elapsedMillis millis_since_display_update;
 
-struct EepromData {
-  int offset1;
-  int offset2;
-};
+//struct EepromData {
+//  int offset1;
+//  int offset2;
+//};
 
 static char buffer[300];
 
@@ -57,7 +60,7 @@ int handler_index = 0;
 int waveform_offset = 0;
 
 // EEPROM address for storing configuration. This is an arbitrary value.
-static const uint32_t EEPROM_ADDRESS = 16;
+//static const uint32_t EEPROM_ADDRESS = 16;
 
 static acquisition::State acq_state;
 
@@ -255,10 +258,93 @@ class Page5Handler : public PageHandler {
     int last_displayed_angle_ = 0;
 };
 
+static acquisition::CaptureBuffer capture_buffer;
+
+class Page6Handler : public PageHandler {
+  public:
+    Page6Handler() : PageHandler(250, "#PG6") {}
+
+    void enter() override {
+      start_capturing();
+      //state_ = kCapturing;
+      //acquisition::start_capture(2);
+    }
+
+    void process_line() override {
+      if (line.equals("#TRG")) {
+        if (state_ == kIdle) {
+          Serial.println("Start capturing");
+          start_capturing();
+        }
+      }
+      
+      //Serial.printf("P9: %s\n", line.c_str());
+
+//      // Handle ADC zero calibration.
+//      if (line.equals("#ZRO")) {
+//        acquisition::Settings acq_settings;
+//        acquisition::calibrate_zeros(&acq_settings);
+//        eeprom::UpdateAcqSettings(acq_settings);
+//        Serial.print("Calibrate: ");
+//        Serial.print(acq_settings.offset1);
+//        Serial.print(' ');
+//        Serial.println(acq_settings.offset2);
+//        return;
+//      }
+    }
+      
+
+    void update_display() override {
+      if (state_ == kCapturing && acquisition::is_capture_ready()) {
+        acquisition::get_capture(&capture_buffer);
+        state_ = kIdle;
+        // Display captured graphs.
+        send_cmd("cle 6,0");
+        send_cmd("cle 6,1");
+        const int n = min(420, acquisition::CAPTURE_SIZE);
+        for (int i = 0; i < n; i++) {
+          sprintf(buffer, "add 6,0,%d", adc_to_pixels(capture_buffer.items[i].v1));
+          send_cmd(buffer);
+          sprintf(buffer, "add 6,1,%d",  adc_to_pixels(capture_buffer.items[i].v2));
+          send_cmd(buffer);
+
+        }
+        //state
+        //acquisition::start_capture(2);
+      }
+    }
+    
+  private:
+    enum State {kIdle, kCapturing};
+    State state_;
+
+     void start_capturing() {
+            acquisition::start_capture(1);
+            state_ = kCapturing;
+    }
+    
+    static int adc_to_pixels(int v) {
+      const int milliamps = acquisition::adc_value_to_milliamps(v);
+      int pixels = 123 + (milliamps * 41) / 1000;
+      pixels = min(247, pixels);
+      pixels = max(0, pixels);
+      return pixels;
+    }
+
+    
+};
+
 // Setup page
 class Page9Handler : public PageHandler {
   public:
     Page9Handler() : PageHandler(100, "#PG9") {}
+
+
+    void enter() override {
+      const bool reverse_direction = acquisition::is_reverse_direction();
+      sprintf(buffer, "%s=%d", P9_REV_DIR, reverse_direction ? 1 : 0);
+      send_cmd(buffer);
+    }
 
     void update_display() override {
       acquisition::get_state(&acq_state);
@@ -267,18 +353,30 @@ class Page9Handler : public PageHandler {
     }
 
     void process_line() override {
-      Serial.printf("P9: %s\n", line.c_str());
+      //Serial.printf("P9: %s\n", line.c_str());
+
       // Handle ADC zero calibration.
       if (line.equals("#ZRO")) {
-        acquisition::CalibrationData calibration_data;
-        acquisition::calibrate_zeros(&calibration_data);
-        EEPROM.put(EEPROM_ADDRESS, calibration_data);
+        acquisition::Settings acq_settings;
+        acquisition::calibrate_zeros(&acq_settings);
+        eeprom::UpdateAcqSettings(acq_settings);
         Serial.print("Calibrate: ");
-        Serial.print(calibration_data.offset1);
+        Serial.print(acq_settings.offset1);
         Serial.print(' ');
-        Serial.println(calibration_data.offset2);
+        Serial.println(acq_settings.offset2);
+        return;
       }
+
       // Handle direction change.
+      if (line.equals("#REV0") || line.equals("#REV1")) {
+        const bool reverse_direction = line.equals("#REV1");
+        Serial.printf("9: %d\n", reverse_direction);
+        acquisition::Settings acq_settings;
+        acquisition::set_direction(reverse_direction, &acq_settings);
+        eeprom::UpdateAcqSettings(acq_settings);
+        return;
+      }
+
     }
 
 };
@@ -289,15 +387,16 @@ static Page2Handler page2_handler;
 static Page3Handler page3_handler;
 static Page4Handler page4_handler;
 static Page5Handler page5_handler;
+static Page6Handler page6_handler;
 static Page9Handler page9_handler;
 
 PageHandler* handlers[] = {
-  &page1_handler, &page2_handler, &page3_handler, &page4_handler, &page5_handler, &page9_handler
+  &page1_handler, &page2_handler, &page3_handler,
+  &page4_handler, &page5_handler, &page6_handler,
+  &page9_handler
 };
 
 static const int kNumHandlers = sizeof(handlers) / sizeof(handlers[0]);
-
-
 
 static void set_page_handler_index(int new_handler_index) {
   Serial.print("page index -> ");
@@ -305,6 +404,7 @@ static void set_page_handler_index(int new_handler_index) {
   handlers[handler_index]->leave();
   handler_index = new_handler_index;
   handlers[handler_index]->enter();
+  millis_since_display_update = handlers[handler_index]->desired_rate_millis_;
   return;
 
 }
@@ -334,14 +434,9 @@ void setup() {
 
   io::setup();
 
-  acquisition::CalibrationData calibration_data;
-  EEPROM.get(EEPROM_ADDRESS, calibration_data);
-  Serial.println();
-  Serial.print("Calibration data: ");
-  Serial.print(calibration_data.offset1);
-  Serial.print(' ');
-  Serial.println(calibration_data.offset2);
-  acquisition::setup(calibration_data);
+  acquisition::Settings acq_settings;
+  eeprom::GetAcqSettings(&acq_settings);
+  acquisition::setup(acq_settings);
 
   handlers[handler_index]->enter();
   send_cmd("page 0");

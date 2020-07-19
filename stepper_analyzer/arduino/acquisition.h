@@ -9,13 +9,14 @@
 
 namespace acquisition {
 
-struct CalibrationData {
+// NOTE: if changing this struct, change also in eeprom.cpp.
+struct Settings {
   int offset1;
   int offset2;
+  bool reverse_direction;
 };
 
-
-const int CAPTURE_SIZE = 128;
+const int CAPTURE_SIZE = 420;
 
 struct CaptureItem {
   int16_t v1;
@@ -78,7 +79,6 @@ struct State {
     uint32_t quadrature_errors;
     // Number of ticks DAC results were not ready
     uint32_t sampling_errors;
-    //int capture_size;
     // for tracking step speed
     Direction last_step_direction;
     // AdC counts, single coil.
@@ -101,7 +101,7 @@ extern void start_capture(int divider);
 extern void stop_capture();
 
 // Called once during program setup.
-extern void setup(CalibrationData& calibration_data);
+extern void setup(Settings& settings);
 
 // Return a copy of the acquision state.
 extern void get_state(State* state);
@@ -115,8 +115,11 @@ extern int adc_value_to_milliamps(int adc_value);
 // Convert adc value to amps.
 extern float adc_value_to_amps(int adc_value);
 
-extern void calibrate_zeros(CalibrationData* calibration_data);
+extern void calibrate_zeros(Settings* settings);
 
+extern void set_direction(bool reverse_direction, Settings* settings);
+
+extern bool is_reverse_direction();
 
 }  // namespace acquisition
 

@@ -39,7 +39,7 @@ static const int adc2_pin = A3;  // = 17
 static const uint8_t adc1_pin_channel = 14;
 static const uint8_t adc2_pin_channel = 11;
 
-// Allowed range for adc zero current offset. This range is much 
+// Allowed range for adc zero current offset. This range is much
 // wider than needed and actual offsets are expected to be around 1900.
 const int MIN_OFFSET =   0;
 const int MAX_OFFSET = 4095;  // 12 bits max
@@ -51,19 +51,19 @@ const float SIGNAL_FILTER_K = 0.3;
 const float DISPLAY_FILTER_K = 1.0 / 1000;
 
 namespace isr_data {
-  // Mofified by the ISR. Disable interrupts to access.
-  static State isr_state;
-  
-  
-  // Mofified by the ISR. Disable interrupts to access.
-  
-  static CalibrationData calibration_data;
-  
-  static int capture_size;
-  static uint32_t capture_divider;
-  static uint32_t capture_tick_counter;
-  static bool capture_active;
-  static CaptureBuffer capture_buffer;
+// Mofified by the ISR. Disable interrupts to access.
+static State isr_state;
+
+
+// Mofified by the ISR. Disable interrupts to access.
+
+static Settings settings;
+
+static int capture_size;
+static uint32_t capture_divider;
+static uint32_t capture_tick_counter;
+static bool capture_active;
+static CaptureBuffer capture_buffer;
 }  // namespace isr_data
 
 
@@ -102,17 +102,25 @@ void get_capture(CaptureBuffer* buffer) {
   {
     *buffer = isr_data::capture_buffer;
   }
-  __enable_irq();  
+  __enable_irq();
 }
 
 
 // Return a copy of the acquision state.
 void get_state(State* state) {
+  bool reverse_direction;
   __disable_irq();
   {
     *state = isr_data::isr_state;
+    reverse_direction = isr_data::settings.reverse_direction;
   }
   __enable_irq();
+    // TODO: have a cleaner change of direction, that affects
+    // also qudrants and anything else related. This is a quick
+    // hack.
+    if (reverse_direction) {
+      state->full_steps = -state->full_steps;
+    }
 }
 
 // Reset the history portion of the state.
@@ -137,16 +145,36 @@ float adc_value_to_amps(int adc_value) {
   return ((float)adc_value) * AMPS_PER_COUNT;;
 }
 
-void calibrate_zeros(CalibrationData* calibration_data) {
+void calibrate_zeros(Settings* settings) {
   __disable_irq()
   {
-    isr_data::calibration_data.offset1 += isr_data::isr_state.display_v1;
-    isr_data::calibration_data.offset2 += isr_data::isr_state.display_v2;
+    isr_data::settings.offset1 += isr_data::isr_state.display_v1;
+    isr_data::settings.offset2 += isr_data::isr_state.display_v2;
 
-    *calibration_data = isr_data::calibration_data;
+    *settings = isr_data::settings;
   }
   __enable_irq();
 }
+
+void set_direction(bool reverse_direction, Settings* settings) {
+  __disable_irq()
+  {
+    isr_data::settings.reverse_direction = reverse_direction;
+    *settings = isr_data::settings;
+  }
+  __enable_irq();
+}
+
+bool is_reverse_direction() {
+  bool result;
+  __disable_irq()
+  {
+    result = isr_data::settings.reverse_direction;
+  }
+  __enable_irq();
+  return result;
+}
+
 
 static char buffer[200];
 
@@ -179,9 +207,9 @@ void dump_state(const State& acq_state) {
 }
 
 // Assumed to be in READY state.
- void dump_capture(const CaptureBuffer& buffer) {
+void dump_capture(const CaptureBuffer& buffer) {
   for (int i = 0; i < acquisition::CAPTURE_SIZE; i++) {
-    const acquisition::CaptureItem& item =buffer.items[i];
+    const acquisition::CaptureItem& item = buffer.items[i];
     Serial.print(-15);
     Serial.print(' ');
     Serial.print(item.v1);
@@ -221,8 +249,8 @@ inline void isr_process_adc_results(int adc1_reading, int adc2_reading) {
   isr_data::isr_state.isr_count++;
 
   // Make it zero current relative.
-  const int raw_v1 = adc1_reading - isr_data::calibration_data.offset1;
-  const int raw_v2 = adc2_reading - isr_data::calibration_data.offset2;
+  const int raw_v1 = adc1_reading - isr_data::settings.offset1;
+  const int raw_v2 = adc2_reading - isr_data::settings.offset2;
 
   // We use these filters to reduce internal and external noise.
   static LowPassFilter signal1_filter(SIGNAL_FILTER_K, 0.0);
@@ -410,10 +438,10 @@ static int clip_offset(int requested_offset) {
   return max(MIN_OFFSET, min(MAX_OFFSET, requested_offset));
 }
 
-void setup(CalibrationData& calibration_data) {
-
-  isr_data::calibration_data.offset1 = clip_offset(calibration_data.offset1);
-  isr_data::calibration_data.offset2 = clip_offset(calibration_data.offset2);
+void setup(Settings& settings) {
+  isr_data::settings = settings;
+  isr_data::settings.offset1 = clip_offset(isr_data::settings.offset1);
+  isr_data::settings.offset2 = clip_offset(isr_data::settings.offset2);
 
   // --- ADC
   pinMode(adc1_pin, INPUT);
