@@ -1,0 +1,12 @@
+; Park the head and leve the bed high.
+
+M400
+M913 Z25          ; Z motors to 25% current
+G91               ; relative positioning
+G1 Z30 F1500 S2   ; drop Z by 30
+M400
+M913 Z100         ; Z motors to 100% current
+
+G90               ; absolute positioning
+;G1 X240 Y280 F3000  ; move XY to parking position
+G1 X240 Y280 F5000  ; move XY to parking position
