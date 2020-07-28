@@ -1,4 +1,0 @@
-(sym_lib_table
-  (lib (name stepper_analyzer)(type Legacy)(uri ${KIPRJMOD}/stepper_analyzer.lib)(options "")(descr ""))
-  (lib (name stepper_analyzer-rescue)(type Legacy)(uri ${KIPRJMOD}/stepper_analyzer-rescue.lib)(options "")(descr ""))
-)
