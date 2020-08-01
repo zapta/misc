@@ -22,8 +22,12 @@ M569 P0 S1                                     ; physical drive 0 goes forwards
 M569 P1 S1                                     ; physical drive 1 goes forwards
 M569 P2 S1                                     ; physical drive 2 goes forwards
 M569 P3 S1                                     ; physical drive 3 goes forwards
+M569 P4 S1                                     ; Drive 3 goes forwards
 
-M584 X0 Y1 Z2 E3                               ; set drive mapping
+; Independent (dual) Z motors. See documentation at
+; https://duet3d.dozuki.com/Wiki/Bed_levelling_using_multiple_independent_Z_motors#Section_Example_for_2_motors
+;584 X0 Y1 Z2 E3; single Z driver
+M584 X0 Y1 Z2:4 E3  ; dual Z motors. Left z->Z driver. Right->E1 drive
 
 ;M350 E16 I0                                    ; configure microstepping without interpolation
 M350 X16 Y16 Z16 E16 I1                            ; configure microstepping with interpolation
