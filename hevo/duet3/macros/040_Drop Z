@@ -2,7 +2,8 @@
 G91               ; relative positioning
 M400
 M913 Z25          ; Z motors to 25% current
-G1 Z30 F2000 S2   ; drop Z by 30mm
+;G1 Z30 F2000 S2   ; drop Z by 30mm
+G1 Z30 F2000 H2      ; drop Z by 30mm
 M400
 M913 Z100         ; Z motors to 100% current
 G90               ; abs positioning

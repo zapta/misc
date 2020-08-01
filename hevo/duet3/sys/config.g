@@ -22,13 +22,19 @@ M569 P0 S1                                     ; physical drive 0 goes forwards
 M569 P1 S1                                     ; physical drive 1 goes forwards
 M569 P2 S1                                     ; physical drive 2 goes forwards
 M569 P3 S1                                     ; physical drive 3 goes forwards
+
 M584 X0 Y1 Z2 E3                               ; set drive mapping
-M350 E16 I0                                    ; configure microstepping without interpolation
-M350 X16 Y16 Z16 I1                            ; configure microstepping with interpolation
+
+;M350 E16 I0                                    ; configure microstepping without interpolation
+M350 X16 Y16 Z16 E16 I1                            ; configure microstepping with interpolation
+
 M92 X200.00 Y200.00 Z400.00 E830.00            ; set steps per mm
-M566 X900.00 Y900.00 Z12.00 E120.00            ; set maximum instantaneous speed changes (mm/min)
-M203 X6000.00 Y6000.00 Z180.00 E1200.00        ; set maximum speeds (mm/min)
-M201 X500.00 Y500.00 Z20.00 E250.00            ; set accelerations (mm/s^2)
+
+; See https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
+M566 X600 Y600 Z30 E1200            ; set maximum instantaneous speed changes (mm/min)
+
+M203 X15000 Y15000 Z3000 E2000        ; set maximum speeds (mm/min)
+M201 X600 Y600 Z30 E1200            ; set accelerations (mm/s^2)
 M906 X1500 Y1500 Z1500 E1200 I30               ; set motor currents (mA) and motor idle factor in per cent
 M84 S30                                        ; Set idle timeout
 
@@ -41,11 +47,19 @@ M574 X1 S3                                     ; configure sensorless endstop fo
 M574 Y1 S3                                     ; configure sensorless endstop for low end on Y
 M574 Z1 S2                                     ; configure Z-probe endstop for low end on Z
 
+M915 X Y S1 F0 R0 H400                            ; Stall detection. Higher S value -> less sensitive
+
+
 ; Z-Probe
 M950 S0 C"exp.heater3"                         ; create servo pin 0 for BLTouch
-M558 P9 C"^zprobe.in" H5 F120 T6000            ; set Z probe type to bltouch and the dive height + speeds
-G31 P500 X30 Y0 Z2.5                           ; set Z probe trigger value, offset and trigger height
-M557 X13:215 Y10:195 S20                       ; define mesh grid
+;M558 P9 C"^zprobe.in" H5 F120 T5000            ; set Z probe type to bltouch and the dive height + speeds
+M558 P9 C"^zprobe.in" H2 F120 T5000            ; set Z probe type to bltouch and the dive height + speeds
+; See http://www.sublimelayers.com/2017/05/fdffsd.html
+; To apply babysteps value, SUBSTRACT it from the Z value here.
+; (to raise head -> lower Z value here)
+; (to lower head -> raise Z value here)
+G31 P500 X30 Y0 Z1.96                           ; set Z probe trigger value, offset and trigger height
+;M557 X13:215 Y10:195 S20                       ; define mesh grid
 
 ; Heaters
 M308 S0 P"bedtemp" Y"thermistor" T100000 B4138 ; configure sensor 0 as thermistor on pin bedtemp
@@ -60,7 +74,13 @@ M143 H0 S80                                    ; set temperature limit for heate
 ;     max PWM 1.00, calibration voltage 24.2, mode PID, inverted no, frequency default
 ; Computed PID parameters for setpoint change: P629.0, I12.718, D753.1
 ; Computed PID parameters for load change:
-M307 H0 A237.3 C1430.3 D1.7 V24.2 B0
+;M307 H0 A237.3 C1430.3 D1.7 V24.2 B0
+;
+; M307 H0
+; Heater 0 model: gain 283.1, time constant 1724.9, dead time 1.6, max PWM 1.00, calibration voltage 24.1, mode PID
+; Computed PID parameters for setpoint change: P682.2, I13.010, D761.4
+; Computed PID parameters for load change: P682.2, I65.453, D761.4
+M307 H0 A283.1 C1724.9 D1.6 V24.1 B0
 
 M308 S1 P"e0temp" Y"thermistor" T100000 B4138  ; configure sensor 1 as thermistor on pin e0temp
 M950 H1 C"e0heat" T1                           ; create nozzle heater output on e0heat and map it to sensor 1
@@ -72,8 +92,13 @@ M143 H1 S260                                   ; Set temperature limit for heate
 ;Heater 1 model: gain 503.6, time constant 235.7, dead time 4.9, max PWM 1.00, calibration voltage 24.1, mode PID, inverted no, frequency default
 ;Computed PID parameters for setpoint change: P16.9, I0.494, D58.5
 ;Computed PID parameters for load change: P16.
+;M307 H1 A503.6 C235.7 D4.9 V24.1 B0
 ;
-M307 H1 A503.6 C235.7 D4.9 V24.1 B0
+;Heater 1 model: gain 550.5, time constant 267.6, dead time 4.3, max PWM 1.00, calibration voltage 24.1, mode PID
+;Computed PID parameters for setpoint change: P20.1, I0.592, D60.7
+;Computed PID parameters for load change: P20.1, I1.457, D60.7
+;
+M307 H1 A550.5 C267.6 D4.3 V24.1 B0
 
 ; Fans
 M950 F0 C"fan0" Q500                           ; create fan 0 on pin fan0 and set its frequency
