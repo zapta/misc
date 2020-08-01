@@ -93,8 +93,11 @@ M143 H1 S260                                   ; Set temperature limit for heate
 ;
 M307 H1 A550.5 C267.6 D4.3 V24.1 B0
 
-; Disable Heater 2 (E1). Used for camera click
-M307 H2 A-1 C-1 D-1
+; Define the second extruder heater output for camera click.
+M950 P2 C"e1Heat" ; 'e1Heat' is the RRF3 name for that output.
+
+...
+M42 P0 S0.5  ; set 50% PWM on GPIO port 0
 
 ; Fans
 M950 F0 C"fan0" Q500                           ; create fan 0 on pin fan0 and set its frequency
