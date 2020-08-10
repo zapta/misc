@@ -38,8 +38,9 @@ M92 X200.00 Y200.00 Z400.00 E830.00            ; set steps per mm
 M566 X600 Y600 Z30 E1200            ; set maximum instantaneous speed changes (mm/min)
 
 M203 X15000 Y15000 Z3000 E2000        ; set maximum speeds (mm/min)
+M204 P1000 T3000                              ; Set printing and travel accelerations
 M201 X600 Y600 Z30 E1200            ; set accelerations (mm/s^2)
-M906 X1500 Y1500 Z1500 E1200 I30               ; set motor currents (mA) and motor idle factor in per cent
+M906 X1500 Y1500 Z1500 E1000 I30               ; set motor currents (mA) and motor idle factor in per cent
 M84 S30                                        ; Set idle timeout
 
 ; Axis Limits
@@ -56,12 +57,12 @@ M915 X Y S1 F0 R0 H400                            ; Stall detection. Higher S va
 
 ; Z-Probe
 M950 S0 C"exp.heater3"                         ; create servo pin 0 for BLTouch
-M558 P9 C"^zprobe.in" H2 F120 T5000            ; set Z probe type to bltouch and the dive height + speeds
+M558 P9 C"^zprobe.in" H3 F120 T5000            ; set Z probe type to bltouch and the dive height + speeds
 ; See http://www.sublimelayers.com/2017/05/fdffsd.html
 ; To apply babysteps value, SUBSTRACT it from the Z value here.
 ; (to raise head -> lower Z value here)
 ; (to lower head -> raise Z value here)
-G31 P500 X30 Y0 Z1.96                           ; set Z probe trigger value, offset and trigger height
+G31 P500 X30 Y0 Z1.73                           ; set Z probe trigger value, offset and trigger height
 
 ;M557 X13:215 Y10:195 S20                       ; define mesh grid
 
@@ -110,7 +111,8 @@ M563 P0 D0 H1 F0                               ; define tool 0
 G10 P0 X0 Y0 Z0                                ; set tool 0 axis offsets
 G10 P0 R0 S0                                   ; set initial tool 0 active and standby temperatures to 0C
 
-; Custom settings are not defined
+; Pressure advance.
+M572 D0 S0.08 ; set pressure advance
 
 ; Miscellaneous
 M575 P1 S1 B57600                              ; enable support for PanelDue
