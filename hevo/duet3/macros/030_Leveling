@@ -1,0 +1,35 @@
+; bed.g
+; called to perform automatic bed compensation via G32
+;
+
+M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
+
+;G91               ; relative positioning
+;M400
+;M913 Z25          ; Z motors to 25% current
+;G1 Z5 F2000 S2    ; drop bed slightly
+;M400
+;M913 Z100         ; Z motors to 100% current
+;G91               ; absolute positioning
+
+M190 S60  ; heat bed and wait until ready
+
+G28 ; home with a hot bed
+
+;M98 Pdeployprobe.g           ; deploy mechanical Z probe
+
+; Probe exactly at leveling screws points.
+; NOTE: the x/y move speed between points is determined
+; by the T value of the M558 command in config.g
+G30 P3 X29  Y279 Z-99999     ; rear / left
+G30 P0 X29  Y39  Z-99999     ; front / left
+G30 P1 X269 Y39  Z-99999     ; front / right
+G30 P2 X269 Y279 Z-99999 S4  ; rear  / right + report
+
+;M98 Pretractprobe.g          ; retract mechanical Z probe
+
+M98 P"/macros/park_up"
+
+M140 S0  ; bed temp = 0
+M140 S-273.15  ; turn bed off
+

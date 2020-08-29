@@ -1,0 +1,15 @@
+; Purge new filament.
+
+T0           ; Select tool T0
+G10 S240     ; Set current tool temperature, high enough for PETG
+M116         ; Wait for the temperatures to be reached
+
+M83          ; set extruder to relative mode
+G1 E5 F150   ; Extrude in 5mm slow
+G1 E5 F1200  ; Extrude out 5mm fast
+M82          ; set extruder to abs mode
+
+M84          ; disable motors
+
+G10 P0 S0    ; Set extruder target temp to 0
+G10 P0S-273.15 R-273.15  ; heater off

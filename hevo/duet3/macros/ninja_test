@@ -1,0 +1,12 @@
+; Extrude 10cm for calibration
+
+T0         ; Select tool T0
+G10 S245   ; Set current tool temperature to 230C
+M116 ; Wait for the temperatures to be reached
+
+M83   ; set extruder to relative mode
+G1 E50 F45   // 30 -> ~10mm/s extrusion.
+M82   ; set extruder to abs mode
+
+G10 P0 S0  ; Set extruder target temp to 0
+G10 P0S-273.15 R-273.15  ; heater off

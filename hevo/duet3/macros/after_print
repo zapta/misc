@@ -1,0 +1,18 @@
+;
+
+M83           ; extruder relative positioning
+G1 E-5 F1500 ; retract 5mm at to avoid a string from the part
+M82           ; extruder abs positioning
+M400          ; wait for all movements to finish
+
+M104 S0 ; turn off extruder
+M140 S0 ; turn off bed heaters
+M106 S0 ; turn off part cooling fan
+
+M98 P"/macros/park_up"
+
+M84 ; disable motors
+
+G10 P0 S0  ; Set extruder target temp to 0
+G10 P0S-273.15 R-273.15  ; heater off
+

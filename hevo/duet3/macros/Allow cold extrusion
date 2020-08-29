@@ -1,0 +1,3 @@
+; Allow extruder motion while hotend is colde (for testing)
+
+M302 P1
