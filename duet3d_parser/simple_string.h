@@ -7,6 +7,7 @@
 #define SIMPLE_STRING_H_
 
 #include "simple_vector.h"
+#include <string.h>
 
 // String class. This is like the vector class except that we always keep a null
 // terminator so that we can call c_str() on it.
@@ -26,11 +27,15 @@ class SimpleString : public SimpleVector<char, N + 1> {
   // Redefine 'full' so as to make room for a null terminator
   bool full() const { return this->filled == N; }
 
-  // Redefine 'add' to add a null terminator
+  // Redefine base 'add' to add a null terminator
   bool add(char x);
 
-  // Redefine 'add' to add a null terminator
+  // Redefine base 'add' to add a null terminator
   bool add(const char* p, int n);
+
+  bool add(const char* p) {
+    add(p, strlen(p));
+  }
 
   // Redefine 'erase' to preserve the null terminator
   void erase(int pos, int count = 1) {

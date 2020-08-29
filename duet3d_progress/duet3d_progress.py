@@ -6,27 +6,27 @@
 
 import json
 import time
-import urllib
+import urllib.request
 
 url='http://10.0.0.9/rr_status?type=3'
 
-print 'Duet3 URL: [%s]' % url
+print('Duet3 URL: [%s]' % url)
 
 def ReportHeader():
-  print ','.join([
+  print(','.join([
     'status',
-    'printer_time',
-    'print_time',
-    'layer',
-    'fraction',
-    'sec_left_layer',
-    'sec_left_filament',
-    'sec_left_file' ])
+    'printer_time_secs',
+    'print_time_secs',
+    'layer_number',
+    'fraction_done',
+    'secs_left_by_layer',
+    'secs_left_by_filament',
+    'secs_left_by_file' ]))
 
 def ReportCurrentValues():
-  response = urllib.urlopen(url)
+  response = urllib.request.urlopen(url)
   doc = json.loads(response.read())
-  #print json.dumps(doc, sort_keys=False, indent=2)
+  #print(json.dumps(doc, sort_keys=False, indent=2))
   values = [
     str(doc['status']),
     str(doc['time']),
@@ -37,7 +37,7 @@ def ReportCurrentValues():
     str(doc['timesLeft']['filament']),
     str(doc['timesLeft']['file']),
   ]
-  print ','.join(values)
+  print(','.join(values))
 
 # Main
 ReportHeader()

@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="config_parser.cpp" />
     <ClCompile Include="duet_parser.cpp" />
-    <ClCompile Include="duet_parser_test.cpp" />
+    <ClCompile Include="test_parsers.cpp" />
     <ClCompile Include="json_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config_parser.h" />
     <ClInclude Include="duet_parser.h" />
     <ClInclude Include="json_parser.h" />
     <ClInclude Include="simple_string.h" />

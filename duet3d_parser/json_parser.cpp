@@ -15,6 +15,7 @@ void JsonParser::StartParsing(JsonParserListener* listener) {
   field_val_.clear();
   array_depth_ = 0;
   json_listener_ = listener;
+  json_listener_->OnStartParsing();
 }
 
 void JsonParser::RemoveLastId() {
@@ -57,9 +58,8 @@ void JsonParser::ConvertUnicode() {
 }
 
 void JsonParser::ParseNextChar( char c) {
-  // For generality we treat line breaks as white space even
-  //  though the duet response is a single line.
-  if (c == '\n') {
+  // Line break characters are treated as white spaces.
+  if (c == '\n' || c == '\r') {
     c = ' ';
   }
 

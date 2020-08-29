@@ -1,3 +1,8 @@
+// Duet3 Serial Monitor
+//
+// Board: Teensy LC
+// Optimize: faster
+//
 
 #include "monitor.h"
 #include "passive_timer.h"
@@ -10,7 +15,7 @@
 #define LED (13)
 
 // Max luminicity in the range [0-255].
-#define L 255
+#define L 125
 #define L2 (L / 2)
 #define L3 (L / 3)
 #define L4 (L / 4)

@@ -18,10 +18,13 @@
     <ClCompile Include="duet_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="duet_parser_test.cpp">
+    <ClCompile Include="json_parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="json_parser.cpp">
+    <ClCompile Include="config_parser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test_parsers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +39,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="simple_vector.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="config_parser.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
