@@ -45,6 +45,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+ADC_HandleTypeDef hadc2;
 
 TIM_HandleTypeDef htim1;
 
@@ -57,6 +58,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_ADC2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -65,11 +67,14 @@ static void MX_ADC1_Init(void);
 /* USER CODE BEGIN 0 */
 
 int ticks = 0;
-uint32_t value = 0;
+uint32_t value1 = 0;
+uint32_t value2 = 0;
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+//void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+void MyAdcIrqRoutine() {
 	LED1_GPIO_Port->BSRR = LED1_Pin;
-	value = HAL_ADC_GetValue(hadc);
+	value1 = hadc1.Instance->DR; //HAL_ADC_GetValue(hadc);
+	value2 = hadc2.Instance->DR; //HAL_ADC_GetValue(hadc);
 	ticks++;
 	LED1_GPIO_Port->BSRR = (uint32_t) LED1_Pin << 16u;
 
@@ -134,9 +139,11 @@ int main(void)
   MX_TIM1_Init();
   MX_USB_DEVICE_Init();
   MX_ADC1_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
 
 	HAL_ADC_Start_IT(&hadc1);
+	HAL_ADC_Start_IT(&hadc2);
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 
 
@@ -147,7 +154,7 @@ int main(void)
 	while (1) {
     HAL_Delay(500);
 		LED0_GPIO_Port->BSRR = LED0_Pin;
-		printf("%d, %lu\n", ticks, value);
+		printf("%d, %lu, %lu\n", ticks, value1, value2);
 		LED0_GPIO_Port->BSRR = (uint32_t) LED0_Pin << 16u;
 
     /* USER CODE END WHILE */
@@ -215,6 +222,7 @@ static void MX_ADC1_Init(void)
 
   /* USER CODE END ADC1_Init 0 */
 
+  ADC_MultiModeTypeDef multimode = {0};
   ADC_ChannelConfTypeDef sConfig = {0};
 
   /* USER CODE BEGIN ADC1_Init 1 */
@@ -233,6 +241,13 @@ static void MX_ADC1_Init(void)
   {
     Error_Handler();
   }
+  /** Configure the ADC multi-mode
+  */
+  multimode.Mode = ADC_DUALMODE_REGSIMULT;
+  if (HAL_ADCEx_MultiModeConfigChannel(&hadc1, &multimode) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_0;
@@ -245,6 +260,51 @@ static void MX_ADC1_Init(void)
   /* USER CODE BEGIN ADC1_Init 2 */
 
   /* USER CODE END ADC1_Init 2 */
+
+}
+
+/**
+  * @brief ADC2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC2_Init(void)
+{
+
+  /* USER CODE BEGIN ADC2_Init 0 */
+
+  /* USER CODE END ADC2_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC2_Init 1 */
+
+  /* USER CODE END ADC2_Init 1 */
+  /** Common config
+  */
+  hadc2.Instance = ADC2;
+  hadc2.Init.ScanConvMode = ADC_SCAN_DISABLE;
+  hadc2.Init.ContinuousConvMode = DISABLE;
+  hadc2.Init.DiscontinuousConvMode = DISABLE;
+  hadc2.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc2.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc2.Init.NbrOfConversion = 1;
+  if (HAL_ADC_Init(&hadc2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Regular Channel
+  */
+  sConfig.Channel = ADC_CHANNEL_1;
+  sConfig.Rank = ADC_REGULAR_RANK_1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+  if (HAL_ADC_ConfigChannel(&hadc2, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC2_Init 2 */
+
+  /* USER CODE END ADC2_Init 2 */
 
 }
 
