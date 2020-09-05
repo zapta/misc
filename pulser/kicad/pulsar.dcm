@@ -1,0 +1,467 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP +24V
+D Power symbol creates a global label with name "+24V"
+K power-flag
+$ENDCMP
+#
+$CMP ARDUINO_MINI_PRO
+D Arduino min pro module
+K Arduino mini pro module
+F https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf
+$ENDCMP
+#
+$CMP Arduino_Nano_v2.x
+D Arduino Nano v2.x
+K Arduino nano microcontroller module USB
+F https://www.arduino.cc/en/uploads/Main/ArduinoNanoManual23.pdf
+$ENDCMP
+#
+$CMP Arduino_Nano_v3.x
+D Arduino Nano v3.x
+K Arduino nano microcontroller module USB
+F http://www.mouser.com/pdfdocs/Gravitech_Arduino_Nano3_0.pdf
+$ENDCMP
+#
+$CMP Arduino_Nano_v3.x_copy
+D Arduino Nano v3.x
+K Arduino nano microcontroller module USB
+F http://www.mouser.com/pdfdocs/Gravitech_Arduino_Nano3_0.pdf
+$ENDCMP
+#
+$CMP BUK7M10-40EX
+D 56A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 10mOhm Ron, 19.5nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M10-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M12-40EX
+D 48A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 12mOhm Ron, 15.8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M12-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M12-60EX
+D 53A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 12mOhm Ron, 24.8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M12-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M15-60EX
+D 42.9A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 15mOhm Ron, 19.4nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M15-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M17-80EX
+D 43A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 17mOhm Ron, 29.6nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M17-80E.pdf
+$ENDCMP
+#
+$CMP BUK7M19-60EX
+D 35.8A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 19mOhm Ron, 17.3nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M19-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M21-40EX
+D 33A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 21mOhm Ron, 10.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M21-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M22-80EX
+D 37A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 22mOhm Ron, 23.9nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M22-80E.pdf
+$ENDCMP
+#
+$CMP BUK7M27-80EX
+D 30A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 27mOhm Ron, 19.5nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M27-80E.pdf
+$ENDCMP
+#
+$CMP BUK7M33-60EX
+D 24A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 33mOhm Ron, 10.9nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M33-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M42-60EX
+D 20A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 42mOhm Ron, 9nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M42-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M45-40EX
+D 19A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 45mOhm Ron, 6.2nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M45-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M67-60EX
+D 14A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 67mOhm Ron, 6.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M67-60E.pdf
+$ENDCMP
+#
+$CMP BUK7M6R3-40EX
+D 70A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 6.3mOhm Ron, 28.1nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M6R3-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M8R0-40EX
+D 69A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 8mOhm Ron, 23.8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M8R0-40E.pdf
+$ENDCMP
+#
+$CMP BUK7M9R9-60EX
+D 60A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 9.9mOhm Ron, 30.1nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK7M9R9-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M10-30EX
+D 54A Id, 30V Vds, N-Channel TrenchMOS MOSFET, 7.8mOhm Ron, 12.2nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M10-30E.pdf
+$ENDCMP
+#
+$CMP BUK9M11-40EX
+D 53A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 9mOhm Ron, 13.4nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M11-40E.pdf
+$ENDCMP
+#
+$CMP BUK9M12-60EX
+D 54A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 11mOhm Ron, - Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M12-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M120-100EX
+D 11.5A Id, 100V Vds, N-Channel TrenchMOS MOSFET, 119mOhm Ron, 8.8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M120-100E.pdf
+$ENDCMP
+#
+$CMP BUK9M14-40EX
+D 44A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 11mOhm Ron, 11.3nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M14-40E.pdf
+$ENDCMP
+#
+$CMP BUK9M15-60EX
+D 47A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 13mOhm Ron, 17nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M15-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M156-100EX
+D 9.3A Id, 100V Vds, N-Channel TrenchMOS MOSFET, 150mOhm Ron, 7.4nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M156-100E.pdf
+$ENDCMP
+#
+$CMP BUK9M17-30EX
+D 37A Id, 30V Vds, N-Channel TrenchMOS MOSFET, 14mOhm Ron, 8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M17-30E.pdf
+$ENDCMP
+#
+$CMP BUK9M19-60EX
+D 38A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 17mOhm Ron, 13.8nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M19-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M23-80EX
+D 37A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 20mOhm Ron, 20nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M23-80E.pdf
+$ENDCMP
+#
+$CMP BUK9M24-40EX
+D 30A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 20mOhm Ron, 7.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M24-40E.pdf
+$ENDCMP
+#
+$CMP BUK9M24-60EX
+D 32A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 21mOhm Ron, 12.4nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M24-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M28-80EX
+D 33A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 25mOhm Ron, 16.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M28-80E.pdf
+$ENDCMP
+#
+$CMP BUK9M34-100EX
+D 29A Id, 100V Vds, N-Channel TrenchMOS MOSFET, 34mOhm Ron, 24.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M34-100E.pdf
+$ENDCMP
+#
+$CMP BUK9M35-80EX
+D 26A Id, 80V Vds, N-Channel TrenchMOS MOSFET, 31mOhm Ron, 13.5nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M35-80E.pdf
+$ENDCMP
+#
+$CMP BUK9M42-60EX
+D 22A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 37mOhm Ron, 8.3nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M42-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M43-100EX
+D 25A Id, 100V Vds, N-Channel TrenchMOS MOSFET, 43mOhm Ron, 20.2nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M43-100E.pdf
+$ENDCMP
+#
+$CMP BUK9M52-40EX
+D 17.6A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 40mOhm Ron, 4.5nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M52-40E.pdf
+$ENDCMP
+#
+$CMP BUK9M53-60EX
+D 17A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 46mOhm Ron, 6nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M53-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M5R2-30EX
+D 70A Id, 30V Vds, N-Channel TrenchMOS MOSFET, 4.1mOhm Ron, 22.5nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M5R2-30E.pdf
+$ENDCMP
+#
+$CMP BUK9M6R6-30EX
+D 70A Id, 30V Vds, N-Channel TrenchMOS MOSFET, 5.3mOhm Ron, 18nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M6R6-30E.pdf
+$ENDCMP
+#
+$CMP BUK9M7R2-40EX
+D 70A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 5.8mOhm Ron, 19.7nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M7R2-40E.pdf
+$ENDCMP
+#
+$CMP BUK9M85-60EX
+D 12.8A Id, 60V Vds, N-Channel TrenchMOS MOSFET, 73mOhm Ron, 4.4nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M85-60E.pdf
+$ENDCMP
+#
+$CMP BUK9M9R1-40EX
+D 64A Id, 40V Vds, N-Channel TrenchMOS MOSFET, 7.3mOhm Ron, 16.2nC Qqd, -55 to 175 °C, LFPAK33
+K Power MOSFET N-MOS
+F https://assets.nexperia.com/documents/data-sheet/BUK9M9R1-40E.pdf
+$ENDCMP
+#
+$CMP CP1_Small
+D Polarized capacitor, small US symbol
+K cap capacitor
+F ~
+$ENDCMP
+#
+$CMP C_Small
+D Unpolarized capacitor, small symbol
+K capacitor cap
+F ~
+$ENDCMP
+#
+$CMP GND
+D Power symbol creates a global label with name "GND" , ground
+K power-flag
+$ENDCMP
+#
+$CMP R-781.5-0.5
+D 500mA Step-Down DC/DC-Regulator, 4.75-30V input, 1.5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-781.8-0.5
+D 500mA Step-Down DC/DC-Regulator, 4.75-32V input, 1.8V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-781.8-1.0
+D 1A Step-Down DC/DC-Regulator, 4.75-18V input, 1.8V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-1.0.pdf
+$ENDCMP
+#
+$CMP R-7812-0.5
+D 500mA Step-Down DC/DC-Regulator, 15-32V input, 12V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-7815-0.5
+D 500mA Step-Down DC/DC-Regulator, 18-32V input, 15V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-782.5-0.5
+D 500mA Step-Down DC/DC-Regulator, 4.75-18V input, 2.5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-782.5-1.0
+D 1A Step-Down DC/DC-Regulator, 4.75-18V input, 2.5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-1.0.pdf
+$ENDCMP
+#
+$CMP R-783.3-0.5
+D 500mA Step-Down DC/DC-Regulator, 4.75-18V input, 3.3V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-783.3-1.0
+D 1A Step-Down DC/DC-Regulator, 4.75-18V input, 3.3V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-1.0.pdf
+$ENDCMP
+#
+$CMP R-785.0-0.5
+D 500mA Step-Down DC/DC-Regulator, 6.5-18V input, 5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-785.0-1.0
+D 1A Step-Down DC/DC-Regulator, 6.5-18V input, 5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-1.0.pdf
+$ENDCMP
+#
+$CMP R-786.5-0.5
+D 500mA Step-Down DC/DC-Regulator, 8-32V input, 6.5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78xx-0.5.pdf
+$ENDCMP
+#
+$CMP R-78C1.8-1.0
+D 1A Step-Down DC/DC-Regulator, 5-42V input, 1.8V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78C12-1.0
+D 1A Step-Down DC/DC-Regulator, 15-42V input, 12V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78C15-1.0
+D 1A Step-Down DC/DC-Regulator, 18-42V input, 15V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78C3.3-1.0
+D 1A Step-Down DC/DC-Regulator, 6-42V input, 3.3V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78C5.0-1.0
+D 1A Step-Down DC/DC-Regulator, 7-42V input, 5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78C9.0-1.0
+D 1A Step-Down DC/DC-Regulator, 12-42V input, 9V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Cxx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78E12-0.5
+D 500mA Step-Down DC/DC-Regulator, 15-28V input, 12V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-0.5.pdf
+$ENDCMP
+#
+$CMP R-78E15-0.5
+D 500mA Step-Down DC/DC-Regulator, 18-28V input, 15V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-0.5.pdf
+$ENDCMP
+#
+$CMP R-78E3.3-0.5
+D 500mA Step-Down DC/DC-Regulator, 6-28V input, 3.3V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-0.5.pdf
+$ENDCMP
+#
+$CMP R-78E3.3-1.0
+D 1A Step-Down DC/DC-Regulator, 6-28V input, 3.3V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78E5.0-0.5
+D 500mA Step-Down DC/DC-Regulator, 7-28V input, 5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-0.5.pdf
+$ENDCMP
+#
+$CMP R-78E5.0-1.0
+D 1A Step-Down DC/DC-Regulator, 7-28V input, 5V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-1.0.pdf
+$ENDCMP
+#
+$CMP R-78E9.0-0.5
+D 500mA Step-Down DC/DC-Regulator, 12-28V input, 9V fixed Output Voltage, LM78xx replacement, -40°C to +85°C, SIP3
+K dc-dc recom Step-Down DC/DC-Regulator
+F https://www.recom-power.com/pdf/Innoline/R-78Exx-0.5.pdf
+$ENDCMP
+#
+$CMP REG_5V
+K power-flag
+$ENDCMP
+#
+$CMP ROTARY
+D Rotary switch, 4-bit encoding, 10 positions, Real code
+K rotary bcd Real
+F https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf
+$ENDCMP
+#
+$CMP SW_Coded_SH-7030
+D Rotary switch, 4-bit encoding, 10 positions, Complementary code
+K rotary bcd Complementary
+F https://www.nidec-copal-electronics.com/e/catalog/switch/sh-7000.pdf
+$ENDCMP
+#
+$CMP Screw_Terminal_01x02
+D Generic screw terminal, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)
+K screw terminal
+F ~
+$ENDCMP
+#
+$CMP Z3SMCxxx
+D 3000mW Zener Diode, SMC(DO-214AB)
+K zener diode
+F https://diotec.com/tl_files/diotec/files/pdf/datasheets/z3smc1.pdf
+$ENDCMP
+#
+#End Doc Library
