@@ -1,4 +1,4 @@
-18641241894686174
+18642841207109525
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -82092,6 +82092,13 @@ pulsar
 TERMINAL_SMALL
 terminal block Metz Connect Type059_RT06302HBWC, 2 pins, pitch 3.5mm, size 7x6.5mm^2, drill diamater 1.2mm, pad diameter 2.3mm, see http://www.metz-connect.com/de/system/files/productfiles/Datenblatt_310591_RT063xxHBWC_OFF-022684T.pdf, script-generated using https://github.com/pointhi/kicad-footprint-generator/scripts/TerminalBlock_MetzConnect
 THT terminal block Metz Connect Type059_RT06302HBWC pitch 3.5mm size 7x6.5mm^2 drill 1.2mm pad 2.3mm
+0
+2
+2
+pulsar
+TerminalBlock_bornier-2_P5.08mm
+simple 2-pin terminal block, pitch 5.08mm, revamped version of bornier2
+terminal block bornier2
 0
 2
 2
