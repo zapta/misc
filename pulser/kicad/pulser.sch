@@ -760,8 +760,8 @@ $Comp
 L pulsar:Z3SMCxxx D3
 U 1 1 5F6413AD
 P 3550 4300
-F 0 "D3" H 3700 4350 50  0000 C CNN
-F 1 "MBRX120LF-TP" H 3300 4350 50  0000 C CNN
+F 0 "D3" H 3650 4250 50  0000 C CNN
+F 1 "MBRX120LF-TP" H 3500 4750 50  0000 C CNN
 F 2 "Diode_SMD:D_SOD-123" H 3550 4125 50  0001 C CNN
 F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/z3smc1.pdf" H 3550 4300 50  0001 C CNN
 	1    3550 4300
@@ -1236,45 +1236,45 @@ Text Label 4100 3650 0    50   ~ 0
 $Comp
 L Mechanical:MountingHole H3
 U 1 1 5F8B6F79
-P 8750 1450
-F 0 "H3" H 8850 1496 50  0000 L CNN
-F 1 "MountingHole" H 8850 1405 50  0000 L CNN
-F 2 "pulsar:MountingHole" H 8750 1450 50  0001 C CNN
-F 3 "~" H 8750 1450 50  0001 C CNN
-	1    8750 1450
+P 8850 1350
+F 0 "H3" H 8950 1396 50  0000 L CNN
+F 1 "MountingHole" H 8950 1305 50  0000 L CNN
+F 2 "pulsar:MountingHole" H 8850 1350 50  0001 C CNN
+F 3 "~" H 8850 1350 50  0001 C CNN
+	1    8850 1350
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H4
 U 1 1 5F8B71C3
-P 8950 1450
-F 0 "H4" H 9050 1496 50  0000 L CNN
-F 1 "MountingHole" H 9050 1405 50  0000 L CNN
-F 2 "pulsar:MountingHole" H 8950 1450 50  0001 C CNN
-F 3 "~" H 8950 1450 50  0001 C CNN
-	1    8950 1450
+P 8850 1550
+F 0 "H4" H 8950 1596 50  0000 L CNN
+F 1 "MountingHole" H 8950 1505 50  0000 L CNN
+F 2 "pulsar:MountingHole" H 8850 1550 50  0001 C CNN
+F 3 "~" H 8850 1550 50  0001 C CNN
+	1    8850 1550
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H2
 U 1 1 5F8B6D5B
-P 8500 1450
-F 0 "H2" H 8600 1496 50  0000 L CNN
-F 1 "MountingHole" H 8600 1405 50  0000 L CNN
-F 2 "pulsar:MountingHole" H 8500 1450 50  0001 C CNN
-F 3 "~" H 8500 1450 50  0001 C CNN
-	1    8500 1450
+P 8850 1150
+F 0 "H2" H 8950 1196 50  0000 L CNN
+F 1 "MountingHole" H 8950 1105 50  0000 L CNN
+F 2 "pulsar:MountingHole" H 8850 1150 50  0001 C CNN
+F 3 "~" H 8850 1150 50  0001 C CNN
+	1    8850 1150
 	1    0    0    -1  
 $EndComp
 $Comp
 L Mechanical:MountingHole H1
 U 1 1 5F8B6960
-P 8300 1450
-F 0 "H1" H 8400 1496 50  0000 L CNN
-F 1 "MountingHole" H 8400 1405 50  0000 L CNN
-F 2 "pulsar:MountingHole" H 8300 1450 50  0001 C CNN
-F 3 "~" H 8300 1450 50  0001 C CNN
-	1    8300 1450
+P 8850 950
+F 0 "H1" H 8950 996 50  0000 L CNN
+F 1 "MountingHole" H 8950 905 50  0000 L CNN
+F 2 "pulsar:MountingHole" H 8850 950 50  0001 C CNN
+F 3 "~" H 8850 950 50  0001 C CNN
+	1    8850 950 
 	1    0    0    -1  
 $EndComp
 $Comp
