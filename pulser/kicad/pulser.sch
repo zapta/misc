@@ -544,7 +544,7 @@ U 1 1 5F6F8491
 P 2050 1300
 F 0 "F1" H 2050 1485 50  0000 C CNN
 F 1 "10A" H 2050 1394 50  0000 C CNN
-F 2 "Fuse:Fuse_Blade_Mini_directSolder" H 2050 1300 50  0001 C CNN
+F 2 "pulsar:Fuse_Blade_Mini_directSolder" H 2050 1300 50  0001 C CNN
 F 3 "~" H 2050 1300 50  0001 C CNN
 	1    2050 1300
 	1    0    0    -1  
