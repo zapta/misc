@@ -56,7 +56,7 @@ U 1 1 5F50B47B
 P 8150 3900
 F 0 "J4" H 8100 3650 50  0000 L CNN
 F 1 "Screw_Terminal_01x02" H 8230 3801 50  0001 L CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 8150 3900 50  0001 C CNN
+F 2 "pulsar:TerminalBlock_bornier-2_P5.08mm" H 8150 3900 50  0001 C CNN
 F 3 "~" H 8150 3900 50  0001 C CNN
 	1    8150 3900
 	1    0    0    -1  
@@ -67,7 +67,7 @@ U 1 1 5F50C564
 P 1650 1300
 F 0 "J2" H 1650 1050 50  0000 C CNN
 F 1 "Screw_Terminal_01x02" H 1568 1426 50  0001 C CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1650 1300 50  0001 C CNN
+F 2 "pulsar:TerminalBlock_bornier-2_P5.08mm" H 1650 1300 50  0001 C CNN
 F 3 "~" H 1650 1300 50  0001 C CNN
 	1    1650 1300
 	-1   0    0    -1  
@@ -134,7 +134,7 @@ L pulsar:Z3SMCxxx D1
 U 1 1 5F51A058
 P 2400 1300
 F 0 "D1" H 2250 1400 50  0000 C CNN
-F 1 "S10ML-TP" H 2400 1500 50  0000 C CNN
+F 1 "SB2060TA" H 2400 1500 50  0000 C CNN
 F 2 "Diode_THT:D_DO-201AD_P12.70mm_Horizontal" H 2400 1125 50  0001 C CNN
 F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/z3smc1.pdf" H 2400 1300 50  0001 C CNN
 	1    2400 1300
@@ -712,7 +712,7 @@ L pulsar:Z3SMCxxx D5
 U 1 1 5F64B026
 P 3950 3400
 F 0 "D5" V 3996 3320 50  0000 R CNN
-F 1 "Z3SMCxxx" V 3905 3320 50  0000 R CNN
+F 1 "MBRX120LF-TP" V 3905 3320 50  0000 R CNN
 F 2 "Diode_SMD:D_SOD-123" H 3950 3225 50  0001 C CNN
 F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/z3smc1.pdf" H 3950 3400 50  0001 C CNN
 	1    3950 3400
@@ -761,7 +761,7 @@ L pulsar:Z3SMCxxx D3
 U 1 1 5F6413AD
 P 3550 4300
 F 0 "D3" H 3700 4350 50  0000 C CNN
-F 1 "Z3SMCxxx" H 3300 4350 50  0000 C CNN
+F 1 "MBRX120LF-TP" H 3300 4350 50  0000 C CNN
 F 2 "Diode_SMD:D_SOD-123" H 3550 4125 50  0001 C CNN
 F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/z3smc1.pdf" H 3550 4300 50  0001 C CNN
 	1    3550 4300
@@ -1146,8 +1146,6 @@ Wire Wire Line
 	7750 5700 7500 5700
 Text Label 7500 5700 0    50   ~ 0
 GATE
-Text Notes 950  3050 0    79   ~ 0
-TODO: test gate driving speed
 Wire Wire Line
 	5650 4750 5650 5100
 Wire Wire Line
