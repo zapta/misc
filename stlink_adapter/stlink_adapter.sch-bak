@@ -27,13 +27,13 @@ $EndComp
 $Comp
 L Connector:Conn_01x04_Female J3
 U 1 1 5F542BAE
-P 6750 3650
-F 0 "J3" H 6778 3626 50  0000 L CNN
-F 1 "Conn_01x04_Female" H 6778 3535 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 6750 3650 50  0001 C CNN
-F 3 "~" H 6750 3650 50  0001 C CNN
-	1    6750 3650
-	1    0    0    -1  
+P 6900 3750
+F 0 "J3" H 6792 3325 50  0000 C CNN
+F 1 "Conn_01x04_Female" H 6792 3416 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical" H 6900 3750 50  0001 C CNN
+F 3 "~" H 6900 3750 50  0001 C CNN
+	1    6900 3750
+	1    0    0    1   
 $EndComp
 Wire Wire Line
 	4800 3300 4700 3300
@@ -48,8 +48,6 @@ Wire Wire Line
 Wire Wire Line
 	5900 2900 5900 3650
 Wire Wire Line
-	5900 3650 6550 3650
-Wire Wire Line
 	4800 3700 4400 3700
 Wire Wire Line
 	4400 3700 4400 2750
@@ -58,13 +56,7 @@ Wire Wire Line
 Wire Wire Line
 	5750 2750 5750 3750
 Wire Wire Line
-	5750 3750 6550 3750
-Wire Wire Line
 	5300 3500 5350 3500
-Wire Wire Line
-	5550 3500 5550 3850
-Wire Wire Line
-	5550 3850 6550 3850
 $Comp
 L Connector:Conn_01x03_Male J2
 U 1 1 5F548033
@@ -129,18 +121,12 @@ F 3 "~" H 6500 4300 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	6500 4200 6500 3550
-Connection ~ 6500 3550
-Wire Wire Line
-	6500 3550 6550 3550
 Wire Wire Line
 	6500 4400 6500 4550
-Wire Wire Line
-	5550 3850 5550 5000
 Wire Wire Line
 	5550 5000 6500 5000
 Wire Wire Line
 	6500 5000 6500 4850
-Connection ~ 5550 3850
 Wire Wire Line
 	5300 3400 5400 3400
 Wire Wire Line
@@ -155,4 +141,18 @@ Wire Wire Line
 Connection ~ 5350 3500
 Wire Wire Line
 	5350 3500 5400 3500
+Wire Wire Line
+	6700 3550 6500 3550
+Connection ~ 6500 3550
+Wire Wire Line
+	5900 3650 6700 3650
+Wire Wire Line
+	5750 3750 6700 3750
+Wire Wire Line
+	6700 3850 5550 3850
+Wire Wire Line
+	5550 3500 5550 3850
+Connection ~ 5550 3850
+Wire Wire Line
+	5550 3850 5550 5000
 $EndSCHEMATC
