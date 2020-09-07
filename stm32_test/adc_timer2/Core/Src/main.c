@@ -143,6 +143,8 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 
 
+	USB_EN_GPIO_Port->BSRR = USB_EN_Pin;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */

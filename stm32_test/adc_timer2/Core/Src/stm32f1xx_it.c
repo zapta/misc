@@ -210,10 +210,8 @@ void ADC1_2_IRQHandler(void)
 
 #if 0
   /* USER CODE END ADC1_2_IRQn 0 */
-
   HAL_ADC_IRQHandler(&hadc1);
   HAL_ADC_IRQHandler(&hadc2);
-
   /* USER CODE BEGIN ADC1_2_IRQn 1 */
 #endif
 
