@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name pulsar)(type Legacy)(uri ${KIPRJMOD}/pulsar.lib)(options "")(descr ""))
+)
