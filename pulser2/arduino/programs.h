@@ -4,24 +4,25 @@
 
 #include <arduino.h>
 
-
+namespace programs {
 class Program {
   public:
     virtual void setup() = 0;
     virtual void loop() = 0;
 };
 
-class Program_0 : public Program {
+class Program0 : public Program {
   public:
     virtual void setup();
     virtual void loop();
 };
 
-class Program_1 : public Program {
+class Program1 : public Program {
   public:
     virtual void setup();
     virtual void loop();
 };
 
+} // namespace programs
 
 #endif // PROGRAMS__H
