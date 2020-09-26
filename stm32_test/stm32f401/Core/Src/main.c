@@ -45,7 +45,9 @@
 /* USER CODE BEGIN PM */
 
 #define kNumDma (8)
-static uint32_t dma_buffer[kNumDma];
+// The DMA is set for half word (16 bit) data size and memory increment.
+// Adding two guard items.
+static uint16_t dma_buffer[kNumDma+2];
 
 static int counter1 = 0;
 static int counter2 = 0;
@@ -161,9 +163,14 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  //HAL_ADC_Start(&hadc2);
-  	//HAL_ADCEx_MultiModeStart_DMA(&hadc1, &(dma_buffer[0]), 32);
-  	HAL_ADC_Start_DMA(&hadc1, &(dma_buffer[0]), kNumDma);
+  dma_buffer[0] = 1111;
+  dma_buffer[kNumDma+1] = 9999;
+
+  // NOTE: the DMA channel transfers 16 bit items but the API
+  // requires a pointer cast to uint32_t*. The count is
+  // the total count uint16_t data items in the buffer, which
+  // divided into two halves, for interrupt processing.
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)&(dma_buffer[0+1]), kNumDma);
 
   	//HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 
@@ -184,8 +191,8 @@ int main(void)
   	printf("\n%d, %d, %d\n", loops++, counter1, counter2);
   	HAL_Delay(100);
 
-  	for (int i = 0; i < kNumDma; i++) {
-  		printf("%d  %08lx\n", i,  dma_buffer[i]);
+  	for (int i = 0; i < kNumDma + 2; i++) {
+  		printf("%d  %4u\n", i,  dma_buffer[i]);
     	HAL_Delay(100);
   	}
   	HAL_Delay(50);
