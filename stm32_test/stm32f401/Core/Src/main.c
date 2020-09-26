@@ -53,6 +53,19 @@ static int counter2 = 0;
 static uint16_t val1;
 static uint16_t val2;
 
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hadc);
+	LED0_GPIO_Port->BSRR = LED1_Pin;
+	for(;;);
+
+
+  /* NOTE : This function Should not be modified, when the callback is needed,
+            the HAL_ADC_ErrorCallback could be implemented in the user file
+   */
+}
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 	/* Prevent unused argument(s) compilation warning */
 	LED1_GPIO_Port->BSRR = LED1_Pin;

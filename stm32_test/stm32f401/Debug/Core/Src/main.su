@@ -1,6 +1,0 @@
-main.c:56:6:HAL_ADC_ConvCpltCallback	16	static
-main.c:75:6:HAL_ADC_ConvHalfCpltCallback	16	static
-main.c:109:5:_write	24	static
-main.c:121:5:main	16	static
-main.c:191:6:SystemClock_Config	88	static
-main.c:238:6:Error_Handler	4	static
