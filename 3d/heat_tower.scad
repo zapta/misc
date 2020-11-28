@@ -1,9 +1,9 @@
 // Customizeable heat tower. 
 // Inspired by Thingieverse #2213410
-// String functiosn from Thingiverse #1237203
+// String functions from Thingiverse #1237203
 
 // Comma seperated list of step labels, from top to bottom
-label_list = "180,185,190,195,200,205";
+label_list = "190,195,200,205,210,215,220,225,230";
 
 text_depth = 0.4;
 
@@ -22,7 +22,7 @@ rotation = -90;
 // Step radius
 r=10;
 
-// Step height
+// Step height in mm
 h=5;
 
 d = 2*r;
