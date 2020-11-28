@@ -4,14 +4,13 @@
 
 M671 X29:29:269:269  Y279:39:39:279 P0.7      ; positions of adjustment screws
 
-G91               ; relative positioning
-M400
-M913 Z25          ; Z motors to 25% current
-;G1 Z5 F6000 S2    ; lift Z relative to current position
-G1 Z5 F2000 S2    ; lift Z relative to current position
-M400
-M913 Z100         ; Z motors to 100% current
-G91               ; absolute positioning
+;G91               ; relative positioning
+;M400
+;M913 Z25          ; Z motors to 25% current
+;G1 Z5 F2000 S2    ; drop bed slightly
+;M400
+;M913 Z100         ; Z motors to 100% current
+;G91               ; absolute positioning
 
 M190 S60  ; heat bed and wait until ready
 

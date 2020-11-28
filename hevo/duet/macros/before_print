@@ -1,19 +1,37 @@
-;M117 Started Before Print
 
-; Make sure no left over changes.
-M98 P"/sys/mode_normal.g"
+M116      ; wait for bed and extruder temps to stabalize
 
-T0  ; select extruder tool 0; just in case. Already doing it in config.g
-M116 P0   ; wait for extruder (tool 0) temp to stabalize
+T0        ; select extruder tool 0; just in case. Already doing it in config.g
 
-;M117 before_print extruder stabalized
+M561      ; clear any bed transform
 
-G28 ; home all axes
-G29 S1              ; load mesh heightmap
+G28       ; home (runs homeall.g)
+
+; --- auto z leveling
+
+M671 X-38:172 Y-38:172 S2.0 ; set positions of Z1, Z2 lead screws and max tolerance
+G1 X0 Y172 Z10 F4000        ; optional, go to the probing area
+G30 P0 X30 Y172 Z-99999     ; probe first point (near left Z)
+G30 P1 X280 Y172 Z-99999 S2 ; probe second point (near right Z) and auto adjust
+
+; Do z homing again. Since we are already homed, doing only the slow pass 
+; TODO: move to homez.g and share with homeall.g
+
+G1 X120 Y172 Z5 F6000   ; go to probing point (between two Z rods, 30mm bltouch offset)
+M558 A5 F100      ; Set for probing at slow speed, allow multiple trys
+G30               ; Probe and home Z
 
 
-;G1 X25 Y-5 F1000.0     ; go outside print area, away from the tab
-G1 X25 Y-5 F2000.0     ; go outside print area, away from the tab
+
+; --- Auto mesh
+
+; Meshes the print area based on M577 settings by the automesh script.
+G29  ;mesh
+
+
+; --- Purge line
+
+G1 X25 Y-5 F6000.0     ; go outside print area, away from the tab
 G1 Z0.6 F400           ; move Z to purge level
 M400                   ; wait for movements to complete
 
@@ -33,5 +51,4 @@ G1 E-2 F1800           ; retract 2mm at 1800mm/sec to avoid draging filament to 
 G1 Z0.15 F2000         ; lower Z 
 
 G1 Y150.0 F2000        ; keep moving without extruding
-;G1 Z4 F1000            ; move head up
 

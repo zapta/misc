@@ -10,3 +10,5 @@ M82   ; set extruder to abs mode
 
 G10 P0 S0  ; Set extruder target temp to 0
 G10 P0S-273.15 R-273.15  ; heater off
+
+M84 E0  ; Stop extruder motor

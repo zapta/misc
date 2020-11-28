@@ -3,8 +3,8 @@
 
 ; TODO: add P1 to M566 to support new policy
 
-M566 X600 Y600 Z100 E3000      ; Set maximum instantaneous speed changes (mm/min) (Jerk)
-M201 X600 Y600 Z30  E600       ; Set maximum accelerations (mm/s^2)
+;M566 X600 Y600 Z100 E3000      ; Set maximum instantaneous speed changes (mm/min) (Jerk)
+;M201 X600 Y600 Z30  E600       ; Set maximum accelerations (mm/s^2)
 
 
 

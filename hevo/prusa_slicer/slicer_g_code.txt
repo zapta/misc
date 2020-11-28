@@ -1,0 +1,42 @@
+
+----- Start G code
+
+M140 S[bed_temperature]                 ; start heating bed
+M104 S[first_layer_temperature_0] T0    ; start heating extruder
+M557 TBD  ; automesh marker
+M98 P"0:/macros/before_print_mesh"
+
+
+----- End G code
+M98 P"0:/macros/after_print"
+
+----- Before layer change
+;Automesh: begin layer [layer_num]
+
+;M98 P"0:/macros/camera_click"
+
+
+
+----- After layer change
+
+
+
+
+----- Heat tower (after layer change)
+
+;Heat tower, 5mm steps
+{if layer_z <= 5}M104 S255 T0
+{elsif layer_z <= 10}M104 S250 T0
+{elsif layer_z <= 15}M104 S245 T0
+{elsif layer_z <= 20}M104 S240 T0
+{elsif layer_z <= 25}M104 S235 T0
+{elsif layer_z <= 30}M104 S230 T0
+{endif}
+
+----- Pressure advance (after layer change)
+
+TBD
+
+
+
+
