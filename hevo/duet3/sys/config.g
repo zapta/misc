@@ -35,7 +35,11 @@ M350 X16 Y16 Z16 E16 I1                         ; configure microstepping with i
 M92 X200.00 Y200.00 Z400.00 E830.00            ; set steps per mm
 
 ; See https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
-M566 X600 Y600 Z30 E1200            ; set maximum instantaneous speed changes (mm/min)
+;
+; Suggested Z jerk at least 60 for mesh bed leveling:
+; https://forum.duet3d.com/topic/20237/pressure-advance-question?_=1607356245483
+;
+M566 X600 Y600 Z60 E1200            ; set maximum instantaneous speed changes (mm/min)
 
 M203 X15000 Y15000 Z3000 E2000        ; set maximum speeds (mm/min)
 M204 P1000 T3000                              ; Set printing and travel accelerations
