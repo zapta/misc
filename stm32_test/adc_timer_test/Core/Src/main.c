@@ -145,6 +145,8 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
+		LED0_GPIO_Port->BSRR = LED0_Pin;
+
     HAL_Delay(500);
 		LED0_GPIO_Port->BSRR = LED0_Pin;
 		printf("%d, %lu\n", ticks, value);

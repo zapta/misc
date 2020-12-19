@@ -16,4 +16,6 @@
 		<item key="DIALOG_X_ORIGIN" value="448"/>
 		<item key="DIALOG_Y_ORIGIN" value="138"/>
 	</section>
+	<section name="ImportExportAction">
+	</section>
 </section>

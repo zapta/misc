@@ -16,6 +16,7 @@
 		<item key="caseSensitive" value="false"/>
 		<item key="searchFlags" value="227191"/>
 		<list key="previousPatterns">
+			<item value="HAL_ADC_MspDeInit"/>
 			<item value="Error_Handler"/>
 			<item value="ErrorHandler"/>
 		</list>
