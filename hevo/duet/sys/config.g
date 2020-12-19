@@ -22,23 +22,25 @@ M569 P0 S1                                   ; Drive 0 goes forwards
 M569 P1 S1                                   ; Drive 1 goes forwards
 M569 P2 S1                                   ; Drive 2 goes forwards
 M569 P3 S1                                   ; Drive 3 goes forwards
+M569 P4 S1                                   ; Drive 3 goes forwards
+
 M350 X16 Y16 Z16 E16 I1                      ; Configure microstepping with interpolation
 
-# Independent Z motors. See documentation at
-# https://duet3d.dozuki.com/Wiki/Bed_levelling_using_multiple_independent_Z_motors#Section_Example_for_2_motors
+; Independent Z motors. See documentation at
+; https://duet3d.dozuki.com/Wiki/Bed_levelling_using_multiple_independent_Z_motors#Section_Example_for_2_motors
 M584 X0 Y1 Z2:4 E3; two Z motors connected to driver outputs Z and E1
+;584 X0 Y1 Z2 E3; single Z driver
 
 M92 X200.00 Y200.00 Z400.00 E830.0            ; Set microsteps per mm
 
 ; Based on:
 ; https://forum.duet3d.com/topic/8689/extruder-acceleration-jerk-and-tuning/2
-; Sets:
-;   M566 ....    ; max jerk
-;   M201 ....    ; max acceleration 
-M98 P"/sys/mode_normal.g"
+M566 X600 Y600  Z30   E1200     ; Set maximum instantaneous speed changes (mm/min) (Jerk)
+M201  X600 Y600 Z30   E1200     ; Set maximum accelerations (mm/s^2)
 
 ; Note: too fast E speed may skip steps
-M203 X15000 Y15000 Z3000 E3000                ; Set maximum speeds (mm/min)
+;M203 X15000 Y15000 Z3000 E3000                ; Set maximum speeds (mm/min)
+M203 X15000 Y15000 Z3000 E2000                ; Set maximum speeds (mm/min)
 M204 P1000 T3000			      ; Set printing and travel accelerations
 M906 X1500 Y1500 Z1500 E1200 I30              ; Set motor currents (mA) and motor idle factor in per cent
 M84 S30                                       ; Set idle timeout (secs)
@@ -78,6 +80,7 @@ G31 P500 X30 Y0 Z1.76                   ; Set Z probe trigger value, offset and 
 ; Heaters
 M305 P0 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 0
 M143 H0 S120                                 ; Set temperature limit for heater 0 to 80C
+
 M305 P1 T100000 B4138 R4700                  ; Set thermistor + ADC parameters for heater 1
 M143 H1 S280                                 ; Set temperature limit for heater 1 to 260
 
@@ -127,7 +130,7 @@ M307 H0 A237.3 C1430.3 D1.7 V24.2 B0
 M307 H1 A503.6 C235.7 D4.9 V24.1 B0
 
 ; Pressure advance.
-M572 D0 S0.15 ; set pressure advance
+M572 D0 S0.08 ; set pressure advance
 
 ; Automatic saving after power loss is not enabled
 
@@ -136,13 +139,14 @@ M572 D0 S0.15 ; set pressure advance
 T0   ; select extruder
 
 ; PS_ON experiment
-;M570 H0 P10 T10 S0    ; Allow a heat bed anomaly to persist for 10 seconds (P10) 
-;                      ; on the before raising a heater fault. Allow a 10C 
-;                      ; deviation from set point (T10) After 0 minutes of heater 
-;                      ; fault cancel the build (S0).
-;M570 H1 P10 T10 S0    ; Allow a hot end anomaly to persist for 10 seconds (P10)
-;                      ; on the before raising a heater fault. Allow a 
-;                      ; 10C deviation from set point (T10) After 0  
-;                      ; minute of heater fault cancel the build (S0).
+M570 H0 P20 T10 S0    ; Allow a heat bed anomaly to persist for 10 seconds (P10) 
+                      ; on the before raising a heater fault. Allow a 10C 
+                      ; deviation from set point (T10) After 0 minutes of heater 
+                      ; fault cancel the build (S0).
+
+M570 H1 P20 T10 S0    ; Allow a hot end anomaly to persist for 10 seconds (P10)
+                      ; on the before raising a heater fault. Allow a 
+                      ; 10C deviation from set point (T10) After 0  
+                      ; minute of heater fault cancel the build (S0).
 
 

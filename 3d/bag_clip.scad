@@ -8,7 +8,7 @@
 /* [General] */
 
 // Effective (internal) length of the clip
-armLength = 90;
+armLength = 75;
 
 // Should not be less than two times latch arm hickness plus movement gap :)
 armThickness = 6;
@@ -16,12 +16,12 @@ armThickness = 6;
 // slot width scale.
 grove = 2;
 
-height = 16;
+height = 14;
 
 latchArmThickness = 2; // [1:0.1:3]
 
 // Simply just tollerance, must be positive for movement
-movementGap = 0.5; // [0.2:0.05:0.8]
+movementGap = 0.4; // [0.2:0.05:0.8]
 
 /* [Hidden] */
 $fa = 1;
@@ -62,7 +62,7 @@ module main() {
   lockArm();
 
   // Rotor text
-  translate([60, 11.25, height/2 - 0.2]) rotate([90, 0, 180]) linear_extrude(height = 0.8)
+  translate([45, 11.25, height/2 - 0.2]) rotate([90, 0, 180]) linear_extrude(height = 0.8)
      text("TEIKO", halign="center",valign="center", size=8, font="Helvetica:black");
   }
 }
