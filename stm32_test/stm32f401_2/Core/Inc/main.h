@@ -29,6 +29,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -60,18 +61,42 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED0_Pin GPIO_PIN_13
 #define LED0_GPIO_Port GPIOC
-#define LED1_Pin GPIO_PIN_0
+#define TFT_D0_Pin GPIO_PIN_0
+#define TFT_D0_GPIO_Port GPIOA
+#define TFT_D1_Pin GPIO_PIN_1
+#define TFT_D1_GPIO_Port GPIOA
+#define TFT_D2_Pin GPIO_PIN_2
+#define TFT_D2_GPIO_Port GPIOA
+#define TFT_D3_Pin GPIO_PIN_3
+#define TFT_D3_GPIO_Port GPIOA
+#define TFT_D4_Pin GPIO_PIN_4
+#define TFT_D4_GPIO_Port GPIOA
+#define TFT_D5_Pin GPIO_PIN_5
+#define TFT_D5_GPIO_Port GPIOA
+#define TFT_D6_Pin GPIO_PIN_6
+#define TFT_D6_GPIO_Port GPIOA
+#define TFT_D7_Pin GPIO_PIN_7
+#define TFT_D7_GPIO_Port GPIOA
+#define AIN0_Pin GPIO_PIN_0
+#define AIN0_GPIO_Port GPIOB
+#define AIN1_Pin GPIO_PIN_1
+#define AIN1_GPIO_Port GPIOB
+#define LED1_Pin GPIO_PIN_2
 #define LED1_GPIO_Port GPIOB
-#define LED2_Pin GPIO_PIN_1
-#define LED2_GPIO_Port GPIOB
-#define LED3_Pin GPIO_PIN_2
-#define LED3_GPIO_Port GPIOB
-#define TFT_DC_Pin GPIO_PIN_3
+#define TFT_RST_Pin GPIO_PIN_12
+#define TFT_RST_GPIO_Port GPIOB
+#define TFT_BL_Pin GPIO_PIN_13
+#define TFT_BL_GPIO_Port GPIOB
+#define TFT_DC_Pin GPIO_PIN_14
 #define TFT_DC_GPIO_Port GPIOB
-#define TFT_NRST_Pin GPIO_PIN_4
-#define TFT_NRST_GPIO_Port GPIOB
-#define TDT_BL_Pin GPIO_PIN_5
-#define TDT_BL_GPIO_Port GPIOB
+#define TFT_CS_Pin GPIO_PIN_15
+#define TFT_CS_GPIO_Port GPIOB
+#define TFT_WR_Pin GPIO_PIN_9
+#define TFT_WR_GPIO_Port GPIOA
+#define LED2_Pin GPIO_PIN_3
+#define LED2_GPIO_Port GPIOB
+#define LED3_Pin GPIO_PIN_4
+#define LED3_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

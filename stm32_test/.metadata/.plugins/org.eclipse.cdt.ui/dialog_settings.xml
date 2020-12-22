@@ -21,4 +21,7 @@
 			<item value="ErrorHandler"/>
 		</list>
 	</section>
+	<section name="CResourceRenameRefactoringInputPage">
+		<item key="updateReferences" value="true"/>
+	</section>
 </section>
