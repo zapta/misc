@@ -57,7 +57,9 @@ void MX_GPIO_Init(void)
                           |TFT_WR_Pin|TFT_RST_Pin|LED3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, TFT_BL_Pin|TFT_DC_Pin|TFT_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, TFT_D8_Pin|TFT_D14_Pin|TFT_D15_Pin|TFT_BL_Pin
+                          |TFT_DC_Pin|TFT_CS_Pin|TFT_D9_Pin|TFT_D10_Pin
+                          |TFT_D11_Pin|TFT_D12_Pin|TFT_D13_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : PCPin PCPin PCPin */
   GPIO_InitStruct.Pin = LED0_Pin|LED1_Pin|LED2_Pin;
@@ -68,28 +70,32 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pins : PAPin PAPin PAPin PAPin
                            PAPin PAPin PAPin PAPin
-                           PAPin */
+                           PAPin PAPin */
   GPIO_InitStruct.Pin = TFT_D0_Pin|TFT_D1_Pin|TFT_D2_Pin|TFT_D3_Pin
                           |TFT_D4_Pin|TFT_D5_Pin|TFT_D6_Pin|TFT_D7_Pin
-                          |TFT_WR_Pin;
+                          |TFT_WR_Pin|LED3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = TFT_BL_Pin|TFT_DC_Pin|TFT_CS_Pin;
+  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
+                           PBPin PBPin PBPin PBPin
+                           PBPin PBPin PBPin */
+  GPIO_InitStruct.Pin = TFT_D8_Pin|TFT_D14_Pin|TFT_D15_Pin|TFT_BL_Pin
+                          |TFT_DC_Pin|TFT_CS_Pin|TFT_D9_Pin|TFT_D10_Pin
+                          |TFT_D11_Pin|TFT_D12_Pin|TFT_D13_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAPin PAPin */
-  GPIO_InitStruct.Pin = TFT_RST_Pin|LED3_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = TFT_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(TFT_RST_GPIO_Port, &GPIO_InitStruct);
 
 }
 
