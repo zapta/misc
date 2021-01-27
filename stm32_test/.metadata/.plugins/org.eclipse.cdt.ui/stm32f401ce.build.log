@@ -1,0 +1,10 @@
+17:02:59 **** Incremental Build of configuration Debug for project stm32f401ce ****
+make -j4 all 
+arm-none-eabi-size   stm32f401ce.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5680	     20	   1572	   7272	   1c68	stm32f401ce.elf
+Finished building: default.size.stdout
+ 
+
+17:03:00 Build Finished. 0 errors, 0 warnings. (took 945ms)
+
