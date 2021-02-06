@@ -22,60 +22,60 @@ public class NewBssrMasksGenerator {
         }
     }
 
-//    // In addition to the 16 bit parallel data, we also
-//    // want to reset the WR pin.
-//    static final Pin WR_PIN = new Pin(Port.A, 0);
-//
-//    // Maps the 16 data bit index to pin.
-//    static final Pin[] DATA_PINS = new Pin[]{
-//            new Pin(Port.B, 12),  // D0
-//            new Pin(Port.B, 13),  // D1
-//            new Pin(Port.B, 14),  // D2
-//            new Pin(Port.B, 15),  // D3
-//
-//            new Pin(Port.A, 10),  // D4
-//            new Pin(Port.A, 9),   // D5
-//            new Pin(Port.A, 10),  // D6
-//            new Pin(Port.A, 7),   // D7
-//
-//            new Pin(Port.A, 6),   // D8
-//            new Pin(Port.A, 5),   // D9
-//            new Pin(Port.A, 15),  // D10
-//            new Pin(Port.A, 4),   // D11
-//
-//            new Pin(Port.A, 3),   // D12
-//            new Pin(Port.B, 4),   // D13
-//            new Pin(Port.A, 2),   // D14
-//            new Pin(Port.B, 5),   // D15
-//    };
-
-
-    // Id addition to the 16 bit parallel data, we also
+    // In addition to the 16 bit parallel data, we also
     // want to reset the WR pin.
-    static final Pin WR_PIN = new Pin(Port.A, 9);
+    static final Pin WR_PIN = new Pin(Port.A, 0);
 
     // Maps the 16 data bit index to pin.
     static final Pin[] DATA_PINS = new Pin[]{
-            new Pin(Port.A, 0),   // D0
-            new Pin(Port.A, 1),   // D1
-            new Pin(Port.A, 2),   // D2
-            new Pin(Port.A, 3),   // D3
+            new Pin(Port.B, 12),  // D0
+            new Pin(Port.B, 13),  // D1
+            new Pin(Port.B, 14),  // D2
+            new Pin(Port.B, 15),  // D3
 
-            new Pin(Port.A, 4),   // D4
-            new Pin(Port.A, 5),   // D5
-            new Pin(Port.A, 6),   // D6
+            new Pin(Port.B, 10),  // D4
+            new Pin(Port.A, 9),   // D5
+            new Pin(Port.A, 10),  // D6
             new Pin(Port.A, 7),   // D7
 
-            new Pin(Port.B, 15),  // D8
-            new Pin(Port.B, 13),  // D9
-            new Pin(Port.B, 4),   // D10
-            new Pin(Port.B, 5),   // D11
+            new Pin(Port.A, 6),   // D8
+            new Pin(Port.A, 5),   // D9
+            new Pin(Port.A, 15),  // D10
+            new Pin(Port.A, 4),   // D11
 
-            new Pin(Port.B, 8),   // D12
-            new Pin(Port.B, 9),   // D13
-            new Pin(Port.B, 10),  // D14
-            new Pin(Port.B, 12),  // D15
+            new Pin(Port.A, 3),   // D12
+            new Pin(Port.B, 4),   // D13
+            new Pin(Port.A, 2),   // D14
+            new Pin(Port.B, 5),   // D15
     };
+
+
+//    // Id addition to the 16 bit parallel data, we also
+//    // want to reset the WR pin.
+//    static final Pin WR_PIN = new Pin(Port.A, 9);
+//
+//    // Maps the 16 data bit index to pin.
+//    static final Pin[] DATA_PINS = new Pin[]{
+//            new Pin(Port.A, 0),   // D0
+//            new Pin(Port.A, 1),   // D1
+//            new Pin(Port.A, 2),   // D2
+//            new Pin(Port.A, 3),   // D3
+//
+//            new Pin(Port.A, 4),   // D4
+//            new Pin(Port.A, 5),   // D5
+//            new Pin(Port.A, 6),   // D6
+//            new Pin(Port.A, 7),   // D7
+//
+//            new Pin(Port.B, 15),  // D8
+//            new Pin(Port.B, 13),  // D9
+//            new Pin(Port.B, 4),   // D10
+//            new Pin(Port.B, 5),   // D11
+//
+//            new Pin(Port.B, 8),   // D12
+//            new Pin(Port.B, 9),   // D13
+//            new Pin(Port.B, 10),  // D14
+//            new Pin(Port.B, 12),  // D15
+//    };
 
     // Maps a color value from src_bits to dst_bits.
     private static int resize_color_channel(int srv_val, int src_bits, int dst_bits) {

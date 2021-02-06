@@ -1,0 +1,9 @@
+#ifndef MY_TEST_H
+#define MY_TEST_H
+
+
+extern void init_tft();
+
+
+
+#endif // MY_TEST_H

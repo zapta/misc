@@ -1,0 +1,7 @@
+test.c:231:6:ili9488_init	336	static
+test.c:378:13:disp_spi_send_bytes	24	static
+test.c:383:13:ili9488_send_cmd	16	static
+test.c:391:13:ili9488_send_data	16	static
+test.c:399:13:ili9488_send_colors	16	static
+test.c:408:13:ili9488_set_orientation	24	static
+test.c:428:6:tft_init	8	static

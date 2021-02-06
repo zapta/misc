@@ -1,0 +1,20 @@
+16:41:52 **** Incremental Build of configuration Debug for project stm32f401ce_spi ****
+make -j4 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F401xE -DDEBUG -c -I../Core/Inc -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc -o "stm32f401ce_spi.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\projects\misc\repo\stm32_test\stm32f401ce_spi\STM32F401CEUX_FLASH.ld" --specs=nosys.specs -Wl,-Map="stm32f401ce_spi.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: stm32f401ce_spi.elf
+ 
+arm-none-eabi-objdump -h -S  stm32f401ce_spi.elf  > "stm32f401ce_spi.list"
+arm-none-eabi-objcopy  -O binary  stm32f401ce_spi.elf  "stm32f401ce_spi.bin"
+arm-none-eabi-size   stm32f401ce_spi.elf 
+   text	   data	    bss	    dec	    hex	filename
+  39696	    492	   8452	  48640	   be00	stm32f401ce_spi.elf
+Finished building: default.size.stdout
+ 
+Finished building: stm32f401ce_spi.bin
+ 
+Finished building: stm32f401ce_spi.list
+ 
+
+16:41:55 Build Finished. 0 errors, 0 warnings. (took 2s.885ms)
+

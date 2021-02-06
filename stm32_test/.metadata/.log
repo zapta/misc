@@ -6743,3 +6743,526 @@ Command-line arguments:  -os win32 -ws win32 -arch x86_64
 
 !ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-24 00:31:12.199
 !MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+!SESSION 2021-01-26 23:48:47.504 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-01-26 23:49:00.868
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.buildanalyzer.ui 1 0 2021-01-26 23:49:13.605
+!MESSAGE Failed to parse map file
+!STACK 0
+java.io.FileNotFoundException: C:\projects\misc\repo\stm32_test\stm32f401ce_config\Debug\stm32f401ce_config.map (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:93)
+	at java.io.FileReader.<init>(FileReader.java:58)
+	at elf_analyzer.datamodel.BuildDataProviderMap.readFile(BuildDataProviderMap.java:57)
+	at elf_analyzer.datamodel.BuildDataProviderMap.compute(BuildDataProviderMap.java:355)
+	at elf_analyzer.datamodel.BuildDataProviderMap.computeMemConfig(BuildDataProviderMap.java:398)
+	at elf_analyzer.datamodel.BuildData.compute(BuildData.java:80)
+	at elf_analyzer.ElfAnalyzerView.inputChanged(ElfAnalyzerView.java:248)
+	at elf_analyzer.ElfAnalyzerView.lambda$5(ElfAnalyzerView.java:446)
+	at com.st.stm32cube.ide.common.utils.ThreadHelper.runInUiThreadAsync(ThreadHelper.java:24)
+	at elf_analyzer.ElfAnalyzerView.selectionChanged(ElfAnalyzerView.java:446)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.notifyListeners(SelectionService.java:252)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.handlePostSelectionChanged(SelectionService.java:116)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.lambda$3(SelectionService.java:77)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$4.run(SelectionAggregator.java:184)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.notifyTargetedPostListeners(SelectionAggregator.java:181)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.notifyPostListeners(SelectionAggregator.java:172)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.access$7(SelectionAggregator.java:158)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$6.lambda$0(SelectionAggregator.java:250)
+	at org.eclipse.e4.core.contexts.RunAndTrack.runExternalCode(RunAndTrack.java:59)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$6.changed(SelectionAggregator.java:250)
+	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.update(TrackableComputationExt.java:108)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.processScheduled(EclipseContext.java:364)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.set(EclipseContext.java:379)
+	at org.eclipse.e4.ui.internal.workbench.SelectionServiceImpl.setPostSelection(SelectionServiceImpl.java:39)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.lambda$2(CompatibilityPart.java:128)
+	at org.eclipse.jface.viewers.StructuredViewer$3.run(StructuredViewer.java:818)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.ui.internal.JFaceUtil.lambda$0(JFaceUtil.java:47)
+	at org.eclipse.jface.util.SafeRunnable.run(SafeRunnable.java:174)
+	at org.eclipse.jface.viewers.StructuredViewer.firePostSelectionChanged(StructuredViewer.java:815)
+	at org.eclipse.jface.viewers.StructuredViewer.handlePostSelect(StructuredViewer.java:1185)
+	at org.eclipse.ui.navigator.CommonViewer.handlePostSelect(CommonViewer.java:460)
+	at org.eclipse.jface.viewers.StructuredViewer.lambda$0(StructuredViewer.java:1208)
+	at org.eclipse.swt.events.SelectionListener$1.widgetSelected(SelectionListener.java:84)
+	at org.eclipse.jface.util.OpenStrategy.firePostSelectionEvent(OpenStrategy.java:263)
+	at org.eclipse.jface.util.OpenStrategy.access$5(OpenStrategy.java:258)
+	at org.eclipse.jface.util.OpenStrategy$1.lambda$1(OpenStrategy.java:428)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:185)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:3961)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3588)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1160)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1049)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:633)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:557)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:150)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:137)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:107)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:400)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:660)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:597)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1468)
+
+!ENTRY com.st.stm32cube.ide.mcu.buildanalyzer.ui 1 0 2021-01-26 23:49:13.809
+!MESSAGE Failed to parse map file
+!STACK 0
+java.io.FileNotFoundException: C:\projects\misc\repo\stm32_test\stm32f401ce_config\Debug\stm32f401ce_config.map (The system cannot find the path specified)
+	at java.io.FileInputStream.open0(Native Method)
+	at java.io.FileInputStream.open(FileInputStream.java:195)
+	at java.io.FileInputStream.<init>(FileInputStream.java:138)
+	at java.io.FileInputStream.<init>(FileInputStream.java:93)
+	at java.io.FileReader.<init>(FileReader.java:58)
+	at elf_analyzer.datamodel.BuildDataProviderMap.readFile(BuildDataProviderMap.java:57)
+	at elf_analyzer.datamodel.BuildDataProviderMap.compute(BuildDataProviderMap.java:355)
+	at elf_analyzer.datamodel.BuildDataProviderMap.computeLinkerSymbols(BuildDataProviderMap.java:406)
+	at elf_analyzer.datamodel.BuildData.compute(BuildData.java:102)
+	at elf_analyzer.ElfAnalyzerView.inputChanged(ElfAnalyzerView.java:248)
+	at elf_analyzer.ElfAnalyzerView.lambda$5(ElfAnalyzerView.java:446)
+	at com.st.stm32cube.ide.common.utils.ThreadHelper.runInUiThreadAsync(ThreadHelper.java:24)
+	at elf_analyzer.ElfAnalyzerView.selectionChanged(ElfAnalyzerView.java:446)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.notifyListeners(SelectionService.java:252)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.handlePostSelectionChanged(SelectionService.java:116)
+	at org.eclipse.ui.internal.e4.compatibility.SelectionService.lambda$3(SelectionService.java:77)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$4.run(SelectionAggregator.java:184)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.notifyTargetedPostListeners(SelectionAggregator.java:181)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.notifyPostListeners(SelectionAggregator.java:172)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator.access$7(SelectionAggregator.java:158)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$6.lambda$0(SelectionAggregator.java:250)
+	at org.eclipse.e4.core.contexts.RunAndTrack.runExternalCode(RunAndTrack.java:59)
+	at org.eclipse.e4.ui.internal.workbench.SelectionAggregator$6.changed(SelectionAggregator.java:250)
+	at org.eclipse.e4.core.internal.contexts.TrackableComputationExt.update(TrackableComputationExt.java:108)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.processScheduled(EclipseContext.java:364)
+	at org.eclipse.e4.core.internal.contexts.EclipseContext.set(EclipseContext.java:379)
+	at org.eclipse.e4.ui.internal.workbench.SelectionServiceImpl.setPostSelection(SelectionServiceImpl.java:39)
+	at org.eclipse.ui.internal.e4.compatibility.CompatibilityPart.lambda$2(CompatibilityPart.java:128)
+	at org.eclipse.jface.viewers.StructuredViewer$3.run(StructuredViewer.java:818)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.ui.internal.JFaceUtil.lambda$0(JFaceUtil.java:47)
+	at org.eclipse.jface.util.SafeRunnable.run(SafeRunnable.java:174)
+	at org.eclipse.jface.viewers.StructuredViewer.firePostSelectionChanged(StructuredViewer.java:815)
+	at org.eclipse.jface.viewers.StructuredViewer.handlePostSelect(StructuredViewer.java:1185)
+	at org.eclipse.ui.navigator.CommonViewer.handlePostSelect(CommonViewer.java:460)
+	at org.eclipse.jface.viewers.StructuredViewer.lambda$0(StructuredViewer.java:1208)
+	at org.eclipse.swt.events.SelectionListener$1.widgetSelected(SelectionListener.java:84)
+	at org.eclipse.jface.util.OpenStrategy.firePostSelectionEvent(OpenStrategy.java:263)
+	at org.eclipse.jface.util.OpenStrategy.access$5(OpenStrategy.java:258)
+	at org.eclipse.jface.util.OpenStrategy$1.lambda$1(OpenStrategy.java:428)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:185)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:3961)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3588)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1160)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1049)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:633)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:338)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:557)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:150)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:203)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:137)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:107)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:400)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:660)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:597)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1468)
+
+!ENTRY com.st.stm32cube.ide.mcu.stackanalyzer 4 0 2021-01-26 23:49:16.049
+!MESSAGE Stackanalyzer failed to analyze input
+!STACK 0
+java.lang.Exception: File: C:\projects\misc\repo\stm32_test\stm32f401ce_config\Debug\stm32f401ce_config.elfdo not exists
+	at com.st.stm32cube.ide.mcu.utils.assembly.Disassembler.<init>(Disassembler.java:58)
+	at com.st.stm32cube.ide.mcu.utils.assembly.Disassembler.<init>(Disassembler.java:86)
+	at com.st.stm32cube.ide.mcu.stackanalyzer.ui.StackAnalyzerView.inputChanged(StackAnalyzerView.java:901)
+	at com.st.stm32cube.ide.mcu.stackanalyzer.ui.StackAnalyzerView.lambda$15(StackAnalyzerView.java:1231)
+	at java.lang.Thread.run(Thread.java:748)
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-01-26 23:49:16.062
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-26 23:49:16.854
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+!SESSION 2021-01-27 07:32:01.206 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-01-27 07:32:08.321
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-01-27 07:32:16.349
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-27 07:32:17.107
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+!SESSION 2021-01-27 08:49:41.991 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-01-27 08:49:49.129
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-01-27 08:49:56.987
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-27 08:49:57.792
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+!SESSION 2021-01-30 00:34:32.341 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-01-30 00:34:45.605
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-30 00:35:04.509
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-01-30 00:35:24.761
+!MESSAGE Started RMI Server, listening on port 41337
+!SESSION 2021-01-30 00:40:48.745 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-01-30 00:40:55.963
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-01-30 00:41:08.317
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-01-30 00:41:09.348
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-01-30 00:42:58.518
+!MESSAGE Indexed 'stm32f401ce_spi' (0 sources, 0 headers) in 0.006 sec: 0 declarations; 0 references; 0 unresolved inclusions; 0 syntax errors; 0 unresolved names (0%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2021-01-30 00:43:10.917
+!MESSAGE Indexed 'stm32f401ce_spi' (40 sources, 49 headers) in 3.1 sec: 5,644 declarations; 43,797 references; 7 unresolved inclusions; 117 syntax errors; 4,898 unresolved names (9%)
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.stlink 4 4 2021-01-30 21:18:41.718
+!MESSAGE ST-LINK GDB server failed to start (exit code = 4)
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2021-01-30 21:18:41.776
+!MESSAGE Error in final launch sequence:
+
+Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to start GDB server
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:242)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:106)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:94)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:297)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:860)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:719)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1017)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$2.run(DebugUIPlugin.java:1220)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 1 com.st.stm32cube.ide.mcu.debug.launch 4 0 2021-01-30 21:18:41.780
+!MESSAGE Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 2 com.st.stm32cube.ide.mcu.debug.stlink 4 0 2021-01-30 21:18:41.780
+!MESSAGE Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.stlink 4 4 2021-01-30 21:19:43.059
+!MESSAGE ST-LINK GDB server failed to start (exit code = 4)
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2021-01-30 21:19:43.116
+!MESSAGE Error in final launch sequence:
+
+Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to start GDB server
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:242)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:106)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:94)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:297)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:860)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:719)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1017)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$2.run(DebugUIPlugin.java:1220)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 1 com.st.stm32cube.ide.mcu.debug.launch 4 0 2021-01-30 21:19:43.117
+!MESSAGE Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 2 com.st.stm32cube.ide.mcu.debug.stlink 4 0 2021-01-30 21:19:43.117
+!MESSAGE Error in initializing ST-LINK device.
+Reason: (4) No device found on target.
+
+!ENTRY com.st.stm32cube.ide.mcu.debug.stlink 4 4 2021-01-30 21:21:35.189
+!MESSAGE ST-LINK GDB server failed to start (exit code = 1)
+
+!ENTRY org.eclipse.cdt.dsf.gdb 4 5012 2021-01-30 21:21:35.249
+!MESSAGE Error in final launch sequence:
+
+Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to start GDB server
+	at org.eclipse.cdt.dsf.concurrent.Query.get(Query.java:112)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugSession(GdbLaunchDelegate.java:242)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launchDebugger(GdbLaunchDelegate.java:106)
+	at org.eclipse.cdt.dsf.gdb.launching.GdbLaunchDelegate.launch(GdbLaunchDelegate.java:94)
+	at com.st.stm32cube.ide.mcu.debug.launch.DSFDelegate.launch(DSFDelegate.java:299)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:860)
+	at org.eclipse.debug.internal.core.LaunchConfiguration.launch(LaunchConfiguration.java:719)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin.buildAndLaunch(DebugUIPlugin.java:1017)
+	at org.eclipse.debug.internal.ui.DebugUIPlugin$2.run(DebugUIPlugin.java:1220)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (1) Failed to connect to device. Please check power and cabling to target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 1 com.st.stm32cube.ide.mcu.debug.launch 4 0 2021-01-30 21:21:35.250
+!MESSAGE Failed to start GDB server
+!STACK 1
+org.eclipse.core.runtime.CoreException: Error in initializing ST-LINK device.
+Reason: (1) Failed to connect to device. Please check power and cabling to target.
+	at com.st.stm32cube.ide.mcu.debug.stlink.StLinkDebugHardware.verifyServer(StLinkDebugHardware.java:1685)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:159)
+	at com.st.stm32cube.ide.mcu.debug.launch.export.HardwareDebugUtil.startServer(HardwareDebugUtil.java:79)
+	at com.st.stm32cube.ide.mcu.debug.launch.LaunchSequenceUtil.stepStartGDBServer(LaunchSequenceUtil.java:226)
+	at com.st.stm32cube.ide.mcu.debug.launch.GDBExtendedJtagDSFFinalLaunchSequence_7_12.stepStartGDBServer(GDBExtendedJtagDSFFinalLaunchSequence_7_12.java:100)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.cdt.dsf.concurrent.ReflectionSequence$ReflectionStep.execute(ReflectionSequence.java:160)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.executeStep(Sequence.java:475)
+	at org.eclipse.cdt.dsf.concurrent.Sequence.access$2(Sequence.java:390)
+	at org.eclipse.cdt.dsf.concurrent.Sequence$2.handleSuccess(Sequence.java:437)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor.handleCompleted(RequestMonitor.java:391)
+	at org.eclipse.cdt.dsf.concurrent.RequestMonitor$2.run(RequestMonitor.java:317)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)
+	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+	at java.lang.Thread.run(Thread.java:748)
+!SUBENTRY 2 com.st.stm32cube.ide.mcu.debug.stlink 4 0 2021-01-30 21:21:35.250
+!MESSAGE Error in initializing ST-LINK device.
+Reason: (1) Failed to connect to device. Please check power and cabling to target.
+!SESSION 2021-02-01 21:52:05.257 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-02-01 21:52:17.996
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-02-01 21:52:37.249
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-02-01 21:52:37.921
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY org.eclipse.jface 2 0 2021-02-01 22:24:20.252
+!MESSAGE Ignored reentrant call while viewer is busy. This is only logged once per viewer instance, but similar calls will still be ignored.
+!STACK 0
+java.lang.RuntimeException
+	at org.eclipse.jface.viewers.ColumnViewer.checkBusy(ColumnViewer.java:764)
+	at org.eclipse.jface.viewers.ColumnViewer.update(ColumnViewer.java:543)
+	at org.eclipse.ui.navigator.CommonViewer.update(CommonViewer.java:512)
+	at org.eclipse.jface.viewers.StructuredViewer.update(StructuredViewer.java:1965)
+	at org.eclipse.ui.internal.navigator.resources.nested.NestedProjectsLabelProvider.lambda$2(NestedProjectsLabelProvider.java:87)
+	at java.util.concurrent.CompletableFuture.uniAccept(CompletableFuture.java:670)
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:646)
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1609)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1596)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+!SESSION 2021-02-05 16:23:20.226 -----------------------------------------------
+eclipse.buildId=Version 1.4.2
+java.version=1.8.0_252
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2021-02-05 16:23:33.490
+!MESSAGE Log4j initialized with config file C:\projects\misc\repo\stm32_test\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 4 4 2021-02-05 16:23:55.705
+!MESSAGE com.st.stm32cube.ide.mcu.ide/META-INF/version/build_ref file not found, build reference will not be reported into properties
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2021-02-05 16:24:16.589
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.jface 2 0 2021-02-05 16:41:25.477
+!MESSAGE Ignored reentrant call while viewer is busy. This is only logged once per viewer instance, but similar calls will still be ignored.
+!STACK 0
+java.lang.RuntimeException
+	at org.eclipse.jface.viewers.ColumnViewer.checkBusy(ColumnViewer.java:764)
+	at org.eclipse.jface.viewers.ColumnViewer.update(ColumnViewer.java:543)
+	at org.eclipse.ui.navigator.CommonViewer.update(CommonViewer.java:515)
+	at org.eclipse.jface.viewers.StructuredViewer.update(StructuredViewer.java:1965)
+	at org.eclipse.ui.internal.navigator.resources.nested.NestedProjectsLabelProvider.lambda$2(NestedProjectsLabelProvider.java:87)
+	at java.util.concurrent.CompletableFuture.uniAccept(CompletableFuture.java:670)
+	at java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:646)
+	at java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:488)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1609)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1596)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
