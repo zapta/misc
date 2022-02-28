@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "current_sensor")(type "KiCad")(uri "${KIPRJMOD}/current_sensor.kicad_sym")(options "")(descr ""))
+)

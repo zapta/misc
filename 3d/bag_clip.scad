@@ -21,6 +21,7 @@ height = 14;
 latchArmThickness = 2; // [1:0.1:3]
 
 // Simply just tollerance, must be positive for movement
+//movementGap = 0.4; // [0.2:0.05:0.8]
 movementGap = 0.4; // [0.2:0.05:0.8]
 
 /* [Hidden] */
@@ -63,7 +64,7 @@ module main() {
 
   // Rotor text
   translate([45, 11.25, height/2 - 0.2]) rotate([90, 0, 180]) linear_extrude(height = 0.8)
-     text("TEIKO", halign="center",valign="center", size=8, font="Helvetica:black");
+     text("SUMI", halign="center",valign="center", size=8, spacing=1.3, font="Helvetica:black");
   }
 }
 
