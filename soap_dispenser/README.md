@@ -72,6 +72,6 @@ unit with the motor and electronic board will come out.
 To program the unit from the Arduino IDE you need to connect the programmer signals 
 to the raw of 8 pads at the top (only 6 pins are used). Check the schematic here for 
 exact pads to use. I chose to solder a 90 degrees 8 pin header which provide easy 
-access to the programing pad and has enough clearance when reassmebling the soap
+access to the programing pad and has enough clearance when reassembling the soap
 dispenser for eazy future modfications.
 
