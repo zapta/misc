@@ -1,0 +1,7 @@
+The authorative configuration is in sdkconfig.defaults.
+
+sdkconfig.release and sdkconfig.debug are created automatically at 
+build time from sdkconfig.defaults.
+
+TODO: Consider to remove sdkconfig.realse and sdkconfig.debug 
+from the github repository.
