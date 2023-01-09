@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "driver/adc.h"
-#include "driver/ledc.h"
+// #include "driver/ledc.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "sdkconfig.h"
@@ -51,29 +51,29 @@ static const adc_digi_configuration_t dig_cfg = {
     .format = ADC_DIGI_OUTPUT_FORMAT_TYPE1,
 };
 
-static const ledc_timer_config_t ledc_timer = {
-    .speed_mode = LEDC_LOW_SPEED_MODE,
-    .duty_resolution = LEDC_TIMER_13_BIT,
-    .timer_num = LEDC_TIMER_0,
-    .freq_hz = 1000,
-    .clk_cfg = LEDC_AUTO_CLK};
+// static const ledc_timer_config_t ledc_timer = {
+//     .speed_mode = LEDC_LOW_SPEED_MODE,
+//     .duty_resolution = LEDC_TIMER_13_BIT,
+//     .timer_num = LEDC_TIMER_0,
+//     .freq_hz = 1000,
+//     .clk_cfg = LEDC_AUTO_CLK};
 
-static const ledc_channel_config_t ledc_channel = {
-    .gpio_num = 32,
-    .speed_mode = LEDC_LOW_SPEED_MODE,
-    .channel = LEDC_CHANNEL_0,
-    .intr_type = LEDC_INTR_DISABLE,
-    .timer_sel = LEDC_TIMER_0,
-    .duty = 8191 / 2,
-    .hpoint = 0,
-    .flags = {
-        .output_invert = 0,
-    }};
+// static const ledc_channel_config_t ledc_channel = {
+//     .gpio_num = 32,
+//     .speed_mode = LEDC_LOW_SPEED_MODE,
+//     .channel = LEDC_CHANNEL_0,
+//     .intr_type = LEDC_INTR_DISABLE,
+//     .timer_sel = LEDC_TIMER_0,
+//     .duty = 8191 / 2,
+//     .hpoint = 0,
+//     .flags = {
+//         .output_invert = 0,
+//     }};
 
-static void init_pwm() {
-  ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
-  ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
-}
+// static void init_pwm() {
+//   ESP_ERROR_CHECK(ledc_timer_config(&ledc_timer));
+//   ESP_ERROR_CHECK(ledc_channel_config(&ledc_channel));
+// }
 
 static void init_adc_dma() {
   ESP_ERROR_CHECK(adc_digi_initialize(&adc_dma_config));
@@ -81,8 +81,11 @@ static void init_adc_dma() {
   ESP_ERROR_CHECK(adc_digi_start());
 }
 
-constexpr int kMaxCaptureBuffers = 8;
-static uint8_t captured_buffers[kMaxCaptureBuffers * kBytesPerBuffer] = {};
+constexpr int kCaptureBuffers = 200;
+constexpr int kCaptureValuePairs = kValuePairsPerBuffer * kCaptureBuffers;
+constexpr int kCaptureValues = kValuesPerBuffer * kCaptureBuffers;
+constexpr int kCaptureBytes = kBytesPerBuffer * kCaptureBuffers;
+static uint8_t captured_buffers[kCaptureBytes] = {};
 static int num_captured_buffers = 0;
 
 void adc_task(void *ignored) {
@@ -96,7 +99,7 @@ void adc_task(void *ignored) {
       assert(false);
     }
     assert(num_ret_bytes == kBytesPerBuffer);
-    if (num_captured_buffers < kMaxCaptureBuffers) {
+    if (num_captured_buffers < kCaptureBuffers) {
       const int start = num_captured_buffers * kBytesPerBuffer;
       memcpy(&captured_buffers[start], bytes_buffer, kBytesPerBuffer);
       num_captured_buffers++;
@@ -106,12 +109,12 @@ void adc_task(void *ignored) {
 
 static void dump_adc_dma_buffers_as_values() {
   // Assuming captured buffers are filled up.
-  assert(num_captured_buffers == kMaxCaptureBuffers);
+  assert(num_captured_buffers == kCaptureBuffers);
   printf("\n\n --------------------------\n");
 
   const adc_digi_output_data_t *values =
       (adc_digi_output_data_t *)&captured_buffers;
-  for (int j = 0; j < kMaxCaptureBuffers * kValuesPerBuffer; j += 2) {
+  for (int j = 0; j < kCaptureBuffers * kValuesPerBuffer; j += 2) {
     const adc_digi_output_data_t &v1 = values[j];
     const adc_digi_output_data_t &v2 = values[j + 1];
     printf("%d,%d,%4u,%4u\n", v1.type1.channel, v2.type1.channel, v1.type1.data,
@@ -120,8 +123,36 @@ static void dump_adc_dma_buffers_as_values() {
   // NOTE: we don't print the last group since it can be partial.
 }
 
+static void dump_adc_dma_buffers_min_max() {
+  // Assuming captured buffers are filled up.
+  assert(num_captured_buffers == kCaptureBuffers);
+
+  const adc_digi_output_data_t *values =
+      (adc_digi_output_data_t *)&captured_buffers;
+  uint32_t vmin = values[0].type1.data;
+  uint32_t vmax = vmin;
+
+  for (int j = 0; j < kCaptureValues; j += 2) {
+    const adc_digi_output_data_t &v1 = values[j];
+    const adc_digi_output_data_t &v2 = values[j + 1];
+    assert(v1.type1.channel == 7);
+    assert(v2.type1.channel == 6);
+    if (v2.type1.data < vmin) vmin = v1.type1.data;
+    if (v1.type1.data > vmax) vmax = v1.type1.data;
+    // const adc_digi_output_data_t &v2 = values[j + 1];
+    // printf("%d,%d,%4u,%4u\n", v1.type1.channel, v2.type1.channel,
+    // v1.type1.data,
+    //        v2.type1.data);
+    // printf("%5d,%4hu\n", j, v1.type1.data);
+  }
+
+  printf("%d, min=%u, max=%u, diff=%u\n", kCaptureValuePairs, vmin, vmax,
+         vmax - vmin);
+  // NOTE: we don't print the last group since it can be partial.
+}
+
 void my_main() {
-  init_pwm();
+  // init_pwm();
   init_adc_dma();
 
   TaskHandle_t xHandle = NULL;
@@ -129,11 +160,15 @@ void my_main() {
   configASSERT(xHandle);
 
   for (;;) {
-    vTaskDelay(1000);
-    assert(num_captured_buffers == kMaxCaptureBuffers);
-    dump_adc_dma_buffers_as_values();
-    // Start a new capture.
     num_captured_buffers = 0;
+    while (num_captured_buffers < kCaptureBuffers) {
+      vTaskDelay(1);
+    }
+    // assert(num_captured_buffers == kMaxCaptureBuffers);
+    // dump_adc_dma_buffers_as_values();
+    dump_adc_dma_buffers_min_max();
+    // Start a new capture.
+    // vTaskDelay(1000);  // 10 sec.
   }
 }
 
