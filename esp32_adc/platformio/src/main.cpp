@@ -81,7 +81,7 @@ static void init_adc_dma() {
   ESP_ERROR_CHECK(adc_digi_start());
 }
 
-constexpr int kCaptureBuffers = 200;
+constexpr int kCaptureBuffers = 10;
 constexpr int kCaptureValuePairs = kValuePairsPerBuffer * kCaptureBuffers;
 constexpr int kCaptureValues = kValuesPerBuffer * kCaptureBuffers;
 constexpr int kCaptureBytes = kBytesPerBuffer * kCaptureBuffers;
@@ -107,6 +107,26 @@ void adc_task(void *ignored) {
   }
 }
 
+// For Arduino serial plotter.
+static void dump_adc_dma_buffers_as_graph() {
+  // Assuming captured buffers are filled up.
+  assert(num_captured_buffers == kCaptureBuffers);
+  // printf("\n\n --------------------------\n");
+
+  const adc_digi_output_data_t *values =
+      (adc_digi_output_data_t *)&captured_buffers;
+  for (int j = 0; j < kCaptureValues; j += 2) {
+    const adc_digi_output_data_t &v1 = values[j];
+    const adc_digi_output_data_t &v2 = values[j + 1];
+    printf("%4u,%4u\n", v1.type1.data, v2.type1.data);
+    // Satisfy WDT.
+    if ((j & 0x0f) == 0) {
+      vTaskDelay(1);
+    }
+  }
+  // NOTE: we don't print the last group since it can be partial.
+}
+
 static void dump_adc_dma_buffers_as_values() {
   // Assuming captured buffers are filled up.
   assert(num_captured_buffers == kCaptureBuffers);
@@ -114,11 +134,15 @@ static void dump_adc_dma_buffers_as_values() {
 
   const adc_digi_output_data_t *values =
       (adc_digi_output_data_t *)&captured_buffers;
-  for (int j = 0; j < kCaptureBuffers * kValuesPerBuffer; j += 2) {
+  for (int j = 0; j < kCaptureValues; j += 2) {
     const adc_digi_output_data_t &v1 = values[j];
     const adc_digi_output_data_t &v2 = values[j + 1];
-    printf("%d,%d,%4u,%4u\n", v1.type1.channel, v2.type1.channel, v1.type1.data,
-           v2.type1.data);
+    printf("%4d,%d,%d,%4u,%4u\n", j / 2, v1.type1.channel, v2.type1.channel,
+           v1.type1.data, v2.type1.data);
+    // Satisfy WDT.
+    if ((j & 0x0f) == 0) {
+      vTaskDelay(1);
+    }
   }
   // NOTE: we don't print the last group since it can be partial.
 }
@@ -164,10 +188,11 @@ void my_main() {
     while (num_captured_buffers < kCaptureBuffers) {
       vTaskDelay(1);
     }
-    // assert(num_captured_buffers == kMaxCaptureBuffers);
+    dump_adc_dma_buffers_as_graph();
     // dump_adc_dma_buffers_as_values();
-    dump_adc_dma_buffers_min_max();
-    // Start a new capture.
+    // dump_adc_dma_buffers_min_max();
+
+    vTaskDelay(100);  // 1 sec.
     // vTaskDelay(1000);  // 10 sec.
   }
 }
