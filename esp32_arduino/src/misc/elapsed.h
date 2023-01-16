@@ -1,20 +1,21 @@
 #pragma once
 
+#include <Arduino.h>
 #include <stdint.h>
 #include "util.h"
 
 class Elapsed {
  public:
-  Elapsed() { reset(); }
+  Elapsed() { reset(millis()); }
 
-  void reset() { start_millis_ = util::time_ms(); }
+  void reset(uint32_t millis_now) { start_millis_ = millis_now; }
 
-  uint32_t elapsed_millis() { return util::time_ms() - start_millis_; }
+  uint32_t elapsed_millis(uint32_t millis_now) { return millis_now - start_millis_; }
 
   void advance(uint32_t interval_millis) { start_millis_ += interval_millis; }
 
-  void set(uint32_t elapsed_millis) {
-    start_millis_ = util::time_ms() - elapsed_millis;
+  void set(uint32_t elapsed_millis, uint32_t millis_now) {
+    start_millis_ = millis_now - elapsed_millis;
   }
 
  private:
