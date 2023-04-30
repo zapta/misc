@@ -3,19 +3,19 @@
 #include <Arduino.h>
 
 #include "analyzer/acquisition.h"
-#include "display/lv_adapter.h"
-#include "display/tft_driver.h"
-#include "display/touch_driver.h"
+// #include "display/lv_adapter.h"
+// #include "display/tft_driver.h"
+// #include "display/touch_driver.h"
 #include "hal/adc.h"
 #include "hal/dma.h"
 #include "hal/gpio.h"
 #include "hal/i2c.h"
 #include "hal/tim.h"
-#include "lvgl.h"
+// #include "lvgl.h"
 #include "misc/config_eeprom.h"
 #include "misc/elapsed.h"
 #include "misc/memory.h"
-#include "ui/screen_manager.h"
+// #include "ui/screen_manager.h"
 
 // We assume an external crystal clock of 25Mhz. When using
 // the env:blackpill_f401ce env, the default HSE_VALUE = 8000000
@@ -36,7 +36,7 @@ HardwareTimer tim2(TIM2);
 
 static Elapsed elapsed_from_last_dump;
 
-static void lvgl_irq_tick() { lv_tick_inc(5); }
+// static void lvgl_irq_tick() { lv_tick_inc(5); }
 
 void setup() {
   // Init hardware.
@@ -65,22 +65,22 @@ void setup() {
   //
   // NOTE: to output the timer pulses for debugging, replace
   // 'NC' with the port name. For example PA15 for LED3 output.
-  tim2.setPWM(1, NC, 200, 10, lvgl_irq_tick);
+  // tim2.setPWM(1, NC, 200, 10, lvgl_irq_tick);
 
   // TODO: why do we need to init twice for the TFT to work
   // when powering on?  (Not needed for a warm reset.)
-  tft_driver::begin();
-  tft_driver::fillScreen(kColor8Blue);
-  tft_driver::begin();
-  tft_driver::fillScreen(kColor8Blue);
+  // tft_driver::begin();
+  // tft_driver::fillScreen(kColor8Blue);
+  // tft_driver::begin();
+  // tft_driver::fillScreen(kColor8Blue);
 
-  lv_adapter::setup();
+  // lv_adapter::setup();
 
   acquisition::reset_state();
 
-  screen_manager::setup();
+  // screen_manager::setup();
 
-  lv_task_handler();
+  // lv_task_handler();
 
   delay(50);  // let the screen process the data.
 
@@ -89,10 +89,10 @@ void setup() {
 
 void loop() {
   // LVGL processing and rendering.
-  lv_task_handler();
+  // lv_task_handler();
 
   // Screen updates.
-  screen_manager::loop();
+  // screen_manager::loop();
 
   // Heartbeat.
   if (millis() % 3000 < 50) {
@@ -105,6 +105,6 @@ void loop() {
   if (elapsed_from_last_dump.elapsed_millis() > 5000) {
     elapsed_from_last_dump.reset();
     Serial.printf("\nMemory: %d\n", memory::free_memory());
-    lv_adapter::dump_stats();
+    // lv_adapter::dump_stats();
   }
 }
