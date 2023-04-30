@@ -2,7 +2,8 @@ import asyncio
 import serial_asyncio
 
 #PORT = "COM20"
-PORT = "/dev/tty.usbserial-10"
+#PORT = "/dev/tty.usbserial-10"
+PORT = "/dev/ttyUSB0"
 
 class OutputProtocol(asyncio.Protocol):
     def connection_made(self, transport):
@@ -10,7 +11,7 @@ class OutputProtocol(asyncio.Protocol):
         print('port opened', transport, flush=True)
         transport.serial.rts = False
         #transport.serial.dts = False
-        transport.write(b'Hello, World!\n')  # Write serial data via transport
+        #transport.write(b'Hello, World!\n')  # Write serial data via transport
 
     def data_received(self, data):
         print('data received', repr(data), flush=True)
