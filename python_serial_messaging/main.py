@@ -30,7 +30,8 @@ async def async_main():
     print("Connected: status = {status}", flush=True)
 
     while True:
-        await asyncio.sleep(3)
+        # await asyncio.sleep(3)
+        await asyncio.sleep(0.05)
         if args.send:
             await client.send(1234, bytearray([0x13, 0x00, 0x7D, 0x00, 0x7E, 0x00]))
 

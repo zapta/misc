@@ -6,12 +6,13 @@ import logging
 import time
 
 from enum import Enum
-from typing import Callable, Optional, TypeVar, Iterable, Tuple
-from asyncio.protocols import BaseProtocol
+# from typing import Callable, Optional, TypeVar, Iterable, Tuple
+# from asyncio.protocols import BaseProtocol
 from asyncio.transports import BaseTransport
+from packet_encoder import PacketEncoder
 from packet_decoder import PacketDecoder
 
-import packet_utils
+# import packet_utils
 
 
 # logger = logging.getLogger(__name__)
@@ -33,6 +34,7 @@ class TxContext:
         assert (endpoint > 0 and endpoint < 0xffff)
         self.__seq = seq
         self.__endpoint = endpoint
+        self.__time = time.time()
 
     def __str__(self):
         return f"{self.__seq}->{self.__endpoint}"
@@ -118,16 +120,15 @@ class SerialMessagingClient:
         self.__client_callbacks = client_callbacks
         self.__transport = None
         self.__protocol = None
-        # TODO: Consider to initialize with a random 32 bit value value.
-        self.__tx_counter = 0
+        self.__packet_encoder = PacketEncoder()
+        self.__packet_decoder = PacketDecoder()
         self.__tx_contexts = {}
-        self.__rx_packet_decoder = PacketDecoder()
 
     def __str__(self) -> str:
         return f"{self.__port}@{self.__baudrate}"
       
     def receive(self, b : bytearray):
-      self.__rx_packet_decoder.receive(b)
+      self.__packet_decoder.receive(b)
 
     async def connect(self):
         self.__transport, self.__protocol = await serial_asyncio.create_serial_connection(
@@ -139,10 +140,9 @@ class SerialMessagingClient:
         return Status.OK
 
     async def send(self, endpoint: int, data: bytearray):
-        self.__tx_counter += 1
-        packet = packet_utils.encode_packet(self.__tx_counter, endpoint, data)
-        tx_context = TxContext(self.__tx_counter, endpoint)
-        self.__tx_contexts[self.__tx_counter] = tx_context
+        packet, seq = self.__packet_encoder.encode_next_packet(endpoint, data)
+        tx_context = TxContext(seq, endpoint)
+        self.__tx_contexts[seq] = tx_context
         print(f"TX Packet: {tx_context}: {packet.hex(sep=' ')} (7e)")
         self.__transport.write(packet)
         self.__transport.write(bytearray([0x7E]))
