@@ -1,0 +1,9 @@
+
+move serial callbaks class into the client class
+
+add to the client class background task that will process incoming packets (should it be a task pool?).
+
+use blocking multi task packet queue
+
+add tx and rx context cleanup task.
+
