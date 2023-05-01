@@ -1,4 +1,6 @@
 #!/bin/bash
 
-python -u  test.py
+#python -u  main.py --port="COM22"
+
+./.run1.sh
 

@@ -4,9 +4,15 @@ import asyncio
 import serial_asyncio
 import logging
 import time
+
 from enum import Enum
 from typing import Callable, Optional, TypeVar, Iterable, Tuple
-import packet_encoder
+from asyncio.protocols import BaseProtocol
+from asyncio.transports import BaseTransport
+from packet_decoder import PacketDecoder
+
+import packet_utils
+
 
 # logger = logging.getLogger(__name__)
 logger = logging.getLogger("client")
@@ -14,21 +20,27 @@ logging.basicConfig(level=logging.INFO)
 
 #https://github.com/pyserial/pyserial-asyncio
 
+
 class Status(Enum):
     OK = 1
     InternalError = 2
     TimeoutError = 3
 
+
 class TxContext:
-  
-  def __init__(self, seq: int, endpoint: int):
-    assert(endpoint > 0 and endpoint < 0xffff)
-    self.__seq = seq
-    self.__endpoint = endpoint
+
+    def __init__(self, seq: int, endpoint: int):
+        assert (endpoint > 0 and endpoint < 0xffff)
+        self.__seq = seq
+        self.__endpoint = endpoint
+
+    def __str__(self):
+        return f"{self.__seq}->{self.__endpoint}"
 
 
 class RxContext:
-  pass
+    pass
+
 
 class BaseClientCallbacks:
 
@@ -59,26 +71,27 @@ class BaseClientCallbacks:
 
 
 class SerialProtocol(asyncio.Protocol):
-  
-    def __init__(self):
-      # Set later, after the instantiation by the factory.
-      self.__client = None 
-      
-    def set_client(self, client: SerialMessagingClient):
-      self.__client = client
 
-    def connection_made(self, transport):
+    def __init__(self):
+        # Set later, after the instantiation by the factory.
+        self.__client = None
+
+    def set_client(self, client: SerialMessagingClient):
+        self.__client = client
+
+    def connection_made(self, transport: BaseTransport):
         self.transport = transport
-        print(f"port opened",  flush=True)
-        print(f"Protocol.__client = {self.__client}",  flush=True)
+        print(f"port opened", flush=True)
+        # print(f"Protocol.__client = {self.__client}",  flush=True)
         transport.serial.rts = False
         # transport.write(b'Hello, World!\n')
         # print(f"Slots: {self.__slots__}", flush=True)
-      
 
-    def data_received(self, data):
-        print('data received', repr(data), flush=True)
-        print(f"Protocol.__client = {self.__client}",  flush=True)
+    def data_received(self, data: bytes):
+        b = bytearray(data)
+        # print(f"data received {b.hex(sep=' ')}", flush=True)
+        self.__client.receive(b)
+        # print(f"Protocol.__client = {self.__client}",  flush=True)
         # print(f"RX: {packet_encoder.encode_packet(10, 4, bytearray([0x13, 0x00, 0x00, 0x00, 0x08, 0x00])).hex(sep=' ')}")
 
         # if b'\n' in data:
@@ -97,14 +110,6 @@ class SerialProtocol(asyncio.Protocol):
         print('resume writing', flush=True)
 
 
-# loop = asyncio.get_event_loop()
-# coro = serial_asyncio.create_serial_connection(loop, OutputProtocol, 'COM20', baudrate=115200)
-# transport, protocol = loop.run_until_complete(coro)
-# print("opened", flush=True)
-# loop.run_forever()
-# loop.close()
-
-
 class SerialMessagingClient:
 
     def __init__(self, port: str, client_callbacks: BaseClientCallbacks, baudrate: int = 115200):
@@ -116,50 +121,28 @@ class SerialMessagingClient:
         # TODO: Consider to initialize with a random 32 bit value value.
         self.__tx_counter = 0
         self.__tx_contexts = {}
+        self.__rx_packet_decoder = PacketDecoder()
 
     def __str__(self) -> str:
         return f"{self.__port}@{self.__baudrate}"
+      
+    def receive(self, b : bytearray):
+      self.__rx_packet_decoder.receive(b)
 
     async def connect(self):
         self.__transport, self.__protocol = await serial_asyncio.create_serial_connection(
             asyncio.get_event_loop(), SerialProtocol, self.__port, baudrate=self.__baudrate)
         self.__protocol.set_client(self)
+        # Initial start byte. From now on we will send it onl at the end of each
+        # packet.
+        self.__transport.write(bytearray([0x7E]))
         return Status.OK
-      
+
     async def send(self, endpoint: int, data: bytearray):
-      self.__tx_counter += 1
-      packet = packet_encoder.encode_packet(self.__tx_counter, endpoint, data)
-      tx_context = TxContext(self.__tx_counter, endpoint)
-      self.__tx_contexts[self.__tx_counter] = tx_context
-      print(f"TX {tx_context}: {packet.hex(sep=' ')}")
-      self.__transport.write(packet)
-
-      
-
-    # # Internal method to fetch information of a specific BLE service.
-    # async def __find_service_or_disconnect(self, name: str, uuid: str) -> (BleakGATTService | None):
-    #     if not self.is_connected():
-    #         logger.error(f"Not connected (__find_service_or_disconnect).")
-    #         return None
-    #     service = self.__client.services.get_service(uuid)
-    #     if not service:
-    #         logger.error(
-    #             f"Failed to find service {name} at device {self.address()}.")
-    #         await self.disconnect()
-    #         return None
-    #     logger.info(f"Found {name} info service {service}.")
-    #     return service
-
-
-# print("Main started")
-
-# main_loop = asyncio.get_event_loop()
-# client = SerialMessagingClient("COM20", MyClientCallbacks())
-# status = main_loop.run_until_complete(client.connect())
-
-# # coro = serial_asyncio.create_serial_connection(loop, OutputProtocol, 'COM20', baudrate=115200)
-
-# # transport, protocol = loop.run_until_complete(coro)
-# print("opened", flush=True)
-# main_loop.run_forever()
-# main_loop.close()
+        self.__tx_counter += 1
+        packet = packet_utils.encode_packet(self.__tx_counter, endpoint, data)
+        tx_context = TxContext(self.__tx_counter, endpoint)
+        self.__tx_contexts[self.__tx_counter] = tx_context
+        print(f"TX Packet: {tx_context}: {packet.hex(sep=' ')} (7e)")
+        self.__transport.write(packet)
+        self.__transport.write(bytearray([0x7E]))
