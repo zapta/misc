@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from enum import Enum
 from dataclasses import dataclass
+import asyncio
 # import packet_utils
 from PyCRC.CRCCCITT import CRCCCITT
 from typing import Callable, Optional, TypeVar, Iterable, Tuple
@@ -20,8 +21,11 @@ class DecodedPacket:
         self.endpoint = endpoint
         self.data = data
 
-    def dump(self):
-        print("\nDecoded packet", flush=True)
+    def __str__(self):
+        return f"{self.seq}, {self.endpoint}, {len(self.data)}"
+
+    def dump(self, title="Decoded packet"):
+        print(f"\n{title}", flush=True)
         print(f"  Seq   {self.seq: 10d}", flush=True)
         print(f"  Endpoint   {self.endpoint: 6d}", flush=True)
         print(f"  Data: {self.data.hex(sep=' ')}", flush=True)
@@ -39,7 +43,7 @@ class PacketDecoder:
         self.__in_packet = False
         self.__pending_escape = False
         self.__packet_bfr.clear()
-        self.__decoded_packets = []
+        self.__packets_queue = asyncio.Queue()
 
     def __str__(self):
         return f"In_packet ={self.__in_packet}, pending_escape={self.__pending_escape}, len={len(self.__packet_bytes)}"
@@ -50,15 +54,19 @@ class PacketDecoder:
         self.__pending_escape = False
         self.__packet_bfr.clear()
 
-    def has_pending_packets(self) -> bool:
-        return len(self.__decoded_packets) > 0
+    async def get_next_packet(self):
+      """Blocking asyncio fetch of next pending packet."""
+      return await self.__packets_queue.get()
+    
+    # def has_pending_packets(self) -> bool:
+    #     return len(self.__packets_queue) > 0
 
-    def pop_pending_packet(self) -> Optional(DecodedPacket):
-        """Return next pending packet. 
-        Check has_pending_packets() first to make sure a packet is available. 
-        packets are in order of arrival.
-        """
-        return self.__decoded_packets.pop(0)
+    # def pop_pending_packet(self) -> Optional(DecodedPacket):
+    #     """Return next pending packet. 
+    #     Check has_pending_packets() first to make sure a packet is available. 
+    #     packets are in order of arrival.
+    #     """
+    #     return self.__packets_queue.pop(0)
 
     def receive(self, data: bytearray):
         # print(f"data received {data.hex(sep=' ')}", flush=True)
@@ -146,8 +154,10 @@ class PacketDecoder:
         data = rx_bfr[6:-2]
 
         decoded_packet = DecodedPacket(seq, endpoint, data)
-        decoded_packet.dump()
-        self.__decoded_packets.append(decoded_packet)
+        # decoded_packet.dump()
+        self.__packets_queue.put_nowait(decoded_packet)
+        
+        # self.__decoded_packets.
         # print("\nRX Packet", flush=True)
         # print(f"  Seq   {seq: 10d}", flush=True)
         # print(f"  Endpoint   {endpoint: 6d}", flush=True)

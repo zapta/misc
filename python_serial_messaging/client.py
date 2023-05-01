@@ -10,7 +10,7 @@ from enum import Enum
 # from asyncio.protocols import BaseProtocol
 from asyncio.transports import BaseTransport
 from packet_encoder import PacketEncoder
-from packet_decoder import PacketDecoder
+from packet_decoder import PacketDecoder, DecodedPacket
 
 # import packet_utils
 
@@ -48,11 +48,11 @@ class BaseClientCallbacks:
 
     # Caller and callee.
     def on_open(self, client: SerialMessagingClient) -> None:
-        print("on_connect()")
+        print("on_open()")
 
     # Caller and callee.
     def on_close(self, client: SerialMessagingClient) -> None:
-        print("on_disconnect()")
+        print("on_close()")
 
     # Caller only.
     def on_response(self, client: SerialMessagingClient, endpoint, data, user_data) -> None:
@@ -77,9 +77,11 @@ class SerialProtocol(asyncio.Protocol):
     def __init__(self):
         # Set later, after the instantiation by the factory.
         self.__client = None
+        self.__packet_decoder = None
 
-    def set_client(self, client: SerialMessagingClient):
+    def set(self, client: SerialMessagingClient, packet_decoder: PacketDecoder):
         self.__client = client
+        self.__packet_decoder = packet_decoder
 
     def connection_made(self, transport: BaseTransport):
         self.transport = transport
@@ -92,7 +94,9 @@ class SerialProtocol(asyncio.Protocol):
     def data_received(self, data: bytes):
         b = bytearray(data)
         # print(f"data received {b.hex(sep=' ')}", flush=True)
-        self.__client.receive(b)
+        # self.__client.receive(b)
+        
+        self.__packet_decoder.receive(b)
         # print(f"Protocol.__client = {self.__client}",  flush=True)
         # print(f"RX: {packet_encoder.encode_packet(10, 4, bytearray([0x13, 0x00, 0x00, 0x00, 0x08, 0x00])).hex(sep=' ')}")
 
@@ -123,17 +127,43 @@ class SerialMessagingClient:
         self.__packet_encoder = PacketEncoder()
         self.__packet_decoder = PacketDecoder()
         self.__tx_contexts = {}
+        # self.__rx_tasks = asyncio.TaskGroup()
+        
+        for i in range(3):
+          asyncio.create_task(self.__rx_task_body(f"rx_task_{i+1:02d}"))
+        
+        
 
     def __str__(self) -> str:
         return f"{self.__port}@{self.__baudrate}"
       
-    def receive(self, b : bytearray):
-      self.__packet_decoder.receive(b)
+    # def receive(self, b : bytearray):
+    #   self.__packet_decoder.receive(b)
+    
+    async def __rx_task_body(self, task_name:str):
+      print(f"RX task {task_name} started", flush=True)
+      while True:
+        packet:DecodedPacket = await self.__packet_decoder.get_next_packet()
+        # print(f"{task_name}: got packet {packet}", flush=True)
+        packet.dump(f"{task_name} got packet:")
+        if packet.endpoint == 0:
+          await self.__handle_response_packet(packet)
+        else:
+          await self.__handle_request_packet(packet)
+        
+    async def __handle_request_packet(self, packet:DecodedPacket):
+      print(f"Handling request packet", flush=True)
+      assert(packet.endpoint > 0)
+          
+    async def __handle_response_packet(self, packet:DecodedPacket):
+      print(f"Handling response packet", flush=True)
+      assert(packet.endpoint == 0)
+    
 
     async def connect(self):
         self.__transport, self.__protocol = await serial_asyncio.create_serial_connection(
             asyncio.get_event_loop(), SerialProtocol, self.__port, baudrate=self.__baudrate)
-        self.__protocol.set_client(self)
+        self.__protocol.set(self, self.__packet_decoder)
         # Initial start byte. From now on we will send it onl at the end of each
         # packet.
         self.__transport.write(bytearray([0x7E]))
