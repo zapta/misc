@@ -4,6 +4,8 @@ import argparse
 import asyncio
 import logging
 from client import BaseClientCallbacks, SerialMessagingClient, Status
+from typing import  Tuple, Optional
+
 
 logger = logging.getLogger("main")
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +21,16 @@ args = parser.parse_args()
 
 
 class MyClientCallbacks(BaseClientCallbacks):
-    pass
+  #@override(BaseClientCallbacks)
+  def on_command(
+        self,
+        # client: SerialMessagingClient,
+        endpoint: int,
+        data: bytearray,
+    ) -> Tuple[Status, Optional[bytearray]]:
+        print("on_command_with_resp()")
+        return (123, bytearray([1, 2, 3, 4]))
+    
 
 
 async def async_main():
@@ -33,7 +44,8 @@ async def async_main():
         # await asyncio.sleep(3)
         await asyncio.sleep(0.5)
         if args.send:
-            await client.send(1234, bytearray([0x13, 0x00, 0x7D, 0x00, 0x7E, 0x00]))
+            status, data = await client.send_command(200, bytearray([0x13, 0x00, 0x7D, 0x00, 0x7E, 0x00]))
+            print(f"Result: {status}, {data}")
 
 
 print("Main started")
