@@ -4,10 +4,9 @@ import argparse
 import asyncio
 import logging
 import time
-from client import BaseClientCallbacks, SerialMessagingClient
-from typing import  Tuple, Optional
+from client import SerialMessagingClient
+from typing import Tuple, Optional
 from packets import PacketStatus
-
 
 logger = logging.getLogger("main")
 logging.basicConfig(level=logging.INFO)
@@ -22,36 +21,28 @@ parser.add_argument('--send',
 args = parser.parse_args()
 
 
+def command_callback(endpoint: int, data: bytearray) -> Tuple[int, bytearray]:
+    print(f"Main received command: {endpoint}, {data.hex(sep=' ')}")
+    if (endpoint == 20):
+        return handle_command_endpoint_20(data)
+    return (PacketStatus.UNHANDLED.value, bytearray())
+
 
 def handle_command_endpoint_20(data: bytearray) -> Tuple[int, bytearray]:
     return (PacketStatus.OK.value, bytearray([1, 2, 3, 4]))
-
-  
-class MyClientCallbacks(BaseClientCallbacks):
-  def on_command(
-        self,
-        endpoint: int,
-        data: bytearray,
-    ) -> Tuple[int, Optional[bytearray]]:
-        print(f"Main received command: {endpoint}, {data.hex(sep=' ')}")
-        if (endpoint == 20):
-          return handle_command_endpoint_20(data)
-        return (PacketStatus.UNHANDLED.value, bytearray())
-
-    
 
 
 async def async_main():
     print("Async main started", flush=True)
     print(f"Connecting to port: {args.port}", flush=True)
-    client = SerialMessagingClient(args.port, MyClientCallbacks())
+    client = SerialMessagingClient(args.port, command_callback)
     status = await client.connect()
     print("Connected: status = {status}", flush=True)
     while True:
         # await asyncio.sleep(3)
         await asyncio.sleep(0.5)
         if args.send:
-            endpoint = 200
+            endpoint = 20
             tx_data = bytearray([0x13, 0x00, 0x7D, 0x00, 0x7E, 0x00])
             print(f"------------")
             print(f"Command: {endpoint}, {tx_data.hex(sep=' ')}")
