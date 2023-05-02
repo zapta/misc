@@ -1,17 +1,6 @@
-Implement command timeout
 
-need write synchronization between tasks?
+define standard error status codes such as timeout
 
 protect workers tasks from failure due to an exception
 
-clean up the terminology around commands and messages
-
-clean the concept of seq. Use cmd_id instead
-
-Add to the packet indication of command/response and status. Also, considering indicating command with and without expected response.
-add to the client class background task that will process incoming packets (should it be a task pool?).
-
-use blocking multi task packet queue
-
-add tx and rx context cleanup task.
-
+need write synchronization between tasks?
