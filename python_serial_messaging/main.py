@@ -21,7 +21,7 @@ parser.add_argument('--send',
 args = parser.parse_args()
 
 
-def command_callback(endpoint: int, data: bytearray) -> Tuple[int, bytearray]:
+async def command_async_callback(endpoint: int, data: bytearray) -> Tuple[int, bytearray]:
     print(f"Main received command: {endpoint}, {data.hex(sep=' ')}")
     if (endpoint == 20):
         return handle_command_endpoint_20(data)
@@ -35,7 +35,7 @@ def handle_command_endpoint_20(data: bytearray) -> Tuple[int, bytearray]:
 async def async_main():
     print("Async main started", flush=True)
     print(f"Connecting to port: {args.port}", flush=True)
-    client = SerialMessagingClient(args.port, command_callback)
+    client = SerialMessagingClient(args.port, command_async_callback)
     status = await client.connect()
     print(f"Connected: status = {status}", flush=True)
     while True:

@@ -4,13 +4,14 @@ import asyncio
 import serial_asyncio
 import logging
 import time
+import inspect
 
 from enum import Enum
-from typing import  Optional,  Tuple, Dict, Callable
+from typing import Optional, Tuple, Dict, Callable
 from asyncio.transports import BaseTransport
 from packet_encoder import PacketEncoder
 from packet_decoder import PacketDecoder, DecodedPacket
-from packets import  PacketType,PacketStatus
+from packets import PacketType, PacketStatus
 
 # import packet_utils
 
@@ -36,9 +37,6 @@ class _TxCommandContext:
 
     def is_expired(self):
         return time.time() > self.__expiration_time
-
-
-
 
 
 # TODO: add override annotation to the methods.
@@ -69,10 +67,14 @@ class _SerialProtocol(asyncio.Protocol):
 
 class SerialMessagingClient:
 
-    def __init__(self, port: str, command_callbacks: Callable[[int, bytearray],Tuple(int, bytearray)], baudrate: int = 115200):
+    def __init__(self,
+                 port: str,
+                 command_async_callback: Optional(Callable[[int, bytearray],
+                                                           Tuple(int, bytearray)]),
+                 baudrate: int = 115200):
         self.__port = port
         self.__baudrate = baudrate
-        self.__command_callback = command_callbacks
+        self.__command_async_callback = command_async_callback
         self.__transport = None
         self.__protocol = None
         self.__packet_encoder = PacketEncoder()
@@ -128,13 +130,12 @@ class SerialMessagingClient:
 
     async def __handle_incoming_command_packet(self, packet: DecodedPacket):
         assert (packet.type == PacketType.COMMAND)
-        if self.__command_callback:
-          status, data = self.__command_callback(packet.endpoint, packet.data)
+        if self.__command_async_callback:
+            status, data = await self.__command_async_callback(packet.endpoint, packet.data)
         else:
-          status, data = (PacketStatus.UNHANDLED.value, bytearray())
+            status, data = (PacketStatus.UNHANDLED.value, bytearray())
         response_packet = self.__packet_encoder.encode_response_packet(packet.cmd_id, status, data)
         self.__transport.write(response_packet)
-        
 
     async def __handle_incoming_response_packet(self, packet: DecodedPacket):
         # print(f"Handling resp packet ({len(self.__tx_cmd_contexts)} tx contexts)", flush=True)
