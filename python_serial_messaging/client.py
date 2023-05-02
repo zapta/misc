@@ -81,11 +81,11 @@ class SerialMessagingClient:
         self.__tx_cmd_contexts: Dict[int, _TxCommandContext] = {}
 
         # Create a worker task to clean pending command contexts that were timeout.
-        asyncio.create_task(self.__cleanup_task_body(f"cleanup"))
+        asyncio.create_task(self.__cleanup_task_body(), name="cleanup")
 
         # Create a few worker tasks to process incoming packets.
         for i in range(3):
-            asyncio.create_task(self.__rx_task_body(f"rx_task_{i+1:02d}"))
+            asyncio.create_task(self.__rx_task_body(), name=f"rx_task_{i+1:02d}")
 
     def __str__(self) -> str:
         return f"{self.__port}@{self.__baudrate}"
@@ -96,9 +96,9 @@ class SerialMessagingClient:
             asyncio.get_event_loop(), _SerialProtocol, self.__port, baudrate=self.__baudrate)
         self.__protocol.set(self, self.__packet_decoder)
 
-    async def __cleanup_task_body(self, task_name: str):
+    async def __cleanup_task_body(self):
         """Body of the worker task that clean timeout tx command contexts"""
-        print(f"Cleanup task {task_name} started", flush=True)
+        print(f"Cleanup task '{asyncio.current_task().get_name()}' started", flush=True)
         while True:
             await asyncio.sleep(0.1)
             # print(f"Cleanup...", flush=True)
@@ -112,9 +112,9 @@ class SerialMessagingClient:
                     tx_context.set_result(0xff, bytearray())
                     self.__tx_cmd_contexts.pop(cmd_id)
 
-    async def __rx_task_body(self, task_name: str):
+    async def __rx_task_body(self):
         """Body of the worker tasks to serve incoming packets."""
-        print(f"RX task {task_name} started", flush=True)
+        print(f"RX task '{asyncio.current_task().get_name()}' started", flush=True)
         while True:
             packet: DecodedPacket = await self.__packet_decoder.get_next_packet()
             # packet.dump(f"{task_name} got packet:")

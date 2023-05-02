@@ -1,4 +1,6 @@
 
+can we have asyncio callbacks
+
 define standard error status codes such as timeout
 
 protect workers tasks from failure due to an exception

@@ -37,7 +37,7 @@ async def async_main():
     print(f"Connecting to port: {args.port}", flush=True)
     client = SerialMessagingClient(args.port, command_callback)
     status = await client.connect()
-    print("Connected: status = {status}", flush=True)
+    print(f"Connected: status = {status}", flush=True)
     while True:
         # await asyncio.sleep(3)
         await asyncio.sleep(0.5)
