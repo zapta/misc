@@ -1,3 +1,7 @@
+Understand pylib structure
+
+create and independent repository
+
 Implement connection event callback
 
 Kill worker tasks if client is finalized.
