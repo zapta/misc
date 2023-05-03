@@ -3,16 +3,16 @@ from __future__ import annotations
 import logging
 import asyncio
 from PyCRC.CRCCCITT import CRCCCITT
-from typing import  Optional
+from typing import Optional
 from packets import PacketType, PACKET_DEL, PACKET_ESC, PACKET_MAX_LEN
 
 logger = logging.getLogger("packet_decoder")
-logging.basicConfig(level=logging.INFO)
 
 
 class DecodedPacket:
-    def __init__(self, cmd_id: int, type: PacketType, endpoint: Optional(int), status: Optional(int),
-                 data: bytearray):
+
+    def __init__(self, cmd_id: int, type: PacketType, endpoint: Optional(int),
+                 status: Optional(int), data: bytearray):
         self.cmd_id = cmd_id
         self.type = type
         self.endpoint = endpoint
@@ -54,8 +54,6 @@ class PacketDecoder:
         """Blocking asyncio fetch of next pending packet."""
         return await self.__packets_queue.get()
 
-   
-
     def receive(self, data: bytes):
         for b in data:
             self.__receive_byte(b)
@@ -81,14 +79,14 @@ class PacketDecoder:
 
         # Check for size overrun
         if len(self.__packet_bfr) >= PACKET_MAX_LEN:
-            print("Packet too long, dropping", flush=True)
+            logger.error("Packet is too long (%d), dropping", len(self.__packet_bfr))
             self.__reset_packet()
             return
 
         # Handle escape byte
         if b == PACKET_ESC:
             if self.__pending_escape:
-                print("Error, two consecutive escape chars", flush=True)
+                logger.error("Two consecutive escape chars, dropping packet")
                 self.__reset_packet()
             else:
                 self.__pending_escape = True
@@ -98,7 +96,7 @@ class PacketDecoder:
         if self.__pending_escape:
             b1 = b ^ 0x20
             if b1 != PACKET_DEL and b1 != PACKET_ESC:
-                print(f"Error, invalid escaped char {b1} ({b})", flush=True)
+                logger.error("Invalid escaped byte (%02x, %02x), dropping packet", b1, b)
                 self.__reset_packet()
             else:
                 self.__packet_bfr.append(b1)
@@ -110,7 +108,6 @@ class PacketDecoder:
 
     def __process_packet(self):
         rx_bfr = self.__packet_bfr
-        # print(f"RX packet: {rx_bfr.hex(sep=' ')} (7e)", flush=True)
 
         # Ignore empty packets
         n = len(rx_bfr)
@@ -148,10 +145,8 @@ class PacketDecoder:
             data = rx_bfr[6:-2]
             decoded_packet = DecodedPacket(cmd_id, type, None, status, data)
         else:
-            print(f"Invalid packet type {type.value: 02x}, dropping", flush=True)
+            logger.error("Invalid packet type %02x, dropping packet", type.value)
             return
 
         # decoded_packet.dump()
         self.__packets_queue.put_nowait(decoded_packet)
-
-       

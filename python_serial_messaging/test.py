@@ -3,6 +3,15 @@ from __future__ import annotations
 import argparse
 import asyncio
 import serial_asyncio
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
+# logging.root.setLevel(logging.DEBUG)
+logger.error("Logger test (ERROR)")
+sys.exit(0)
+
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--port", dest="port", default=None, help="Serial port to use.")
@@ -45,6 +54,7 @@ async def async_main():
         asyncio.get_event_loop(), SerialProtocol, args.port, 115200)
     while True:
         await asyncio.sleep(0.5)
+        logger.error("Logger test (ERROR)")
         if args.master:
             print(f"Master tx", flush=True)
             transport.write(bytearray([0x55]))

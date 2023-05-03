@@ -1,8 +1,5 @@
+Implement connection event callback
 
-can we have asyncio callbacks
+Kill worker tasks if client is finalized.
 
-define standard error status codes such as timeout
-
-protect workers tasks from failure due to an exception
-
-need write synchronization between tasks?
+Implement messages
