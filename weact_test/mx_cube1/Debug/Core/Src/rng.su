@@ -1,0 +1,3 @@
+../Core/Src/rng.c:30:6:MX_RNG_Init	8	static
+../Core/Src/rng.c:52:6:HAL_RNG_MspInit	208	static
+../Core/Src/rng.c:79:6:HAL_RNG_MspDeInit	16	static

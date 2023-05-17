@@ -1,0 +1,14 @@
+stm32h7xx_hal_rcc.c:188:19:HAL_RCC_DeInit	18
+stm32h7xx_hal_rcc.c:405:26:HAL_RCC_OscConfig	87
+stm32h7xx_hal_rcc.c:901:19:HAL_RCC_ClockConfig	36
+stm32h7xx_hal_rcc.c:1265:6:HAL_RCC_MCOConfig	2
+stm32h7xx_hal_rcc.c:1319:6:HAL_RCC_EnableCSS	1
+stm32h7xx_hal_rcc.c:1328:6:HAL_RCC_DisableCSS	1
+stm32h7xx_hal_rcc.c:1367:10:HAL_RCC_GetSysClockFreq	12
+stm32h7xx_hal_rcc.c:1464:10:HAL_RCC_GetHCLKFreq	1
+stm32h7xx_hal_rcc.c:1496:10:HAL_RCC_GetPCLK1Freq	1
+stm32h7xx_hal_rcc.c:1514:10:HAL_RCC_GetPCLK2Freq	1
+stm32h7xx_hal_rcc.c:1531:6:HAL_RCC_GetOscConfig	12
+stm32h7xx_hal_rcc.c:1697:6:HAL_RCC_GetClockConfig	1
+stm32h7xx_hal_rcc.c:1753:6:HAL_RCC_NMI_IRQHandler	2
+stm32h7xx_hal_rcc.c:1770:13:HAL_RCC_CSSCallback	1
