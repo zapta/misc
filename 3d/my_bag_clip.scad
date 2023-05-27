@@ -2,10 +2,10 @@
 eps = 0 + 0.05;
 
 // The text message
-text_message = "Charlie";
+text_message = "Teiko";
 
 // Text size
-text_size = 7;
+text_size = 8;
 
 // Text depth
 text_depth = 0.5;
@@ -27,7 +27,7 @@ first_layers_inset_height = 0.2;
 
 
 // Length, measured from pivot center
-arm_length = 88;
+arm_length = 10;
 
 // Overall width
 arm_width = 14;
