@@ -1,0 +1,5 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "stlink_adapter-rescue")(type "KiCad")(uri "${KIPRJMOD}/stlink_adapter-rescue.kicad_sym")(options "")(descr ""))
+  (lib (name "stlink_adapter")(type "KiCad")(uri "${KIPRJMOD}/stlink_adapter.kicad_sym")(options "")(descr ""))
+)
