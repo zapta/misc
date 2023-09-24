@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "duet3d_accel")(type "KiCad")(uri "${KIPRJMOD}/duet3d_accel.kicad_sym")(options "")(descr ""))
+)
