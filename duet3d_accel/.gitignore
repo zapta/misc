@@ -10,4 +10,6 @@ production
 production.zip
 _autosave-*
 *auto_saved_files*
+.DS_Store
+
 
