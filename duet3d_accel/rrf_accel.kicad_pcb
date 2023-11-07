@@ -216,7 +216,7 @@
     (at 105.0036 83.439 -90)
     (descr "surface-mounted straight pin header, 2x05, 2.54mm pitch, double rows")
     (tags "Surface mounted pin header SMD 2x05 2.54mm double row")
-    (property "LCSC" "C236047")
+    (property "LCSC" "C383605")
     (property "Sheetfile" "rrf_accel.kicad_sch")
     (property "Sheetname" "")
     (property "ki_description" "Generic connector, double row, 02x05, odd/even pin numbering scheme (row 1 odd numbers, row 2 even numbers), script generated (kicad-library-utils/schlib/autogen/connector/)")
