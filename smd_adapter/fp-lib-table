@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "smd_adapter")(type "KiCad")(uri "${KIPRJMOD}/smd_adapter.pretty")(options "")(descr ""))
+)
