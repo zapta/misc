@@ -1,4 +1,4 @@
 _*
 */kicad/*.bck
 */kicad/*.bak
-.DS_Store
+**/.DS_Store
