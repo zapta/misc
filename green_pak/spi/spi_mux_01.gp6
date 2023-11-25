@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="28" oldestCompatibleVersion="28" GPDVersion="6.39.001" lastChange="11/24/2023 3:55 PM" projectChecksumState="1" projectChecksum="f62336c4">
+<GPDProject version="28" oldestCompatibleVersion="28" GPDVersion="6.39.001" lastChange="11/24/23 5:35 PM" projectChecksumState="1" projectChecksum="ac79fd2a">
     <generalProjectSettings/>
     <chip family="04" type="06" friendlyName="GreenPAK 6" partNumber="36" package="16">
         <nvmData registerLenght="2048">C3 F2 54 C 50 5C 13 C0 3C 67 35 1 4B 3 0 13 0 3C 68 45 A0 E A0 62 D1 F4 54 CB 53 5D 46 A 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4C D2 F 0 0 0 0 14 0 0 0 0 0 87 5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 0 0 0 0 0 0 0 0 80 30 20 0 30 30 0 21 21 61 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 22 30 C 0 0 0 0 0 0 0 59 69 2 0 50 20 50 55 55 0 48 4 90 0 0 0 0 0 7F 20 0 1 0 8 0 2 1 0 0 2 4 1 0 90 2 1 0 0 2 0 1 0 0 2 1 0 0 2 0 1 0 0 2 0 1 0 0 0 F1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 A5</nvmData>
@@ -163,7 +163,7 @@
         </item>
         <LUT id="35" regularShape="0" mode="0">
             <item id="35" caption="2-bit LUT0/DFF/LATCH0">
-                <graphics pos="(-413.84,709.14)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-492.94,709.14)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-24.44,46.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">A0_COMP</textLabel>
             </item>
         </LUT>
@@ -175,16 +175,16 @@
         </LUT>
         <LUT id="37" regularShape="0" mode="0">
             <item id="37" caption="2-bit LUT2/DFF/LATCH2">
-                <graphics pos="(-405.92,820.14)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-485.02,820.14)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-24.44,46.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">A2_COMP</textLabel>
             </item>
         </LUT>
         <item id="38" caption="2-bit LUT3/PGEN">
-            <graphics pos="(-298.80,605.32)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+            <graphics pos="(-377.90,605.32)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
         </item>
         <LUT id="39" regularShape="0" mode="0">
             <item id="39" caption="3-bit LUT0/DFF/LATCH3">
-                <graphics pos="(-120.59,187.35)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-181.06,187.35)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-28.00,46.50)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">SCLK_GATE</textLabel>
             </item>
         </LUT>
@@ -194,13 +194,13 @@
         </item>
         <LUT id="41" regularShape="0" mode="0">
             <item id="41" caption="3-bit LUT2/DFF/LATCH5">
-                <graphics pos="(-113.83,322.21)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-178.38,322.66)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-28.00,48.50)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">MOSI_GATE</textLabel>
             </item>
         </LUT>
         <LUT id="42" regularShape="0" mode="2">
             <item id="42" caption="3-bit LUT3/DFF/LATCH6">
-                <graphics pos="(-366.93,81.46)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-337.93,81.46)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-25.00,29.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">nCS</textLabel>
             </item>
         </LUT>
@@ -210,12 +210,12 @@
             </item>
         </LUT>
         <item id="44" caption="3-bit LUT5/DFF/LATCH8">
-            <graphics pos="(-165.71,406.77)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,10.00)"/>
+            <graphics pos="(-132.71,406.77)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,10.00)"/>
             <textLabel pos="(14.00,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">D1</textLabel>
         </item>
         <LUT id="45" regularShape="0" mode="0">
             <item id="45" caption="3-bit LUT6/Pipe Delay/Ripple Counter">
-                <graphics pos="(-266.11,722.18)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-345.21,722.18)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-28.00,44.36)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">A1_COMP</textLabel>
             </item>
         </LUT>
@@ -276,7 +276,7 @@
             </item>
         </LUT>
         <item id="61" caption="DFF/LATCH11 (MF2)">
-            <graphics pos="(22.30,410.57)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,10.00)"/>
+            <graphics pos="(77.30,410.57)" angle="0" flipping="0" hidden="0" tOrigin="(25.00,10.00)"/>
             <textLabel pos="(14.00,-27.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">D2</textLabel>
         </item>
         <CNTDLY id="62" externalClockFrequence="0" externalClockFreqUnit="kHz">
@@ -286,7 +286,7 @@
         </CNTDLY>
         <LUT id="63" regularShape="0" mode="0">
             <item id="63" caption="3-bit LUT9 (MF3)">
-                <graphics pos="(-264.38,833.64)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(-343.48,833.64)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-28.00,44.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">A3_COMP</textLabel>
             </item>
         </LUT>
@@ -384,7 +384,7 @@
             <points/>
         </wire>
         <wire output="157" input="557" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="13" wireText="NET13" wireState="0">
-            <points>(-440.00,96.00); (-386.00,96.00)</points>
+            <points>(-440.00,96.00); (-357.00,96.00)</points>
         </wire>
         <wire output="156" input="542" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="3" wireText="NET3" wireState="0">
             <points>(-435.00,219.00); (-398.00,219.00); (-398.00,249.00); (-379.00,249.00)</points>
@@ -393,13 +393,13 @@
             <points>(-75.00,626.00); (-27.00,626.00)</points>
         </wire>
         <wire output="162" input="624" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="15" wireText="nGATED_CS" wireState="0">
-            <points>(64.00,630.00); (70.00,630.00); (70.00,597.00); (-152.00,597.00); (-152.00,611.00); (-146.00,611.00)</points>
+            <points>(64.00,630.00); (70.00,630.00); (70.00,562.91); (-236.33,562.91); (-236.33,611.00); (-146.00,611.00)</points>
         </wire>
         <wire output="160" input="623" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="16" wireText="NET16" wireState="0">
-            <points>(-244.00,621.00); (-146.00,621.00)</points>
+            <points>(-323.00,621.00); (-146.00,621.00)</points>
         </wire>
         <wire output="156" input="550" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="3" wireText="NET3" wireState="0">
-            <points>(-435.00,219.00); (-158.00,219.00); (-158.00,189.00); (-137.00,189.00)</points>
+            <points>(-435.00,219.00); (-398.00,219.00); (-398.00,189.00); (-197.00,189.00)</points>
         </wire>
         <wire output="162" input="548" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="15" wireText="nGATED_CS" wireState="1">
             <points/>
@@ -417,7 +417,7 @@
             <points/>
         </wire>
         <wire output="155" input="556" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="20" wireText="MOSI" wireState="0">
-            <points>(-435.00,324.00); (-130.00,324.00)</points>
+            <points>(-435.00,324.00); (-194.00,324.00)</points>
         </wire>
         <wire output="162" input="560" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="15" wireText="nGATED_CS" wireState="1">
             <points/>
@@ -432,10 +432,10 @@
             <points/>
         </wire>
         <wire output="161" input="496" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="24" wireText="NET24" wireState="0">
-            <points>(-66.00,203.00); (-23.00,203.00)</points>
+            <points>(-126.00,203.00); (-23.00,203.00)</points>
         </wire>
         <wire output="163" input="515" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="22" wireText="NET22" wireState="0">
-            <points>(-59.00,338.00); (-29.00,338.00)</points>
+            <points>(-123.00,338.00); (-29.00,338.00)</points>
         </wire>
         <wire output="151" input="530" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="25" wireText="NET25" wireState="0">
             <points>(-29.00,-20.00); (-439.00,-20.00)</points>
@@ -453,10 +453,10 @@
             <points/>
         </wire>
         <wire output="193" input="564" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="18" wireText="MOSI_PREV1" wireState="0">
-            <points>(-271.00,412.00); (-187.00,412.00)</points>
+            <points>(-271.00,412.00); (-154.00,412.00)</points>
         </wire>
         <wire output="166" input="631" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="27" wireText="MOSI_PREV2" wireState="0">
-            <points>(-96.00,416.00); (1.00,416.00)</points>
+            <points>(-63.00,416.00); (56.00,416.00)</points>
         </wire>
         <wire output="164" input="565" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="19" wireText="nCS" wireState="1">
             <points/>
@@ -474,7 +474,7 @@
             <points/>
         </wire>
         <wire output="84" input="568" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="17" wireText="NET17" wireState="0">
-            <points>(-355.00,724.00); (-282.00,724.00)</points>
+            <points>(-434.00,724.00); (-361.00,724.00)</points>
         </wire>
         <wire output="193" input="567" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="18" wireText="MOSI_PREV1" wireState="1">
             <points/>
@@ -483,7 +483,7 @@
             <points/>
         </wire>
         <wire output="167" input="622" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="21" wireText="NET21" wireState="0">
-            <points>(-211.00,738.00); (-152.00,738.00); (-152.00,631.00); (-146.00,631.00)</points>
+            <points>(-290.00,738.00); (-236.36,738.00); (-236.36,631.00); (-146.00,631.00)</points>
         </wire>
         <wire output="166" input="545" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="27" wireText="MOSI_PREV2" wireState="1">
             <points/>
@@ -492,10 +492,10 @@
             <points/>
         </wire>
         <wire output="159" input="635" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="28" wireText="NET28" wireState="0">
-            <points>(-347.00,835.00); (-280.00,835.00)</points>
+            <points>(-427.00,835.00); (-359.00,835.00)</points>
         </wire>
         <wire output="197" input="621" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="30" wireText="NET30" wireState="0">
-            <points>(-209.00,849.00); (-158.00,849.00); (-158.00,641.00); (-146.00,641.00)</points>
+            <points>(-288.00,849.00); (-219.91,849.00); (-219.91,641.00); (-146.00,641.00)</points>
         </wire>
         <wire output="195" input="634" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" lineType="1" protected="0" CWLid="31" wireText="MOSI_PREV3" wireState="1">
             <points/>
@@ -835,7 +835,7 @@
                 <components>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="0" componentNumber="1"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-841.688;156.476)" rotationState="0" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-834.688;311.476)" rotationState="0" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="GND" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -845,7 +845,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="0" componentNumber="3"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-772.686;157.756)" rotationState="0" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-765.686;312.756)" rotationState="0" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="GND" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -855,7 +855,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="0" componentNumber="4"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-770.996;472.682)" rotationState="0" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-760.996;624.682)" rotationState="0" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="GND" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -865,7 +865,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="0" componentNumber="5"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-691.335;479.383)" rotationState="0" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-681.335;631.383)" rotationState="0" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="GND" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -875,7 +875,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="0" componentNumber="6"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-848.415;475.249)" rotationState="0" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-838.415;627.249)" rotationState="0" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="GND" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -909,7 +909,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="43" componentNumber="1"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-846.221;47.462)" rotationState="3" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-839.221;202.462)" rotationState="3" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="V1" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -933,7 +933,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="43" componentNumber="3"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-775.611;370.305)" rotationState="3" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-765.611;522.305)" rotationState="3" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="V3" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -960,7 +960,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="43" componentNumber="4"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-695.33;367.867)" rotationState="3" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-685.33;519.867)" rotationState="3" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="V4" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -989,7 +989,7 @@
                     </component>
                     <component simulationModel="" defaultSimulationModel="">
                         <componentId category="5" componentType="43" componentNumber="5"/>
-                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-852.553;368.284)" rotationState="3" sceneIndex="0"/>
+                        <componentUiSettings isFlippedHorizontally="false" isFlippedVertically="false" visible="true" position="(-842.553;520.284)" rotationState="3" sceneIndex="0"/>
                         <schematicProps>
                             <param id="name" affinity="4" value="V5" defaultValue=""/>
                             <param id="mfg" affinity="4" value="" defaultValue=""/>
@@ -1074,7 +1074,11 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="3"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-822;498)"/>
+                                    <point value="(-822;329)"/>
+                                    <point value="(-520;329)"/>
+                                </path>
                             </connection>
                         </connections>
                     </network>
@@ -1087,7 +1091,11 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="2"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-664;498)"/>
+                                    <point value="(-664;224)"/>
+                                    <point value="(-520;224)"/>
+                                </path>
                             </connection>
                         </connections>
                     </network>
@@ -1101,8 +1109,8 @@
                                     <IdDto category="5" componentType="0" componentNumber="4" pinNumber="0"/>
                                 </to>
                                 <path>
-                                    <point value="(-755;433)"/>
-                                    <point value="(-755;451)"/>
+                                    <point value="(-745;585)"/>
+                                    <point value="(-745;603)"/>
                                 </path>
                             </connection>
                         </connections>
@@ -1116,7 +1124,13 @@
                                 <to>
                                     <IdDto category="5" componentType="43" componentNumber="3" pinNumber="0"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-525;101)"/>
+                                    <point value="(-727;101)"/>
+                                    <point value="(-727;477)"/>
+                                    <point value="(-745;477)"/>
+                                    <point value="(-745;500)"/>
+                                </path>
                             </connection>
                         </connections>
                     </network>
@@ -1130,10 +1144,10 @@
                                     <IdDto category="5" componentType="43" componentNumber="4" pinNumber="1"/>
                                 </to>
                                 <path>
-                                    <point value="(-675;457)"/>
-                                    <point value="(-675;445)"/>
-                                    <point value="(-674;445)"/>
-                                    <point value="(-674;431)"/>
+                                    <point value="(-665;609)"/>
+                                    <point value="(-665;598)"/>
+                                    <point value="(-664;598)"/>
+                                    <point value="(-664;583)"/>
                                 </path>
                             </connection>
                         </connections>
@@ -1148,10 +1162,10 @@
                                     <IdDto category="5" componentType="0" componentNumber="1" pinNumber="0"/>
                                 </to>
                                 <path>
-                                    <point value="(-825;110)"/>
-                                    <point value="(-825;125)"/>
-                                    <point value="(-826;125)"/>
-                                    <point value="(-826;134)"/>
+                                    <point value="(-818;265)"/>
+                                    <point value="(-818;274)"/>
+                                    <point value="(-819;274)"/>
+                                    <point value="(-819;289)"/>
                                 </path>
                             </connection>
                         </connections>
@@ -1165,7 +1179,11 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="10"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-750;291)"/>
+                                    <point value="(-750;-167)"/>
+                                    <point value="(-522;-167)"/>
+                                </path>
                             </connection>
                             <connection connectionType="1" routingType="0" sceneIndex="0">
                                 <from>
@@ -1175,9 +1193,9 @@
                                     <IdDto category="5" componentType="39" componentNumber="2" pinNumber="0"/>
                                 </to>
                                 <path>
-                                    <point value="(-757;136)"/>
-                                    <point value="(-757;94)"/>
-                                    <point value="(-636;94)"/>
+                                    <point value="(-750;291)"/>
+                                    <point value="(-750;93)"/>
+                                    <point value="(-636;93)"/>
                                     <point value="(-636;78)"/>
                                 </path>
                             </connection>
@@ -1188,7 +1206,13 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="16"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-750;291)"/>
+                                    <point value="(-750;-303)"/>
+                                    <point value="(80;-303)"/>
+                                    <point value="(80;-233)"/>
+                                    <point value="(66;-233)"/>
+                                </path>
                             </connection>
                             <connection connectionType="1" routingType="0" sceneIndex="0">
                                 <from>
@@ -1197,7 +1221,13 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="14"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-750;291)"/>
+                                    <point value="(-750;141)"/>
+                                    <point value="(92;141)"/>
+                                    <point value="(92;-131)"/>
+                                    <point value="(69;-131)"/>
+                                </path>
                             </connection>
                         </connections>
                     </network>
@@ -1211,8 +1241,8 @@
                                     <IdDto category="5" componentType="43" componentNumber="5" pinNumber="1"/>
                                 </to>
                                 <path>
-                                    <point value="(-832;453)"/>
-                                    <point value="(-832;431)"/>
+                                    <point value="(-822;605)"/>
+                                    <point value="(-822;583)"/>
                                 </path>
                             </connection>
                         </connections>
@@ -1226,7 +1256,11 @@
                                 <to>
                                     <IdDto category="100" componentType="45" componentNumber="0" pinNumber="20"/>
                                 </to>
-                                <path/>
+                                <path>
+                                    <point value="(-818;180)"/>
+                                    <point value="(-818;-260)"/>
+                                    <point value="(-521;-260)"/>
+                                </path>
                             </connection>
                             <connection connectionType="1" routingType="0" sceneIndex="0">
                                 <from>
@@ -1245,9 +1279,9 @@
                                     <IdDto category="5" componentType="39" componentNumber="1" pinNumber="1"/>
                                 </to>
                                 <path>
-                                    <point value="(-825;25)"/>
-                                    <point value="(-825;-146)"/>
-                                    <point value="(-636;-146)"/>
+                                    <point value="(-818;180)"/>
+                                    <point value="(-818;-147)"/>
+                                    <point value="(-636;-147)"/>
                                     <point value="(-636;-129)"/>
                                 </path>
                             </connection>
