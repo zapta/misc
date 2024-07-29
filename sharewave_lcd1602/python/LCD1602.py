@@ -8,6 +8,9 @@ from i2c_adapter import I2cAdapter
 port = "/dev/tty.usbmodem1401"
 d = I2cAdapter(port="/dev/tty.usbmodem1401")
 
+COLS = 16
+LINES = 2
+
 # b = SMBus(1)
 
 # Device I2C Arress
@@ -49,13 +52,16 @@ LCD_2LINE = 0x08
 LCD_1LINE = 0x00
 LCD_5x8DOTS = 0x00
 
+SHOW_FUNCTION =  LCD_4BITMODE | LCD_2LINE | LCD_5x8DOTS
+
+
 
 class LCD1602:
-    def __init__(self, col, row):
-        self._row = row
-        self._col = col
-        self._showfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS
-        self.begin(self._row, self._col)
+    def __init__(self):
+        # self._row = row
+        # self._col = col
+        # self._showfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS
+        self.begin()
 
     def _write_command_byte(self, cmd):
         # b.write_byte_data(LCD_ADDRESS,0x80,cmd)
@@ -85,37 +91,38 @@ class LCD1602:
         for x in bytearray(arg, "utf-8"):
             self._write_data_byte(x)
 
-    def display(self):
-        self._showcontrol |= LCD_DISPLAYON
-        self._write_command_byte(LCD_DISPLAYCONTROL | self._showcontrol)
+    # def display(self):
+    #     self._showcontrol |= LCD_DISPLAYON
+    #     self._write_command_byte(LCD_DISPLAYCONTROL | self._showcontrol)
 
-    def begin(self, cols, lines):
-        if lines > 1:
-            self._showfunction |= LCD_2LINE
+    def begin(self):
+        # if LINES > 1:
+        #     self._showfunction |= LCD_2LINE
 
-        self._numlines = lines
-        self._currline = 0
+        # self._numlines = LINES
+        # self._currline = 0
 
         time.sleep(0.05)
 
         # Send function set command sequence
-        self._write_command_byte(LCD_FUNCTIONSET | self._showfunction)
+        self._write_command_byte(LCD_FUNCTIONSET | SHOW_FUNCTION)
         # delayMicroseconds(4500);  # wait more than 4.1ms
         time.sleep(0.005)
         # second try
-        self._write_command_byte(LCD_FUNCTIONSET | self._showfunction)
+        self._write_command_byte(LCD_FUNCTIONSET | SHOW_FUNCTION)
         # delayMicroseconds(150);
         time.sleep(0.005)
         # third go
-        self._write_command_byte(LCD_FUNCTIONSET | self._showfunction)
+        self._write_command_byte(LCD_FUNCTIONSET | SHOW_FUNCTION)
         # finally, set # lines, font size, etc.
-        self._write_command_byte(LCD_FUNCTIONSET | self._showfunction)
+        self._write_command_byte(LCD_FUNCTIONSET | SHOW_FUNCTION)
         # turn the display on with no cursor or blinking default
-        self._showcontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF
-        self.display()
+        # self._showcontrol = LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF
+        # self.display()
+        self._write_command_byte(LCD_DISPLAYCONTROL | LCD_DISPLAYON | LCD_CURSOROFF | LCD_BLINKOFF)
         # clear it off
         self.clear()
         # Initialize to default text direction (for romance languages)
-        self._showmode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT
+        # self._showmode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT
         # set the entry mode
-        self._write_command_byte(LCD_ENTRYMODESET | self._showmode)
+        self._write_command_byte(LCD_ENTRYMODESET | LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT)
