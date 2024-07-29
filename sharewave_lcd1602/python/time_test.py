@@ -17,6 +17,7 @@ try:
 
         lcd.printout(T[3])
         time.sleep(0.1)
+        
 except(KeyboardInterrupt):
     lcd.clear()
     del lcd

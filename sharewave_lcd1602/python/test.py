@@ -1,6 +1,6 @@
 import LCD1602
 import time
-import math
+# import math
 
 lcd=LCD1602.LCD1602(16,2)
 
@@ -15,6 +15,7 @@ try:
 
         lcd.printout("Hello World!")
         time.sleep(0.1)
+        
 except(KeyboardInterrupt):
     lcd.clear()
     del lcd
