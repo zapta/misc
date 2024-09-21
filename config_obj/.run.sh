@@ -1,10 +1,15 @@
 #!/bin/bash
 
-cp text.original _text_0
+rm _*
+cp text.original _text.in
 
 python ./main.py
 
+echo
+echo "_text.in"
 cat -n text.original
 
-cat -n _text_0
+echo
+echo "_text.out"
+cat -n _text.out
 

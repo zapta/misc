@@ -1,24 +1,18 @@
-# Doc at:
 # https://configobj.readthedocs.io/en/latest/configobj.html
+# https://github.com/DiffSK/configobj
 
 from configobj import ConfigObj
 
-print("Reading _text_0")
-cfg = ConfigObj("_text_0")
-print("Reading done")
+cfg = ConfigObj("_text.in")
 
-print(cfg)
 
-#def walker(section, key):
-#    val = section[key]
-#    print("")
-#    print(f"{section = }, {key = }, {val = }")
-#    print(f"{type(section) = }, {type(key) = }, {type(val) = }")
-#
-#cfg.walk(walker, call_on_sections=True)
+print(f"*** {cfg.comments = }")
+print(f"*** {cfg.inline_comments = }")
+print(f"*** {cfg.BOM = }")
+print(f"*** {cfg.items = }")
+print(f"*** {cfg.values = }")
 
-#cfg["env"]["aaa"] = "xyz"
-
+cfg.filename = "_text.out"
 cfg.write()
 
 
