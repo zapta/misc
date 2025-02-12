@@ -1,0 +1,39 @@
+# Apio's project file.
+# Package version is set in myapp/__init.py
+ 
+[build-system]
+requires = ["flit_core >=2,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "myapp"
+author = "The Authoro"
+author-email = "nobody@gmail.com "
+requires-python = ">=3.9"
+requires = [
+    'scons',
+]
+
+[tool.flit.scripts]
+myapp = "myapp.main:main"
+
+
+          
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
