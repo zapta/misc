@@ -2,14 +2,22 @@ from pathlib import Path
 import subprocess
 import sys
 import re
+import SCons.Platform.darwin
+import SCons.Tool.default
+import SCons.Tool.gcc
+# from myapp.my_lib import lib_func
+# from PyInstaller.utils.hooks import collect_submodules
+
 
 
 def myapp_main():
     print("Main started")
+    # lib_func('From main, before dispatching')
 
     # -- If invoked as the scons subprocess, dispatch to the scons lib.
     if sys.argv[1:3] == ["-m", "SCons"]:
        sys.argv[1:] = sys.argv[3:]
+    #    lib_func("From child main")
        # We import and initialize scons only when running the scons subprocess.
        from SCons.Script.Main import main
        # This is a logic is taken from the scons startup 'binary' on darwin.
@@ -19,6 +27,7 @@ def myapp_main():
 
     # -- Here when running the parent process.
 
+    # lib_func("From parent main")
     # -- Get the path of the current file.
     current_python_file = Path(__file__)
     print(f"*** Main():  {current_python_file=}")

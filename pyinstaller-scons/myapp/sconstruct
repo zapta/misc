@@ -1,2 +1,6 @@
+from myapp.my_lib import lib_func
+
 print("*** In SConstruct")
+
+lib_func("Called from sconstruct")
 

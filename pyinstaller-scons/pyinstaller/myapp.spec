@@ -1,16 +1,21 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_submodules
+
 added_files = [
     ( '../myapp/sconstruct', '.' ),
 ]
 
+#hiddenimports = collect_submodules('SCons.Platform')  + collect_submodules('SCons.Tool') +  collect_submodules('myapp')
+
+hiddenimports = collect_submodules('SCons')  + collect_submodules('myapp')
 
 a = Analysis(
     ['../myapp/main.py'],
     pathex=[],
     binaries=[],
     datas=added_files,
-    hiddenimports=[],
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
