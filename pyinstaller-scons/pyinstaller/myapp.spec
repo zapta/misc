@@ -1,15 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-#added_files = [
-#    ( '../../myapp/child/SConstruct', 'myapp/child' ),
-#]
+added_files = [
+    ( '../myapp/sconstruct', '.' ),
+]
 
 
 a = Analysis(
     ['../myapp/main.py'],
     pathex=[],
     binaries=[],
-    #datas=added_files,
+    datas=added_files,
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

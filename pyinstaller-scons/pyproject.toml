@@ -15,13 +15,8 @@ requires = [
 ]
 
 [tool.flit.scripts]
-myapp = "myapp.main:main"
-
-
-          
-
-
-           
+myapp = "myapp.main:myapp_main"
+   
 
 
 
