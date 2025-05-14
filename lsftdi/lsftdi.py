@@ -1,27 +1,14 @@
 
-import ftd2xx as ft
+from pyftdi.ftdi import Ftdi
 
-# ftd_devices = ft.listDevices()
-# print(f"{ftd_devices=}")
-# if ftd_devices:
-#     print(f"{type(ftd_devices[0])=}")
-#     print(f"{ftd_devices[0]=}")
-
-# Get the number of connected FTDI devices
-
-num_devices = ft.createDeviceInfoList()
-
-if num_devices == 0:
+devices = Ftdi.list_devices()
+if not devices:
     print("No FTDI devices found.")
 else:
-    print(f"Found {num_devices} FTDI device(s):")
-    
-    for i in range(num_devices):
-        info = ft.getDeviceInfoDetail(i)
-        print(f"Device {i}:")
-        print(f"  {type(info)=}")
-        print(f"  {info=}")
-        # print(f"  Serial Number: {info['serial']}")
-        # print(f"  Description: {info['description']}")
-        # print(f"  Vendor ID: {hex(info['ID'][0])}")
-        # print(f"  Product ID: {hex(info['ID'][1])}")
+    for device in devices:
+        print(device)
+        # Each device is a tuple: (vendor, product, serial)
+        #print(f"Vendor: {device[0]}")
+        #print(f"Product: {device[1]}")
+        #print(f"Serial: {device[2]}")
+
