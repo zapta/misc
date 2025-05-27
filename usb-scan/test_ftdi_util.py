@@ -3,12 +3,12 @@ import re
 from typing import List, Tuple
 from dataclasses import dataclass
 
-TEXT="""
+TEXT = """
 empty
 Bus device vid:pid       probe type      manufacturer serial               product
 000 001    0x0403:0x6010 FTDI2232        AlhambraBits none                 Alhambra II v1.0A - B09-335
 001 001    0x0403:0x6010 FTDI2232        tinyVision.ai FT94RQ8V             UPduino v3.1c
-001 001    0x0403:0x6010 FTDI2232        tinyVision.ai.v3 FT94RQ8V             UPduino v3.1c
+002 001    0x0403:0x6010 FTDI2232        tinyVision.ai.v3 FT94RQ8V             UPduino v3.1c
 """
 
 HEADER_REGEX = re.compile(
@@ -41,13 +41,14 @@ class DeviceInfo:
 
 
 def get_header_fields_starts(header: str) -> List[int]:
-    """Given an header line, returns the start indices of the columns
-    names. """
+    """Given an header line, returns a list with the indexes of the first char
+    of each of teh columns."""
 
-    # The expected number of fields.
+    # -- The expected number of fields.
     N = 7
     assert HEADER_REGEX.groups == N
 
+    # -- Match the 
     m = HEADER_REGEX.match(header)
     assert m
     assert m.lastindex == N
@@ -55,7 +56,6 @@ def get_header_fields_starts(header: str) -> List[int]:
     fields_starts = []
     for i in range(N):
         fields_starts.append(m.start(i + 1))
-
 
     return fields_starts
 
@@ -75,9 +75,41 @@ def get_lines(text: str) -> Tuple[str, List[str]]:
     return (headers_lines[0], devices_lines)
 
 
-def extract_field(line:str, field_index: int, fields_starts:List[int]):
+def adjust_line_field_end(
+    line: str, field_index: int, field_starts: List[int]
+) -> List[int]:
+    """If needed, adjust the end (start of next field) of field of given index.
+    returns a copy of field_starts."""
+    # print(f"Adjust field {field_index}")
+
+    # -- No point for calling the last field since its has no end.
+    assert field_index < (len(field_starts) - 1)
+
+    # -- Make a copy of the start which we may mutate.
+    result = field_starts.copy()
+
+    # -- Extend the field by one char until it ends with " " or end of string.
+    # print()
+    while True:
+        end = result[field_index + 1]
+        if end >= len(line):
+            break
+        if line[end - 1] == " ":
+            break
+        for i in range(field_index + 1, len(field_starts)):
+            result[i] += 1
+            # print(f"Field {field_index} : incrementing start of field {i} to {result[i]}")
+    # print()
+    return result
+
+
+def extract_field(line: str, field_index: int, fields_starts: List[int]):
     start = fields_starts[field_index]
-    end = fields_starts[field_index + 1] if field_index < (len(fields_starts) - 1) else None
+    end = (
+        fields_starts[field_index + 1]
+        if field_index < (len(fields_starts) - 1)
+        else None
+    )
     value = line[slice(start, end)].strip()
     if value == "none":
         value = ""
@@ -92,11 +124,16 @@ def get_devices(text: str) -> DeviceInfo:
     for index, line in enumerate(devices_lines):
         assert len(header_starts) == 7
 
-        line_starts = header_starts.copy()
+        line_starts = adjust_line_field_end(line, 4, header_starts)
+        line_starts = adjust_line_field_end(line, 5, line_starts)
+
+        # -- Pad the line to have at least one char in the last field.
+        min_len = line_starts[-1] + 1
+        line = line.ljust(min_len)
 
         # -- Extract fields
         bus = extract_field(line, 0, line_starts)
-        device = extract_field(line,  1, line_starts)
+        device = extract_field(line, 1, line_starts)
         vid_pid = extract_field(line, 2, line_starts)
         type = extract_field(line, 3, line_starts)
         manufacturer = extract_field(line, 4, line_starts)
@@ -143,5 +180,3 @@ for device in devices:
     print()
     device.dump()
 print()
-
-

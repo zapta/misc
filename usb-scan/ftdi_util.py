@@ -1,0 +1,187 @@
+import subprocess
+import re
+from typing import List, Tuple
+from dataclasses import dataclass
+
+
+# -- A regex to parse the header line of the 'openFPGALoader --list' report.
+HEADER_REGEX = re.compile(
+    r"^(Bus *)(device *)(vid:pid *)(probe type *)(manufacturer *)(serial *)(product *)$"
+)
+
+
+@dataclass()
+class FtdiDeviceInfo:
+    """Contains the information of a single FTDI device."""
+    # -- Index in the internal FTDI device list. E.g. 0.
+    index: int
+    # -- Buss ID. E.g. 0.
+    bus: int
+    # -- Device ID within the bus ID. E.g. 0.
+    device: int
+    # -- USB Vendor ID, E.g. "0403"
+    vid: str
+    # -- USB Product ID. E.g. "6010"
+    pid: str
+    # -- Interface type, e.g. "FTDI2232"
+    type: str
+    # -- Manufacturer string. E.g. "AlhambraBits"
+    manufacturer: str
+    # -- FTDI serial code.  E.g. "FT94RQ8V".
+    # -- https://github.com/FPGAwars/Alhambra-II-FPGA/issues/13
+    serial_code: str
+    # -- Product description. e.g. "Alhambra II v1.0A - B09-335"
+    description: str
+
+    def dump(self):
+        """Dump this object. For debugging."""
+        print(f"Device [{self.index}]")
+        print(f"    bus:           [{self.bus}]")
+        print(f"    device:        [{self.device}]")
+        print(f"    vid:           [{self.vid}]")
+        print(f"    pid:           [{self.pid}]")
+        print(f"    type:          [{self.type}]")
+        print(f"    manufacturer:  [{self.manufacturer}]")
+        print(f"    serial_code:   [{self.serial_code}]")
+        print(f"    descrpition:   [{self.description}]")
+
+
+def get_header_fields_starts(header: str) -> List[int]:
+    """Given an header line, returns the start indices of the columns
+    names."""
+
+    # The expected number of fields.
+    N = 7
+    assert HEADER_REGEX.groups == N
+
+    m = HEADER_REGEX.match(header)
+    assert m
+    assert m.lastindex == N
+
+    fields_starts = []
+    for i in range(N):
+        fields_starts.append(m.start(i + 1))
+
+    return fields_starts
+
+
+def get_lines(text: str) -> Tuple[str, List[str]]:
+    # Given the output text of the open fpga programmer --list command,
+    # return the header line and a list of the device lines.
+
+    lines = text.splitlines()
+
+    lines = [line for line in lines if line.strip() and line.strip() != "empty"]
+
+    headers_lines = [line for line in lines if line.startswith("Bus")]
+    devices_lines = [line for line in lines if not line.startswith("Bus")]
+
+    assert len(headers_lines) == 1
+    return (headers_lines[0], devices_lines)
+
+
+def adjust_line_field_end(
+    line: str, field_index: int, field_starts: List[int]
+) -> List[int]:
+    """If needed, adjust the end (start of next field) of field of given index.
+    returns a copy of field_starts."""
+    # print(f"Adjust field {field_index}")
+
+    # -- No point for calling the last field since its has no end.
+    assert field_index < (len(field_starts) - 1)
+
+    # -- Make a copy of the start which we may mutate.
+    result = field_starts.copy()
+
+    # -- Extend the field by one char until it ends with " " or end of string.
+    # print()
+    while True:
+        end = result[field_index + 1]
+        if end >= len(line):
+            break
+        if line[end - 1] == " ":
+            break
+        for i in range(field_index + 1, len(field_starts)):
+            result[i] += 1
+            # print(f"Field {field_index} : incrementing start of field {i} to {result[i]}")
+    # print()
+    return result
+
+
+def extract_field(line: str, field_index: int, fields_starts: List[int]):
+    start = fields_starts[field_index]
+    end = (
+        fields_starts[field_index + 1]
+        if field_index < (len(fields_starts) - 1)
+        else None
+    )
+    value = line[slice(start, end)].strip()
+    if value == "none":
+        value = ""
+    return value
+
+
+def get_devices(text: str) -> FtdiDeviceInfo:
+    header, devices_lines = get_lines(text)
+    header_starts = get_header_fields_starts(header)
+
+    devices = []
+    for index, line in enumerate(devices_lines):
+        assert len(header_starts) == 7
+
+        line_starts = adjust_line_field_end(line, 4, header_starts)
+        line_starts = adjust_line_field_end(line, 5, line_starts)
+
+        # -- Pad the line to have at least one char in the last field.
+        min_len = line_starts[-1] + 1
+        line = line.ljust(min_len)
+
+        # -- Extract fields
+        bus = extract_field(line, 0, line_starts)
+        device = extract_field(line, 1, line_starts)
+        vid_pid = extract_field(line, 2, line_starts)
+        type = extract_field(line, 3, line_starts)
+        manufacturer = extract_field(line, 4, line_starts)
+        serial_code = extract_field(line, 5, line_starts)
+        description = extract_field(line, 6, line_starts)
+
+        # Split pid_vid to pid and vid
+        tokens = vid_pid.split(":")
+        assert len(tokens) == 2, tokens
+        assert tokens[0].startswith("0x")
+        assert tokens[1].startswith("0x")
+        vid = tokens[0][2:]
+        pid = tokens[1][2:]
+
+        device = FtdiDeviceInfo(
+            index=index,
+            bus=int(bus),
+            device=int(device),
+            vid=vid,
+            pid=pid,
+            type=type,
+            manufacturer=manufacturer,
+            serial_code=serial_code,
+            description=description,
+        )
+        devices.append(device)
+
+    return devices
+
+
+# result = subprocess.run(
+#     ["apio", "raw", "--", "openFPGALoader", "--scan-usb"],
+#     capture_output=True,
+#     text=True,
+# )
+# assert result.returncode == 0
+# text = result.stdout
+
+text = TEXT
+
+devices = get_devices(text)
+
+for device in devices:
+    print()
+    device.dump()
+print()
