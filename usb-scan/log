@@ -1,7 +1,8 @@
+Mac OSX
+ID=[0403:6001] Port=[/dev/cu.usbserial-A600dOYP] Manuf=[Acme] Desc=[Pro 2000] S/N=[A600dOYP]
+
 Linux
 ID=[0403:6001] Port=[/dev/ttyUSB0] Manuf=[Acme] Desc=[Pro 2000 - Pro 2000] S/N=[A600dOYP]
-
-Mac OSX
 
 Windows
 ID=[0403:6001] Port=[COM8] Manuf=[FTDI] Desc=[USB Serial Port (COM8)] S/N=[A600DOYPA]
