@@ -1,4 +1,6 @@
+Linux
 
 Mac OSX
-ID=[0403:6010] Port=[/dev/cu.usbserial-FT94RQ8V0] Manuf=[tinyVision.ai] Desc=[UPduino v3.1c] S/N=[FT94RQ8V]
-ID=[0403:6010] Port=[/dev/cu.usbserial-FT94RQ8V1] Manuf=[tinyVision.ai] Desc=[UPduino v3.1c] S/N=[FT94RQ8V]
+
+Windows
+ID=[0403:6001] Port=[COM8] Manuf=[FTDI] Desc=[USB Serial Port (COM8)] S/N=[A600DOYPA]
