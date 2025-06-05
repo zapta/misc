@@ -13,7 +13,8 @@ for port in ports:
         f"ID=[{port.vid:04X}:{port.pid:04X}] " + 
         f"Port=[{port.device}] " + 
         f"Manuf=[{port.manufacturer}] " + 
-        f"Desc=[{port.description}] " +
+        f"Prod=[{port.product}] " +
+        f"Ifc=[{port.interface}] " +
         f"S/N=[{port.serial_number}]")
 
 
